@@ -50,7 +50,11 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-void createQuestion(){
+void createQuestion() {
+  return;
+}
+
+void questionMenu() {
   return;
 }
 
@@ -60,41 +64,50 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text(widget.title),
-        ),
-        body: Stack(children: [
-          Container(
-            height: 520,
-            child: ListView(
-              padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 5),
-              children: <Widget>[
-                Container(
+      appBar: AppBar(
+        title: Text(widget.title),
+      ),
+      body: Stack(children: [
+        Container(
+          height: 520,
+          child: ListView(
+            padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 5),
+            children: <Widget>[
+              InkWell(
+                child: Container(
                     margin: new EdgeInsets.only(top: 5),
-                    padding: new EdgeInsets.symmetric(vertical: 20,horizontal: 8),
+                    padding:
+                        new EdgeInsets.symmetric(vertical: 20, horizontal: 8),
                     color: Colors.blue,
                     child: Align(
                         alignment: Alignment.centerLeft,
                         child: Text('This is the first question',
                             style: TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 20)))),
-                Container(
+                onTap: questionMenu,
+              ),
+              InkWell(
+                child: Container(
                     margin: new EdgeInsets.only(top: 5),
-                    padding: new EdgeInsets.symmetric(vertical: 20,horizontal: 8),
+                    padding:
+                        new EdgeInsets.symmetric(vertical: 20, horizontal: 8),
                     color: Colors.red,
                     child: Align(
                         alignment: Alignment.centerLeft,
                         child: Text('Second question looks very padoru in red',
                             style: TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 20)))),
-              ],
-            ),
+                onTap: questionMenu,
+              )
+            ],
           ),
-        ]),
+        ),
+      ]),
       floatingActionButton: FloatingActionButton(
         onPressed: createQuestion,
         child: Icon(Icons.add),
         backgroundColor: Colors.green,
-    ),);
+      ),
+    );
   }
 }
