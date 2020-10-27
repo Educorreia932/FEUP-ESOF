@@ -72,7 +72,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 Container(
                     margin: new EdgeInsets.only(top: 5),
                     padding: const EdgeInsets.all(8),
-                    height: 50,
                     color: Colors.blue,
                     child: Align(
                         alignment: Alignment.centerLeft,
@@ -82,7 +81,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 Container(
                     margin: new EdgeInsets.only(top: 5),
                     padding: const EdgeInsets.all(8),
-                    height: 50,
                     color: Colors.red,
                     child: Align(
                         alignment: Alignment.centerLeft,
