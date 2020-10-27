@@ -55,6 +55,12 @@ void createQuestion() {
 }
 
 void questionMenu() {
+  print("I was called\n");
+  return;
+}
+
+void vote() {
+  print("Upvoted\n");
   return;
 }
 
@@ -75,15 +81,29 @@ class _MyHomePageState extends State<MyHomePage> {
             children: <Widget>[
               InkWell(
                 child: Container(
-                    margin: new EdgeInsets.only(top: 5),
-                    padding:
-                        new EdgeInsets.symmetric(vertical: 20, horizontal: 8),
-                    color: Colors.blue,
-                    child: Align(
+                  margin: new EdgeInsets.only(top: 5),
+                  color: Colors.blue,
+                  child: Row(children: <Widget>[
+                    Column(children: <Widget>[
+                      IconButton(
+                        icon: Icon(Icons.keyboard_arrow_up),
+                        tooltip: "Upvote",
+                        onPressed: vote,
+                        iconSize: 30,
+                      ),
+                      IconButton(
+                          icon: Icon(Icons.keyboard_arrow_down),
+                          tooltip: "Downvote",
+                          onPressed: vote,
+                          iconSize: 30),
+                    ]),
+                    Align(
                         alignment: Alignment.centerLeft,
                         child: Text('This is the first question',
                             style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 20)))),
+                                fontWeight: FontWeight.bold, fontSize: 20))),
+                  ]),
+                ),
                 onTap: questionMenu,
               ),
               InkWell(
