@@ -50,6 +50,10 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
+void createQuestion(){
+  return;
+}
+
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
 
@@ -59,30 +63,40 @@ class _MyHomePageState extends State<MyHomePage> {
         appBar: AppBar(
           title: Text(widget.title),
         ),
-        body: Center(
-          child: ListView(
-            padding: const EdgeInsets.all(3),
-            children: <Widget>[
-              Container(
-                  padding: const EdgeInsets.all(8),
-                  height: 50,
-                  color: Colors.blue,
-                  child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text('This is the first question',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 20)))),
-              Container(
-                  padding: const EdgeInsets.all(8),
-                  height: 50,
-                  color: Colors.red,
-                  child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text('Second question looks very padoru in red',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 20)))),
-            ],
+        body: Stack(children: [
+          Container(
+            height: 520,
+            child: ListView(
+              padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 5),
+              children: <Widget>[
+                Container(
+                    margin: new EdgeInsets.only(top: 5),
+                    padding: const EdgeInsets.all(8),
+                    height: 50,
+                    color: Colors.blue,
+                    child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text('This is the first question',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 20)))),
+                Container(
+                    margin: new EdgeInsets.only(top: 5),
+                    padding: const EdgeInsets.all(8),
+                    height: 50,
+                    color: Colors.red,
+                    child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text('Second question looks very padoru in red',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 20)))),
+              ],
+            ),
           ),
-        ));
+        ]),
+      floatingActionButton: FloatingActionButton(
+        onPressed: createQuestion,
+        child: Icon(Icons.add),
+        backgroundColor: Colors.green,
+    ),);
   }
 }
