@@ -71,7 +71,7 @@ class _MyHomePageState extends State<MyHomePage> {
               children: <Widget>[
                 Container(
                     margin: new EdgeInsets.only(top: 5),
-                    padding: const EdgeInsets.all(8),
+                    padding: new EdgeInsets.symmetric(vertical: 20,horizontal: 8),
                     color: Colors.blue,
                     child: Align(
                         alignment: Alignment.centerLeft,
@@ -80,7 +80,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 fontWeight: FontWeight.bold, fontSize: 20)))),
                 Container(
                     margin: new EdgeInsets.only(top: 5),
-                    padding: const EdgeInsets.all(8),
+                    padding: new EdgeInsets.symmetric(vertical: 20,horizontal: 8),
                     color: Colors.red,
                     child: Align(
                         alignment: Alignment.centerLeft,
