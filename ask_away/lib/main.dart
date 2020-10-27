@@ -59,9 +59,23 @@ void questionMenu() {
   return;
 }
 
-void vote() {
+enum Vote {
+  up,
+  down
+}
+
+void voteAction() {
   print("Upvoted\n");
   return;
+}
+
+Widget _voteButton(vote) {
+  return IconButton(
+    icon: vote == Vote.up? Icon(Icons.keyboard_arrow_up) : Icon(Icons.keyboard_arrow_down),
+    tooltip: vote == Vote.up? "Upvote" : "Downvote",
+    onPressed: voteAction,
+    iconSize: 30,
+  );
 }
 
 class _MyHomePageState extends State<MyHomePage> {
@@ -85,17 +99,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   color: Colors.blue,
                   child: Row(children: <Widget>[
                     Column(children: <Widget>[
-                      IconButton(
-                        icon: Icon(Icons.keyboard_arrow_up),
-                        tooltip: "Upvote",
-                        onPressed: vote,
-                        iconSize: 30,
-                      ),
-                      IconButton(
-                          icon: Icon(Icons.keyboard_arrow_down),
-                          tooltip: "Downvote",
-                          onPressed: vote,
-                          iconSize: 30),
+                      _voteButton(Vote.up),
+                      _voteButton(Vote.down)
                     ]),
                     Align(
                         alignment: Alignment.centerLeft,
