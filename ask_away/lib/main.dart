@@ -64,8 +64,13 @@ enum Vote {
   down
 }
 
-void voteAction() {
-  print("Upvoted\n");
+void voteAction(vote) {
+  vote == Vote.up ? print("Upvoted\n") : print("Downvoted\n");
+  return;
+}
+
+void _userProfile() {
+  print("Profile\n");
   return;
 }
 
@@ -73,8 +78,20 @@ Widget _voteButton(vote) {
   return IconButton(
     icon: vote == Vote.up? Icon(Icons.keyboard_arrow_up) : Icon(Icons.keyboard_arrow_down),
     tooltip: vote == Vote.up? "Upvote" : "Downvote",
-    onPressed: voteAction,
+    onPressed: ()=>voteAction(vote),
     iconSize: 30,
+  );
+}
+
+Widget _userIcon() {
+  return InkWell(
+      onTap: _userProfile,
+      child: CircleAvatar(
+        radius: 30,
+        backgroundImage:
+          AssetImage('assets/avatar.jpg'),
+        backgroundColor: Colors.transparent,
+      ),
   );
 }
 
@@ -132,6 +149,58 @@ class _MyHomePageState extends State<MyHomePage> {
         onPressed: createQuestion,
         child: Icon(Icons.add),
         backgroundColor: Colors.green,
+      ),
+      drawer: Drawer(
+        child: ListView(
+          children: <Widget>[
+              Container(
+                height: 100,
+                child:DrawerHeader(
+                child: Row(children: <Widget>[
+                  Column(children: <Widget>[
+                    _userIcon(),
+                  ]),
+                  Container(
+                      padding:
+                        new EdgeInsets.only(left:20),
+                      child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text('Mr. Padoru',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 20))),
+                  ),
+                ]),
+                ),
+              decoration: BoxDecoration(
+                color: Colors.blue,
+              ),
+            ),
+            ListTile(
+              title: Text('Talks',
+                style: TextStyle(
+                    fontWeight: FontWeight.bold, fontSize: 20)
+              ),
+              onTap: () {
+                // Update the state of the app
+                // ...
+                // Then close the drawer
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              title: Text('Settings',
+                  style: TextStyle(
+                  fontWeight: FontWeight.bold, fontSize: 20)
+              ),
+              onTap: () {
+                // Update the state of the app
+                // ...
+                // Then close the drawer
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
