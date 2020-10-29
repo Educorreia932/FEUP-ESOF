@@ -59,10 +59,7 @@ void questionMenu() {
   return;
 }
 
-enum Vote {
-  up,
-  down
-}
+enum Vote { up, down }
 
 void voteAction(vote) {
   vote == Vote.up ? print("Upvoted\n") : print("Downvoted\n");
@@ -76,75 +73,76 @@ void _userProfile() {
 
 Widget _voteButton(vote) {
   return IconButton(
-    icon: vote == Vote.up? Icon(Icons.keyboard_arrow_up) : Icon(Icons.keyboard_arrow_down),
-    tooltip: vote == Vote.up? "Upvote" : "Downvote",
-    onPressed: ()=>voteAction(vote),
+    icon: vote == Vote.up
+        ? Icon(Icons.keyboard_arrow_up)
+        : Icon(Icons.keyboard_arrow_down),
+    tooltip: vote == Vote.up ? "Upvote" : "Downvote",
+    onPressed: () => voteAction(vote),
     iconSize: 30,
   );
 }
 
 Widget _userIcon() {
   return InkWell(
-      onTap: _userProfile,
-      child: CircleAvatar(
-        radius: 30,
-        backgroundImage:
-          AssetImage('assets/avatar.jpg'),
-        backgroundColor: Colors.transparent,
+    onTap: _userProfile,
+    child: CircleAvatar(
+      radius: 30,
+      backgroundImage: AssetImage('assets/avatar.jpg'),
+      backgroundColor: Colors.transparent,
+    ),
+  );
+}
+
+Widget _question(text) {
+  return InkWell(
+    child: Container(
+      margin: new EdgeInsets.only(top: 10),
+      decoration: new BoxDecoration(
+        borderRadius: new BorderRadius.all(Radius.circular(11)),
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.3),
+            spreadRadius: 3,
+            blurRadius: 5,
+            offset: Offset(0, 2), // changes position of shadow
+          ),
+        ],
       ),
+      child: Row(children: <Widget>[
+        Column(
+            children: <Widget>[_voteButton(Vote.up), _voteButton(Vote.down)]),
+        Align(
+            alignment: Alignment.centerLeft,
+            child: Text(text,
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20))),
+      ]),
+    ),
+    onTap: questionMenu,
   );
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.blue[50],
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: Stack(children: [
-        Container(
-          height: 520,
-          child: ListView(
-            padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 5),
-            children: <Widget>[
-              InkWell(
-                child: Container(
-                  margin: new EdgeInsets.only(top: 5),
-                  color: Colors.blue,
-                  child: Row(children: <Widget>[
-                    Column(children: <Widget>[
-                      _voteButton(Vote.up),
-                      _voteButton(Vote.down)
-                    ]),
-                    Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text('This is the first question',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 20))),
-                  ]),
-                ),
-                onTap: questionMenu,
-              ),
-              InkWell(
-                child: Container(
-                    margin: new EdgeInsets.only(top: 5),
-                    padding:
-                        new EdgeInsets.symmetric(vertical: 20, horizontal: 8),
-                    color: Colors.red,
-                    child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text('Second question looks very padoru in red',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 20)))),
-                onTap: questionMenu,
-              )
-            ],
-          ),
-        ),
-      ]),
+      body: Stack(
+        children: [
+          Container(
+              height: 520,
+              child: ListView(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                  children: <Widget>[
+                    _question("primeiro"),
+                    _question("segundo")
+                  ]))
+        ],
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: createQuestion,
         child: Icon(Icons.add),
@@ -153,33 +151,30 @@ class _MyHomePageState extends State<MyHomePage> {
       drawer: Drawer(
         child: ListView(
           children: <Widget>[
-              Container(
-                height: 100,
-                child:DrawerHeader(
+            Container(
+              height: 100,
+              child: DrawerHeader(
                 child: Row(children: <Widget>[
                   Column(children: <Widget>[
                     _userIcon(),
                   ]),
                   Container(
-                      padding:
-                        new EdgeInsets.only(left:20),
-                      child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text('Mr. Padoru',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 20))),
+                    padding: new EdgeInsets.only(left: 20),
+                    child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text('Mr. Padoru',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 20))),
                   ),
                 ]),
-                ),
+              ),
               decoration: BoxDecoration(
                 color: Colors.blue,
               ),
             ),
             ListTile(
               title: Text('Talks',
-                style: TextStyle(
-                    fontWeight: FontWeight.bold, fontSize: 20)
-              ),
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
               onTap: () {
                 // Update the state of the app
                 // ...
@@ -189,9 +184,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             ListTile(
               title: Text('Settings',
-                  style: TextStyle(
-                  fontWeight: FontWeight.bold, fontSize: 20)
-              ),
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
               onTap: () {
                 // Update the state of the app
                 // ...
