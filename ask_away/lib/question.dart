@@ -68,13 +68,21 @@ class _VotingState extends State<Voting> {
   @override
   Widget build(BuildContext context) {
     return new Column(children: <Widget>[
-      IconButton(
+      Material(
+      color: Colors.transparent,
+      child: IconButton(
+          splashRadius: 15,
           icon: Icon(Icons.keyboard_arrow_up),
           onPressed: () => setState(() => _upvoteCount++)),
+      ),
       Text((_upvoteCount - _downvoteCount).toString(), style: TextStyle(color: Colors.black)),
-      IconButton(
-          icon: Icon(Icons.keyboard_arrow_down),
-          onPressed: () => setState(() => _downvoteCount++))
+      Material(
+        color: Colors.transparent,
+        child: IconButton(
+            splashRadius: 15,
+            icon: Icon(Icons.keyboard_arrow_down),
+            onPressed: () => setState(() => _downvoteCount++)),
+      ),
     ]);
   }
 }
