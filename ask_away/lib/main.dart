@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 
+import 'package:ask_away/question.dart';
+
 void main() {
   runApp(MyApp());
 }
@@ -54,32 +56,9 @@ void createQuestion() {
   return;
 }
 
-void questionMenu() {
-  print("I was called\n");
-  return;
-}
-
-enum Vote { up, down }
-
-void voteAction(vote) {
-  vote == Vote.up ? print("Upvoted\n") : print("Downvoted\n");
-  return;
-}
-
 void _userProfile() {
   print("Profile\n");
   return;
-}
-
-Widget _voteButton(vote) {
-  return IconButton(
-    icon: vote == Vote.up
-        ? Icon(Icons.keyboard_arrow_up)
-        : Icon(Icons.keyboard_arrow_down),
-    tooltip: vote == Vote.up ? "Upvote" : "Downvote",
-    onPressed: () => voteAction(vote),
-    iconSize: 30,
-  );
 }
 
 Widget _userIcon() {
@@ -90,35 +69,6 @@ Widget _userIcon() {
       backgroundImage: AssetImage('assets/avatar.jpg'),
       backgroundColor: Colors.transparent,
     ),
-  );
-}
-
-Widget _question(text) {
-  return InkWell(
-    child: Container(
-      margin: new EdgeInsets.only(top: 10),
-      decoration: new BoxDecoration(
-        borderRadius: new BorderRadius.all(Radius.circular(11)),
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.3),
-            spreadRadius: 3,
-            blurRadius: 5,
-            offset: Offset(0, 2), // changes position of shadow
-          ),
-        ],
-      ),
-      child: Row(children: <Widget>[
-        Column(
-            children: <Widget>[_voteButton(Vote.up), _voteButton(Vote.down)]),
-        Align(
-            alignment: Alignment.centerLeft,
-            child: Text(text,
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20))),
-      ]),
-    ),
-    onTap: questionMenu,
   );
 }
 
@@ -138,8 +88,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   padding:
                       const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
                   children: <Widget>[
-                    _question("primeiro"),
-                    _question("segundo")
+                    Question("Primeira"),
+                    Question("Segunda")
                   ]))
         ],
       ),

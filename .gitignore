@@ -3,3 +3,5 @@ ask_away/.*
 .idea/
 
 ask_away/build/
+ios/
+android/
