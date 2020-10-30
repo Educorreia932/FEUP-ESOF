@@ -4,6 +4,8 @@ import 'package:flutter/painting.dart';
 
 import 'package:ask_away/Question.dart';
 
+List<Question> questions = [new Question("Primeira"), new Question("Segunda")];
+
 void main() {
   runApp(MyApp());
 }
@@ -96,8 +98,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   padding:
                       const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
                   children: <Widget>[
-                    QuestionWidget(new Question("Primeira")),
-                    QuestionWidget(new Question("Segunda"))
+                    QuestionWidget(questions[0]),
+                    QuestionWidget(questions[1])
                   ])),
           Align(
             alignment: Alignment.bottomLeft,
