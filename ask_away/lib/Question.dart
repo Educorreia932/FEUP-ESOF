@@ -1,17 +1,26 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 
-enum Vote { up, down }
+import 'Vote.dart';
 
-class Question extends StatelessWidget {
+class Question {
   int id;
   String text;
-  Voting voting;
+  List<Vote> votes;
 
   Question(String text) {
     this.text = text;
-    voting = new Voting();
+    this.votes = new List<Vote>();
+  }
+}
+
+class QuestionWidget extends StatelessWidget {
+  Question question;
+  Voting voting;
+
+  QuestionWidget(Question question) {
+    this.question = question;
+    voting = new Voting(question.votes);
   }
 
   @override
@@ -35,7 +44,7 @@ class Question extends StatelessWidget {
           voting,
           Align(
               alignment: Alignment.centerLeft,
-              child: Text(this.text,
+              child: Text(question.text,
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20))),
         ]),
       ),
@@ -45,16 +54,19 @@ class Question extends StatelessWidget {
 }
 
 class Voting extends StatefulWidget {
+  List<Vote> votes;
   int upvoteCount, downvoteCount;
 
-  Voting() {}
+  Voting(List<Vote> votes) {
+    this.votes = votes;
+  }
 
   int getVoteCount() {
     return upvoteCount - downvoteCount;
   }
 
-  void vote(Vote voteType) {
-    voteType == Vote.up ? upvoteCount++ : downvoteCount++;
+  void vote(VoteType type) {
+    type == VoteType.up ? upvoteCount++ : downvoteCount++;
   }
 
   @override
@@ -69,13 +81,14 @@ class _VotingState extends State<Voting> {
   Widget build(BuildContext context) {
     return new Column(children: <Widget>[
       Material(
-      color: Colors.transparent,
-      child: IconButton(
-          splashRadius: 15,
-          icon: Icon(Icons.keyboard_arrow_up),
-          onPressed: () => setState(() => _upvoteCount++)),
+        color: Colors.transparent,
+        child: IconButton(
+            splashRadius: 15,
+            icon: Icon(Icons.keyboard_arrow_up),
+            onPressed: () => setState(() => _upvoteCount++)),
       ),
-      Text((_upvoteCount - _downvoteCount).toString(), style: TextStyle(color: Colors.black)),
+      Text((_upvoteCount - _downvoteCount).toString(),
+          style: TextStyle(color: Colors.black)),
       Material(
         color: Colors.transparent,
         child: IconButton(
