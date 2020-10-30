@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 
@@ -72,7 +73,14 @@ Widget _userIcon() {
   );
 }
 
+class MyHomePageState extends StatefulWidget {
+  @override
+  _MyHomePageState createState() => new _MyHomePageState();
+}
+
 class _MyHomePageState extends State<MyHomePage> {
+  final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -82,22 +90,58 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: Stack(
         children: [
-          Container(
-              height: 520,
+          FractionallySizedBox(
+              heightFactor: 0.87,
               child: ListView(
                   padding:
                       const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
                   children: <Widget>[
                     Question("Primeira"),
                     Question("Segunda")
-                  ]))
+                  ])),
+          Align(
+            alignment: Alignment.bottomLeft,
+            child: Container(
+              margin: EdgeInsets.only(bottom: 20, left: 10, right: 10),
+              child: Form(
+                key: _formKey,
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                        child: Container(
+                          color: Colors.white,
+                          child: TextFormField(
+                            decoration: const InputDecoration(
+                              hintText: 'Enter your question',
+                            ),
+                            validator: (value) {
+                              if (value.isEmpty) {
+                                return 'Please enter some text';
+                              }
+                              return null;
+                            },
+                          ),
+                        ),
+                      ),
+                    Container(
+                      margin: EdgeInsets.only(left: 10),
+                      child: ElevatedButton(
+                        onPressed: () => {print("submitted")},
+                        child: Text("Submit."),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          )
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: createQuestion,
-        child: Icon(Icons.add),
-        backgroundColor: Colors.green,
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: createQuestion,
+      //   child: Icon(Icons.add),
+      //   backgroundColor: Colors.blue,
+      // ),
       drawer: Drawer(
         child: ListView(
           children: <Widget>[

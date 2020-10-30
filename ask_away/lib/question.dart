@@ -18,7 +18,7 @@ class Question extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       child: Container(
-        margin: new EdgeInsets.only(top: 10),
+        margin: new EdgeInsets.all(5),
         decoration: new BoxDecoration(
           borderRadius: new BorderRadius.all(Radius.circular(11)),
           color: Colors.white,
