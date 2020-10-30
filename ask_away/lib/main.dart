@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 
-import 'package:ask_away/question.dart';
+import 'package:ask_away/Question.dart';
 
 void main() {
   runApp(MyApp());
@@ -96,8 +96,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   padding:
                       const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
                   children: <Widget>[
-                    Question("Primeira"),
-                    Question("Segunda")
+                    QuestionWidget(new Question("Primeira")),
+                    QuestionWidget(new Question("Segunda"))
                   ])),
           Align(
             alignment: Alignment.bottomLeft,
@@ -135,6 +135,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
           )
+
         ],
       ),
       // floatingActionButton: FloatingActionButton(
