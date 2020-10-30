@@ -90,56 +90,45 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: Stack(
-        children: [
-          FractionallySizedBox(
-              heightFactor: 0.87,
-              child: ListView(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-                  children: <Widget>[
-                    QuestionWidget(questions[0]),
-                    QuestionWidget(questions[1])
-                  ])),
-          Align(
-            alignment: Alignment.bottomLeft,
-            child: Container(
-              margin: EdgeInsets.only(bottom: 20, left: 10, right: 10),
-              child: Form(
-                key: _formKey,
-                child: Row(
-                  children: <Widget>[
-                    Expanded(
-                        child: Container(
-                          color: Colors.white,
-                          child: TextFormField(
-                            decoration: const InputDecoration(
-                              hintText: 'Enter your question',
-                            ),
-                            validator: (value) {
-                              if (value.isEmpty) {
-                                return 'Please enter some text';
-                              }
-                              return null;
-                            },
-                          ),
-                        ),
-                      ),
-                    Container(
-                      margin: EdgeInsets.only(left: 10),
-                      child: ElevatedButton(
-                        onPressed: () => {print("submitted")},
-                        child: Text("Submit."),
-                      ),
-                    )
-                  ],
+      body: Stack(children: [
+        FractionallySizedBox(
+            heightFactor: 0.87,
+            child: ListView(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                children: <Widget>[
+                  QuestionWidget(questions[0]),
+                  QuestionWidget(questions[1])
+                ])),
+        Align(
+          alignment: Alignment.bottomLeft,
+          child: Container(
+            margin: EdgeInsets.only(bottom: 20, left: 10, right: 10),
+            child: Form(
+              key: _formKey,
+              child: Container(
+                color: Colors.white,
+                padding: EdgeInsets.only(left:10),
+                child: TextFormField(
+                  maxLines: null,
+                  decoration: const InputDecoration(
+                      hintText: 'Enter your question',
+                      suffixIcon: IconButton(
+                        icon: Icon(Icons.send),
+                        onPressed: _userIcon,
+                      )),
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return 'Please enter some text';
+                    }
+                    return null;
+                  },
                 ),
               ),
             ),
-          )
-
-        ],
-      ),
+          ),
+        ),
+      ]),
       // floatingActionButton: FloatingActionButton(
       //   onPressed: createQuestion,
       //   child: Icon(Icons.add),
