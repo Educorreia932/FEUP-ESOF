@@ -4,7 +4,6 @@ import 'package:flutter/painting.dart';
 
 import 'package:ask_away/Question.dart';
 
-List<Question> questions = [new Question("Primeira"), new Question("Segunda")];
 
 void main() {
   runApp(MyApp());
@@ -80,8 +79,11 @@ class MyHomePageState extends StatefulWidget {
   _MyHomePageState createState() => new _MyHomePageState();
 }
 
+
+
 class _MyHomePageState extends State<MyHomePage> {
-  final _formKey = GlobalKey<FormState>();
+
+  QuestionList qList = new QuestionList();
 
   @override
   Widget build(BuildContext context) {
@@ -90,45 +92,7 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: Stack(children: [
-        FractionallySizedBox(
-            heightFactor: 0.87,
-            child: ListView(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-                children: <Widget>[
-                  QuestionWidget(questions[0]),
-                  QuestionWidget(questions[1])
-                ])),
-        Align(
-          alignment: Alignment.bottomLeft,
-          child: Container(
-            margin: EdgeInsets.only(bottom: 20, left: 10, right: 10),
-            child: Form(
-              key: _formKey,
-              child: Container(
-                color: Colors.white,
-                padding: EdgeInsets.only(left:10),
-                child: TextFormField(
-                  maxLines: null,
-                  decoration: const InputDecoration(
-                      hintText: 'Enter your question',
-                      suffixIcon: IconButton(
-                        icon: Icon(Icons.send),
-                        onPressed: _userIcon,
-                      )),
-                  validator: (value) {
-                    if (value.isEmpty) {
-                      return 'Please enter some text';
-                    }
-                    return null;
-                  },
-                ),
-              ),
-            ),
-          ),
-        ),
-      ]),
+      body: qList,
       // floatingActionButton: FloatingActionButton(
       //   onPressed: createQuestion,
       //   child: Icon(Icons.add),

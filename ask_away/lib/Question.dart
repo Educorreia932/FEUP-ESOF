@@ -3,6 +3,42 @@ import 'package:flutter/painting.dart';
 
 import 'Vote.dart';
 
+
+
+// FractionallySizedBox(
+// heightFactor: 0.87,
+// child: qList),
+//
+// Align(
+// alignment: Alignment.bottomLeft,
+// child: Container(
+// margin: EdgeInsets.only(bottom: 20, left: 10, right: 10),
+// child: Form(
+// key: _formKey,
+// child: Container(
+// color: Colors.white,
+// padding: EdgeInsets.only(left:10),
+// child: TextFormField(
+// maxLines: null,
+// decoration: const InputDecoration(
+// hintText: 'Enter your question',
+// suffixIcon: IconButton(
+// icon: Icon(Icons.send),
+// onPressed: _userIcon,
+// )),
+// validator: (value) {
+// if (value.isEmpty) {
+// return 'Please enter some text';
+// }
+// return null;
+// },
+// ),
+// ),
+// ),
+// ),
+// ),
+
+
 class Question {
   int id;
   String text;
@@ -61,14 +97,6 @@ class Voting extends StatefulWidget {
     this.votes = votes;
   }
 
-  int getVoteCount() {
-    return upvoteCount - downvoteCount;
-  }
-
-  void vote(VoteType type) {
-    type == VoteType.up ? upvoteCount++ : downvoteCount++;
-  }
-
   @override
   _VotingState createState() => new _VotingState();
 }
@@ -98,6 +126,76 @@ class _VotingState extends State<Voting> {
       ),
     ]);
   }
+}
+
+class QuestionListState extends State<QuestionList>
+{
+  List<Question> questions = [new Question("Primeira"), new Question("Segunda")];
+
+  void addQuestion(String question)
+  {
+    setState(() {questions.add(new Question(question));});
+  }
+
+  List<Widget> getTextWidgets()
+  {
+    List<Widget> list = [];
+    for(int i=0; i < questions.length;i++)
+      list.add(QuestionWidget(questions[i]));
+    return list;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final _formKey = GlobalKey<FormState>();
+
+    return Stack(children: [
+      FractionallySizedBox(
+          heightFactor: 0.87,
+          child: ListView(
+              padding:
+              const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+              children: getTextWidgets()),
+      ),
+
+      Align(
+        alignment: Alignment.bottomLeft,
+        child: Container(
+          margin: EdgeInsets.only(bottom: 20, left: 10, right: 10),
+          child: Form(
+            key: _formKey,
+            child: Container(
+              color: Colors.white,
+              padding: EdgeInsets.only(left: 10),
+              child: TextFormField(
+                maxLines: null,
+                decoration: InputDecoration(
+                    hintText: 'Enter your question',
+                    suffixIcon: IconButton(
+                      icon: Icon(Icons.send),
+                      onPressed: () => addQuestion("Teste"),
+                    )),
+                validator: (value) {
+                  if (value.isEmpty) {
+                    return 'Please enter some text';
+                  }
+                  return null;
+                },
+              ),
+            ),
+          ),
+        ),
+      ),
+    ]);
+  }
+
+}
+
+class QuestionList extends StatefulWidget
+{
+
+  @override
+  QuestionListState createState() => new QuestionListState();
 }
 
 void questionMenu() {
