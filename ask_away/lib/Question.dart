@@ -26,6 +26,26 @@ class Question {
       }
     return total;
   }
+  int getPosVotes()
+  {
+    int total=0;
+    for(int i = 0; i<votes.length;i++)
+    {
+      if(votes[i].type==VoteType.up)
+        total++;
+    }
+    return total;
+  }
+  int getNegVotes()
+  {
+    int total=0;
+    for(int i = 0; i<votes.length;i++)
+    {
+      if(votes[i].type==VoteType.up)
+        total++;
+    }
+    return total;
+  }
 }
 
 class QuestionWidget extends StatelessWidget {
@@ -70,20 +90,28 @@ class QuestionWidget extends StatelessWidget {
 
 class Voting extends StatefulWidget {
   List<Vote> votes;
-  int upvoteCount, downvoteCount;
   Function callback;
 
-  Voting(List<Vote> votes, this.callback) {
-    this.votes = votes;
+  int getTotalVotes()
+  {
+    int total=0;
+    for(int i = 0; i<votes.length;i++)
+    {
+      if(votes[i].type==VoteType.up)
+        total++;
+      else
+        total--;
+    }
+    return total;
   }
+
+  Voting(this.votes, this.callback) {}
 
   @override
   _VotingState createState() => new _VotingState();
 }
 
 class _VotingState extends State<Voting> {
-  int _upvoteCount = 0;
-  int _downvoteCount = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -93,16 +121,16 @@ class _VotingState extends State<Voting> {
         child: IconButton(
             splashRadius: 15,
             icon: Icon(Icons.keyboard_arrow_up),
-            onPressed: () => setState(() {_upvoteCount++;this.widget.callback();})),
+            onPressed: () => setState(() {this.widget.votes.add(new Vote(VoteType.up));this.widget.callback();})),
       ),
-      Text((_upvoteCount - _downvoteCount).toString(),
+      Text((this.widget.getTotalVotes()).toString(),
           style: TextStyle(color: Colors.black)),
       Material(
         color: Colors.transparent,
         child: IconButton(
             splashRadius: 15,
             icon: Icon(Icons.keyboard_arrow_down),
-            onPressed: () => setState(() => _downvoteCount++)),
+            onPressed: () => setState(() {this.widget.votes.add(new Vote(VoteType.down));this.widget.callback();})),
       ),
     ]);
   }
@@ -117,10 +145,9 @@ class QuestionListState extends State<QuestionList> {
   ];
 
   void callback() {
-    questions.sort((a, b) {
-      return a.getTotalVotes().compareTo(b.getTotalVotes());
-    });
-    setState(() {});
+    setState(() {questions.sort((a, b) {
+      return b.getTotalVotes().compareTo(a.getTotalVotes());
+    });});
   }
 
   void addQuestion(String question) {
