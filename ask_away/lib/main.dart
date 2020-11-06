@@ -1,9 +1,9 @@
+import 'package:ask_away/UserProfile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 
 import 'package:ask_away/Question.dart';
-
 
 void main() {
   runApp(MyApp());
@@ -58,14 +58,12 @@ void createQuestion() {
   return;
 }
 
-void _userProfile() {
-  print("Profile\n");
-  return;
-}
-
-Widget _userIcon() {
+Widget _userIcon(BuildContext context) {
   return InkWell(
-    onTap: _userProfile,
+    onTap: () {
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => UserProfile()));
+    },
     child: CircleAvatar(
       radius: 30,
       backgroundImage: AssetImage('assets/avatar.jpg'),
@@ -79,10 +77,7 @@ class MyHomePageState extends StatefulWidget {
   _MyHomePageState createState() => new _MyHomePageState();
 }
 
-
-
 class _MyHomePageState extends State<MyHomePage> {
-
   QuestionList qList = new QuestionList();
 
   @override
@@ -94,11 +89,9 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: new GestureDetector(
           onTap: () {
-
             FocusScope.of(context).requestFocus(new FocusNode());
           },
-          child: qList
-      ),
+          child: qList),
       drawer: Drawer(
         child: ListView(
           children: <Widget>[
@@ -107,7 +100,7 @@ class _MyHomePageState extends State<MyHomePage> {
               child: DrawerHeader(
                 child: Row(children: <Widget>[
                   Column(children: <Widget>[
-                    _userIcon(),
+                    _userIcon(context),
                   ]),
                   Container(
                     padding: new EdgeInsets.only(left: 20),
