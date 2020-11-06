@@ -13,15 +13,29 @@ class Question {
     this.text = text;
     this.votes = new List<Vote>();
   }
+
+  int getTotalVotes()
+  {
+    int total=0;
+    for(int i = 0; i<votes.length;i++)
+      {
+        if(votes[i].type==VoteType.up)
+          total++;
+        else
+          total--;
+      }
+    return total;
+  }
 }
 
 class QuestionWidget extends StatelessWidget {
   Question question;
   Voting voting;
+  Function callback;
 
-  QuestionWidget(Question question) {
+  QuestionWidget(Question question, this.callback) {
     this.question = question;
-    voting = new Voting(question.votes);
+    voting = new Voting(question.votes, this.callback);
   }
 
   @override
@@ -57,8 +71,9 @@ class QuestionWidget extends StatelessWidget {
 class Voting extends StatefulWidget {
   List<Vote> votes;
   int upvoteCount, downvoteCount;
+  Function callback;
 
-  Voting(List<Vote> votes) {
+  Voting(List<Vote> votes, this.callback) {
     this.votes = votes;
   }
 
@@ -78,7 +93,7 @@ class _VotingState extends State<Voting> {
         child: IconButton(
             splashRadius: 15,
             icon: Icon(Icons.keyboard_arrow_up),
-            onPressed: () => setState(() => _upvoteCount++)),
+            onPressed: () => setState(() {_upvoteCount++;this.widget.callback();})),
       ),
       Text((_upvoteCount - _downvoteCount).toString(),
           style: TextStyle(color: Colors.black)),
@@ -101,6 +116,13 @@ class QuestionListState extends State<QuestionList> {
     new Question("Segunda")
   ];
 
+  void callback() {
+    questions.sort((a, b) {
+      return a.getTotalVotes().compareTo(b.getTotalVotes());
+    });
+    setState(() {});
+  }
+
   void addQuestion(String question) {
     if (question != "")
       setState(() {
@@ -111,7 +133,7 @@ class QuestionListState extends State<QuestionList> {
   List<Widget> getTextWidgets() {
     List<Widget> list = [];
     for (int i = 0; i < questions.length; i++)
-      list.add(QuestionWidget(questions[i]));
+      list.add(QuestionWidget(questions[i],this.callback));
     return list;
   }
 
