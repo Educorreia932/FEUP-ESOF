@@ -136,13 +136,14 @@ class QuestionListState extends State<QuestionList> {
               focusNode: textFocusNode,
               controller: questionController,
               maxLines: null,
+              onTap:() => textFocusNode.requestFocus(),
               decoration: InputDecoration(
                   hintText: 'Enter your question',
                   suffixIcon: IconButton(
                     icon: Icon(Icons.send),
                     onPressed: () {
                       textFocusNode.unfocus();
-                      textFocusNode.canRequestFocus=false;
+                      textFocusNode.canRequestFocus = false;
                       addQuestion(questionController.text);
                       questionController.clear();
                       Future.delayed(Duration(milliseconds: 100), () {

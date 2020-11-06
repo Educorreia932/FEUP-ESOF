@@ -92,12 +92,13 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: qList,
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: createQuestion,
-      //   child: Icon(Icons.add),
-      //   backgroundColor: Colors.blue,
-      // ),
+      body: new GestureDetector(
+          onTap: () {
+
+            FocusScope.of(context).requestFocus(new FocusNode());
+          },
+          child: qList
+      ),
       drawer: Drawer(
         child: ListView(
           children: <Widget>[
