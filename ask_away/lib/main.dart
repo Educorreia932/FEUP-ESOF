@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 
 import 'package:ask_away/Question.dart';
+import 'package:ask_away/Talk.dart';
 
+String appTitle = 'Ask Away';
 
 void main() {
   runApp(MyApp());
@@ -31,7 +33,7 @@ class MyApp extends StatelessWidget {
         // closer together (more dense) than on mobile platforms.
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MyHomePage(title: 'Ask Away'),
+      home: MyHomePage(title: appTitle),
     );
   }
 }
@@ -73,12 +75,6 @@ Widget _userIcon() {
     ),
   );
 }
-
-class MyHomePageState extends StatefulWidget {
-  @override
-  _MyHomePageState createState() => new _MyHomePageState();
-}
-
 
 
 class _MyHomePageState extends State<MyHomePage> {
@@ -124,6 +120,20 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
             ListTile(
+              title: Text('Questions',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+              onTap: () {
+                // Update the state of the app
+                // ...
+                // Then close the drawer
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => MyHomePage(title: appTitle,)),
+                );
+              },
+            ),
+            ListTile(
               title: Text('Talks',
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
               onTap: () {
@@ -131,6 +141,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 // ...
                 // Then close the drawer
                 Navigator.pop(context);
+                Navigator.push(
+                    context,
+                  MaterialPageRoute(builder: (context) => MyTalksPage()),
+                );
               },
             ),
             ListTile(
@@ -148,4 +162,99 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
   }
+}
+
+class MyTalksPage extends StatefulWidget {
+  @override
+  State<MyTalksPage> createState() {
+    return new MyTalksPageState();
+  }
+}
+
+class MyTalksPageState extends State<MyTalksPage> {
+
+  TalkList tList = new TalkList();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.blue[50],
+      appBar: AppBar(
+        title: Text('Talks'),
+      ),
+      body: new GestureDetector(
+          onTap: () {
+
+            FocusScope.of(context).requestFocus(new FocusNode());
+          },
+          child: tList
+      ),
+      drawer: Drawer(
+        child: ListView(
+          children: <Widget>[
+            Container(
+              height: 100,
+              child: DrawerHeader(
+                child: Row(children: <Widget>[
+                  Column(children: <Widget>[
+                    _userIcon(),
+                  ]),
+                  Container(
+                    padding: new EdgeInsets.only(left: 20),
+                    child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text('Mr. Padoru',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 20))),
+                  ),
+                ]),
+              ),
+              decoration: BoxDecoration(
+                color: Colors.blue,
+              ),
+            ),
+            ListTile(
+              title: Text('Questions',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+              onTap: () {
+                // Update the state of the app
+                // ...
+                // Then close the drawer
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => MyHomePage(title: appTitle,)),
+                );
+              },
+            ),
+            ListTile(
+              title: Text('Talks',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+              onTap: () {
+                // Update the state of the app
+                // ...
+                // Then close the drawer
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => MyTalksPage()),
+                );
+              },
+            ),
+            ListTile(
+              title: Text('Settings',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+              onTap: () {
+                // Update the state of the app
+                // ...
+                // Then close the drawer
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
 }
