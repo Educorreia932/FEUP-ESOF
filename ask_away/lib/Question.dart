@@ -105,7 +105,7 @@ class Voting extends StatefulWidget {
     return total;
   }
 
-  Voting(this.votes, this.callback) {}
+  Voting(this.votes, this.callback);
 
   @override
   _VotingState createState() => new _VotingState();
