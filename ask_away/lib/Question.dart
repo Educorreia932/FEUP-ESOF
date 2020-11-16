@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 
@@ -138,11 +139,8 @@ class _VotingState extends State<Voting> {
 
 class QuestionListState extends State<QuestionList> {
   TextEditingController questionController = new TextEditingController();
-
-  List<Question> questions = [
-    new Question("Primeira"),
-    new Question("Segunda")
-  ];
+  bool loaded = false;
+  List<Question> questions = [];
 
   void callback() {
     setState(() {questions.sort((a, b) {
@@ -166,6 +164,18 @@ class QuestionListState extends State<QuestionList> {
 
   @override
   Widget build(BuildContext context) {
+    if(!loaded) {
+      FirebaseFirestore.instance
+          .collection('Questions')
+          .get()
+          .then((QuerySnapshot querySnapshot) =>
+      {
+        querySnapshot.docs.forEach((doc) {
+          questions.add(new Question(doc["text"]));
+        })
+      });
+      loaded = true;
+    }
     FocusNode textFocusNode = new FocusNode();
     return Stack(children: [
       FractionallySizedBox(
