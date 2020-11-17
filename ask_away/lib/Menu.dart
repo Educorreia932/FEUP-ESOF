@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'UserProfile.dart';
 import 'main.dart';
+
+
 
 class MyDrawer extends StatelessWidget {
   @override
@@ -14,7 +17,7 @@ class MyDrawer extends StatelessWidget {
             child: DrawerHeader(
               child: Row(children: <Widget>[
                 Column(children: <Widget>[
-                  _userIcon(),
+                  _UserIcon(context),
                 ]),
                 Container(
                   padding: new EdgeInsets.only(left: 20),
@@ -40,7 +43,10 @@ class MyDrawer extends StatelessWidget {
               Navigator.pop(context);
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => MyHomePage(title: appTitle,)),
+                MaterialPageRoute(
+                    builder: (context) => MyHomePage(
+                          title: appTitle,
+                        )),
               );
             },
           ),
@@ -74,10 +80,15 @@ class MyDrawer extends StatelessWidget {
   }
 }
 
-
-Widget _userIcon() {
+Widget _UserIcon(BuildContext context) {
   return InkWell(
-    onTap: _userProfile,
+    onTap: () {
+      Navigator.pop(context);
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => UserProfile()),
+      );
+    },
     child: CircleAvatar(
       radius: 30,
       backgroundImage: AssetImage('assets/avatar.jpg'),
@@ -85,7 +96,6 @@ Widget _userIcon() {
     ),
   );
 }
-
 
 void _userProfile() {
   print("Profile\n");
