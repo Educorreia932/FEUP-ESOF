@@ -1,53 +1,9 @@
+import 'package:ask_away/models/Question.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 
-import 'Vote.dart';
-
-
-class Question {
-  int id;
-  String text;
-  List<Vote> votes;
-
-  Question(String text) {
-    this.text = text;
-    this.votes = new List<Vote>();
-  }
-
-  int getTotalVotes()
-  {
-    int total=0;
-    for(int i = 0; i<votes.length;i++)
-      {
-        if(votes[i].type==VoteType.up)
-          total++;
-        else
-          total--;
-      }
-    return total;
-  }
-  int getPosVotes()
-  {
-    int total=0;
-    for(int i = 0; i<votes.length;i++)
-    {
-      if(votes[i].type==VoteType.up)
-        total++;
-    }
-    return total;
-  }
-  int getNegVotes()
-  {
-    int total=0;
-    for(int i = 0; i<votes.length;i++)
-    {
-      if(votes[i].type==VoteType.up)
-        total++;
-    }
-    return total;
-  }
-}
+import 'VotingComponent.dart';
 
 class QuestionWidget extends StatelessWidget {
   Question question;
@@ -89,63 +45,17 @@ class QuestionWidget extends StatelessWidget {
   }
 }
 
-class Voting extends StatefulWidget {
-  List<Vote> votes;
-  Function callback;
-
-  int getTotalVotes()
-  {
-    int total=0;
-    for(int i = 0; i<votes.length;i++)
-    {
-      if(votes[i].type==VoteType.up)
-        total++;
-      else
-        total--;
-    }
-    return total;
-  }
-
-  Voting(this.votes, this.callback);
-
-  @override
-  _VotingState createState() => new _VotingState();
-}
-
-class _VotingState extends State<Voting> {
-
-  @override
-  Widget build(BuildContext context) {
-    return new Column(children: <Widget>[
-      Material(
-        color: Colors.transparent,
-        child: IconButton(
-            splashRadius: 15,
-            icon: Icon(Icons.keyboard_arrow_up),
-            onPressed: () => setState(() {this.widget.votes.add(new Vote(VoteType.up));this.widget.callback();})),
-      ),
-      Text((this.widget.getTotalVotes()).toString(),
-          style: TextStyle(color: Colors.black)),
-      Material(
-        color: Colors.transparent,
-        child: IconButton(
-            splashRadius: 15,
-            icon: Icon(Icons.keyboard_arrow_down),
-            onPressed: () => setState(() {this.widget.votes.add(new Vote(VoteType.down));this.widget.callback();})),
-      ),
-    ]);
-  }
-}
-
 class QuestionListState extends State<QuestionList> {
   TextEditingController questionController = new TextEditingController();
   bool loaded = false;
   List<Question> questions = [];
 
   void callback() {
-    setState(() {questions.sort((a, b) {
-      return b.getTotalVotes().compareTo(a.getTotalVotes());
-    });});
+    setState(() {
+      questions.sort((a, b) {
+        return b.getTotalVotes().compareTo(a.getTotalVotes());
+      });
+    });
   }
 
   void addQuestion(String question) {
@@ -158,22 +68,21 @@ class QuestionListState extends State<QuestionList> {
   List<Widget> getTextWidgets() {
     List<Widget> list = [];
     for (int i = 0; i < questions.length; i++)
-      list.add(QuestionWidget(questions[i],this.callback));
+      list.add(QuestionWidget(questions[i], this.callback));
     return list;
   }
 
   @override
   Widget build(BuildContext context) {
-    if(!loaded) {
+    if (!loaded) {
       FirebaseFirestore.instance
           .collection('Questions')
           .get()
-          .then((QuerySnapshot querySnapshot) =>
-      {
-        querySnapshot.docs.forEach((doc) {
-          questions.add(new Question(doc["text"]));
-        })
-      });
+          .then((QuerySnapshot querySnapshot) => {
+                querySnapshot.docs.forEach((doc) {
+                  questions.add(new Question(doc["text"]));
+                })
+              });
       loaded = true;
     }
     FocusNode textFocusNode = new FocusNode();
@@ -195,7 +104,7 @@ class QuestionListState extends State<QuestionList> {
               focusNode: textFocusNode,
               controller: questionController,
               maxLines: null,
-              onTap:() => textFocusNode.requestFocus(),
+              onTap: () => textFocusNode.requestFocus(),
               decoration: InputDecoration(
                   hintText: 'Enter your question',
                   suffixIcon: IconButton(
@@ -209,8 +118,7 @@ class QuestionListState extends State<QuestionList> {
                         textFocusNode.canRequestFocus = true;
                       });
                     },
-                  )
-              ),
+                  )),
             ),
           ),
         ),

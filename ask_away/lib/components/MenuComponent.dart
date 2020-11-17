@@ -1,10 +1,9 @@
+import 'package:ask_away/screens/TalkScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'UserProfile.dart';
-import 'main.dart';
-
-
+import '../screens/UserProfileScreen.dart';
+import '../main.dart';
 
 class MyDrawer extends StatelessWidget {
   @override
@@ -91,13 +90,8 @@ Widget _UserIcon(BuildContext context) {
     },
     child: CircleAvatar(
       radius: 30,
-      backgroundImage: AssetImage('assets/avatar.jpg'),
+      backgroundImage: AssetImage('assets/images/avatar.jpg'),
       backgroundColor: Colors.transparent,
     ),
   );
-}
-
-void _userProfile() {
-  print("Profile\n");
-  return;
 }

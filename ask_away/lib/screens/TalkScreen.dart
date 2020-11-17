@@ -1,32 +1,37 @@
-import 'package:ask_away/Question.dart';
+import 'file:///C:/Users/skelo/OneDrive/Ambiente%20de%20Trabalho/open-cx-t1g2-escama/ask_away/lib/components/QuestionComponent.dart';
+import 'package:ask_away/components/MenuComponent.dart';
+import 'package:ask_away/models/Talk.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart'; // for date format
 
-import 'User.dart';
+import '../models/User.dart';
 
-class Talk {
-  int id;
-  String title;
-  String description;
-  QuestionList questionList;
-
-  //UserList userList; TODO
-  DateTime date;
-  bool isExpanded;
-  User creator;
-  String location;
-
-  Talk(String title, String description, DateTime date, String location) {
-    this.title = title;
-    this.description = description;
-    this.date = date;
-    this.location = location;
-    this.creator = new User(0, "Mr. Padoru"); //change to receive in constructor
-    //TODO user list (speakers and moderators)
-
-    this.isExpanded = false;
+class MyTalksPage extends StatefulWidget {
+  @override
+  State<MyTalksPage> createState() {
+    return new MyTalksPageState();
   }
 }
+
+class MyTalksPageState extends State<MyTalksPage> {
+  TalkList talks = new TalkList();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        backgroundColor: Colors.blue[50],
+        appBar: AppBar(
+          title: Text('Talks'),
+        ),
+        body: new GestureDetector(
+            onTap: () {
+              FocusScope.of(context).requestFocus(new FocusNode());
+            },
+            child: talks),
+        drawer: MyDrawer());
+  }
+}
+
 
 class TalkList extends StatefulWidget {
   @override
