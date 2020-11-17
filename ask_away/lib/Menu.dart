@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'main.dart';
+
 class MyDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -29,6 +31,20 @@ class MyDrawer extends StatelessWidget {
             ),
           ),
           ListTile(
+            title: Text('Questions',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+            onTap: () {
+              // Update the state of the app
+              // ...
+              // Then close the drawer
+              Navigator.pop(context);
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => MyHomePage(title: appTitle,)),
+              );
+            },
+          ),
+          ListTile(
             title: Text('Talks',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
             onTap: () {
@@ -36,6 +52,10 @@ class MyDrawer extends StatelessWidget {
               // ...
               // Then close the drawer
               Navigator.pop(context);
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => MyTalksPage()),
+              );
             },
           ),
           ListTile(

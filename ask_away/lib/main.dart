@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:ask_away/Question.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ask_away/Talk.dart';
+
+String appTitle = 'Ask Away';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -61,8 +64,6 @@ class MyHomePageState extends StatefulWidget {
   _MyHomePageState createState() => new _MyHomePageState();
 }
 
-
-
 class _MyHomePageState extends State<MyHomePage> {
 
   QuestionList qList = new QuestionList();
@@ -83,4 +84,35 @@ class _MyHomePageState extends State<MyHomePage> {
       drawer: MyDrawer()
     );
   }
+}
+
+class MyTalksPage extends StatefulWidget {
+  @override
+  State<MyTalksPage> createState() {
+    return new MyTalksPageState();
+  }
+}
+
+class MyTalksPageState extends State<MyTalksPage> {
+
+  TalkList tList = new TalkList();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.blue[50],
+      appBar: AppBar(
+        title: Text('Talks'),
+      ),
+      body: new GestureDetector(
+          onTap: () {
+
+            FocusScope.of(context).requestFocus(new FocusNode());
+          },
+          child: tList
+      ),
+      drawer: MyDrawer()
+    );
+  }
+
 }
