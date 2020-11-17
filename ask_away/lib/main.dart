@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Ask Away',
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -62,7 +62,9 @@ Widget _userIcon(BuildContext context) {
   return InkWell(
     onTap: () {
       Navigator.push(
-          context, MaterialPageRoute(builder: (context) => UserProfile()));
+        context,
+        MaterialPageRoute(builder: (context) => UserProfile()),
+      );
     },
     child: CircleAvatar(
       radius: 30,

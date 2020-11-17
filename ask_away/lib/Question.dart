@@ -37,7 +37,7 @@ class QuestionWidget extends StatelessWidget {
               color: Colors.grey.withOpacity(0.3),
               spreadRadius: 3,
               blurRadius: 5,
-              offset: Offset(0, 2), // changes position of shadow
+              offset: Offset(0, 2), // Changes position of shadow
             ),
           ],
         ),
