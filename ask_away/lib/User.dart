@@ -6,4 +6,6 @@ class User {
   String username;
   List<Question> askedQuestions;
   List<Vote> votes;
+
+
 }
