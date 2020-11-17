@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "91866535702",
+    "firebase_url": "https://ask-away-81762.firebaseio.com",
+    "project_id": "ask-away-81762",
+    "storage_bucket": "ask-away-81762.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:91866535702:android:9cded8249d60c4f3412237",
+        "android_client_info": {
+          "package_name": "com.example.ask_away"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "91866535702-nv57un0hc4voaqlsd5iqv6gc9qimtbec.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD-ljHsJI8Q3IdQsoUACm9E_Y_iwY3dvRI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "91866535702-nv57un0hc4voaqlsd5iqv6gc9qimtbec.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

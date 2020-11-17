@@ -9,4 +9,5 @@ class Vote {
   User user;
   VoteType type;
   // Casted time
+  Vote(this.type);
 }

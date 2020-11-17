@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 
@@ -13,15 +14,49 @@ class Question {
     this.text = text;
     this.votes = new List<Vote>();
   }
+
+  int getTotalVotes()
+  {
+    int total=0;
+    for(int i = 0; i<votes.length;i++)
+      {
+        if(votes[i].type==VoteType.up)
+          total++;
+        else
+          total--;
+      }
+    return total;
+  }
+  int getPosVotes()
+  {
+    int total=0;
+    for(int i = 0; i<votes.length;i++)
+    {
+      if(votes[i].type==VoteType.up)
+        total++;
+    }
+    return total;
+  }
+  int getNegVotes()
+  {
+    int total=0;
+    for(int i = 0; i<votes.length;i++)
+    {
+      if(votes[i].type==VoteType.up)
+        total++;
+    }
+    return total;
+  }
 }
 
 class QuestionWidget extends StatelessWidget {
   Question question;
   Voting voting;
+  Function callback;
 
-  QuestionWidget(Question question) {
+  QuestionWidget(Question question, this.callback) {
     this.question = question;
-    voting = new Voting(question.votes);
+    voting = new Voting(question.votes, this.callback);
   }
 
   @override
@@ -56,19 +91,28 @@ class QuestionWidget extends StatelessWidget {
 
 class Voting extends StatefulWidget {
   List<Vote> votes;
-  int upvoteCount, downvoteCount;
+  Function callback;
 
-  Voting(List<Vote> votes) {
-    this.votes = votes;
+  int getTotalVotes()
+  {
+    int total=0;
+    for(int i = 0; i<votes.length;i++)
+    {
+      if(votes[i].type==VoteType.up)
+        total++;
+      else
+        total--;
+    }
+    return total;
   }
+
+  Voting(this.votes, this.callback);
 
   @override
   _VotingState createState() => new _VotingState();
 }
 
 class _VotingState extends State<Voting> {
-  int _upvoteCount = 0;
-  int _downvoteCount = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -78,16 +122,16 @@ class _VotingState extends State<Voting> {
         child: IconButton(
             splashRadius: 15,
             icon: Icon(Icons.keyboard_arrow_up),
-            onPressed: () => setState(() => _upvoteCount++)),
+            onPressed: () => setState(() {this.widget.votes.add(new Vote(VoteType.up));this.widget.callback();})),
       ),
-      Text((_upvoteCount - _downvoteCount).toString(),
+      Text((this.widget.getTotalVotes()).toString(),
           style: TextStyle(color: Colors.black)),
       Material(
         color: Colors.transparent,
         child: IconButton(
             splashRadius: 15,
             icon: Icon(Icons.keyboard_arrow_down),
-            onPressed: () => setState(() => _downvoteCount++)),
+            onPressed: () => setState(() {this.widget.votes.add(new Vote(VoteType.down));this.widget.callback();})),
       ),
     ]);
   }
@@ -95,11 +139,14 @@ class _VotingState extends State<Voting> {
 
 class QuestionListState extends State<QuestionList> {
   TextEditingController questionController = new TextEditingController();
+  bool loaded = false;
+  List<Question> questions = [];
 
-  List<Question> questions = [
-    new Question("Primeira"),
-    new Question("Segunda")
-  ];
+  void callback() {
+    setState(() {questions.sort((a, b) {
+      return b.getTotalVotes().compareTo(a.getTotalVotes());
+    });});
+  }
 
   void addQuestion(String question) {
     if (question != "")
@@ -111,12 +158,24 @@ class QuestionListState extends State<QuestionList> {
   List<Widget> getTextWidgets() {
     List<Widget> list = [];
     for (int i = 0; i < questions.length; i++)
-      list.add(QuestionWidget(questions[i]));
+      list.add(QuestionWidget(questions[i],this.callback));
     return list;
   }
 
   @override
   Widget build(BuildContext context) {
+    if(!loaded) {
+      FirebaseFirestore.instance
+          .collection('Questions')
+          .get()
+          .then((QuerySnapshot querySnapshot) =>
+      {
+        querySnapshot.docs.forEach((doc) {
+          questions.add(new Question(doc["text"]));
+        })
+      });
+      loaded = true;
+    }
     FocusNode textFocusNode = new FocusNode();
     return Stack(children: [
       FractionallySizedBox(
