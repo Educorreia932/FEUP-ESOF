@@ -1,4 +1,4 @@
-import 'file:///C:/Users/skelo/OneDrive/Ambiente%20de%20Trabalho/open-cx-t1g2-escama/ask_away/lib/components/QuestionComponent.dart';
+import 'package:ask_away/components/QuestionComponent.dart';
 import 'package:ask_away/components/MenuComponent.dart';
 import 'package:ask_away/models/Talk.dart';
 import 'package:flutter/material.dart';

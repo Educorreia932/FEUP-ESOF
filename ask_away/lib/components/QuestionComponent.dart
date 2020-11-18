@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:ask_away/models/Question.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -81,10 +83,13 @@ class QuestionListState extends State<QuestionList> {
           .then((QuerySnapshot querySnapshot) => {
                 querySnapshot.docs.forEach((doc) {
                   questions.add(new Question(doc["text"]));
-                })
+                }
+              ),
+              setState(() {})
               });
       loaded = true;
     }
+
     FocusNode textFocusNode = new FocusNode();
     return Stack(children: [
       FractionallySizedBox(
