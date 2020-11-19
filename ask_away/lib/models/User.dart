@@ -6,4 +6,9 @@ class User {
   String username;
   List<Question> askedQuestions;
   List<Vote> votes;
+
+  User(int id, String username) {
+    this.id = id;
+    this.username = username;
+  }
 }
