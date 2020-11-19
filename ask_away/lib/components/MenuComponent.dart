@@ -2,7 +2,7 @@ import 'package:ask_away/screens/TalkScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../screens/UserProfileScreen.dart';
+import '../screens/user_profile/UserProfileScreen.dart';
 import '../main.dart';
 
 class MyDrawer extends StatelessWidget {
