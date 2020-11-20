@@ -39,12 +39,8 @@ Let your voice be heard by focusing on the questions that matter.
 Every great answer starts with a great question.
 
 ## Elevator Pitch
-Draft a small text to help you quickly introduce and describe your product in a short time and a few words (~800 characters), a technique usually known as elevator pitch.
 
-Take a look at the following links to learn some techniques:
-* [Crafting an Elevator Pitch](https://www.mindtools.com/pages/article/elevator-pitch.htm)
-* [The Best Elevator Pitch Examples, Templates, and Tactics - A Guide to Writing an Unforgettable Elevator Speech, by strategypeak.com](https://strategypeak.com/elevator-pitch-examples/)
-* [Top 7 Killer Elevator Pitch Examples, by toggl.com](https://blog.toggl.com/elevator-pitch-examples/)
+For speakers who want to improve the speaker-participant interaction, Ask a Way is an app that guarentees that the questions asked are the ones that the atendees want to hear the most, by using a voting and moderating system that rewards the best questions.
 
 ---
 ## Requirements
