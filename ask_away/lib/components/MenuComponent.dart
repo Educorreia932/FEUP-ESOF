@@ -1,5 +1,6 @@
-import 'file:///C:/Users/skelo/OneDrive/Ambiente%20de%20Trabalho/open-cx-t1g2-escama/ask_away/lib/screens/authentication/LoginScreen.dart';
+import 'package:ask_away/screens/authentication/LoginScreen.dart';
 import 'package:ask_away/screens/TalkScreen.dart';
+import 'package:ask_away/screens/authentication/RegisterScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -87,6 +88,22 @@ class MyDrawer extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => LoginScreen()),
+              );
+            },
+          ),
+          ListTile(
+            title: Text(
+              'Register',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+            ),
+            onTap: () {
+              // Update the state of the app
+              // ...
+              // Then close the drawer
+              Navigator.pop(context);
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => RegisterScreen()),
               );
             },
           ),
