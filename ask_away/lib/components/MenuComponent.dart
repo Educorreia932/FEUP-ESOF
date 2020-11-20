@@ -1,4 +1,4 @@
-import 'package:ask_away/screens/LoginScreen.dart';
+import 'file:///C:/Users/skelo/OneDrive/Ambiente%20de%20Trabalho/open-cx-t1g2-escama/ask_away/lib/screens/authentication/LoginScreen.dart';
 import 'package:ask_away/screens/TalkScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

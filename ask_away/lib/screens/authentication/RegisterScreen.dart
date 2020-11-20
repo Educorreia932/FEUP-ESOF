@@ -2,58 +2,19 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class LoginScreen extends StatefulWidget {
+import 'components/EntryField.dart';
+
+class RegisterScreen extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => LoginScreenState();
+  State<StatefulWidget> createState() => RegisterScreenState();
 }
 
-class LoginScreenState extends State<LoginScreen> {
-  final _loginController = TextEditingController();
-  final _passwordController = TextEditingController();
-
-  String _validateEmail(String text) {
-    if (text.isEmpty) return "Enter an e-mail.";
-
-    return null;
-  }
-
-  String _validatePasword(String text) {
-    if (text.isEmpty) return "Enter a password.";
-
-    return null;
-  }
-
-  Widget _EntryField(String title, {bool isPassword = false}) {
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(
-            title,
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          TextFormField(
-            controller: isPassword ? _passwordController : _loginController,
-            obscureText: isPassword,
-            decoration: InputDecoration(
-                border: InputBorder.none,
-                fillColor: Color(0xfff3f3f4),
-                filled: true),
-          )
-        ],
-      ),
-    );
-  }
-
-  Widget _EmailPassword() {
+class RegisterScreenState extends State<RegisterScreen> {
+  Widget _LoginForm() {
     return Column(
       children: <Widget>[
-        _EntryField("Email"),
-        _EntryField("Password", isPassword: true),
+        EntryField("Email"),
+        EntryField("Password", isPassword: true),
       ],
     );
   }
@@ -90,14 +51,15 @@ class LoginScreenState extends State<LoginScreen> {
   }
 
   void _Register() {
-    final login = _loginController.text;
-    final password = _passwordController.text;
+    final login = loginController.text;
+    final password = passwordController.text;
+
     print("Login: $login , Senha: $password ");
 
     FirebaseFirestore.instance.collection('Users').add(
       {
         "login": login,
-        "password": password
+        "password": password,
       },
     );
   }
@@ -110,7 +72,10 @@ class LoginScreenState extends State<LoginScreen> {
       ),
       body: Container(
         child: Column(
-          children: [_EmailPassword(), _SubmitButton()],
+          children: [
+            _LoginForm(),
+            _SubmitButton(),
+          ],
         ),
       ),
     );
