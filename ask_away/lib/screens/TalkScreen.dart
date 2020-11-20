@@ -1,10 +1,8 @@
-import 'package:ask_away/components/QuestionComponent.dart';
-import 'package:ask_away/components/MenuComponent.dart';
 import 'package:ask_away/models/Talk.dart';
+import 'package:ask_away/screens/main_screen/components/DrawerComponent.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart'; // for date format
 
-import '../models/User.dart';
 
 class MyTalksPage extends StatefulWidget {
   @override
@@ -28,7 +26,7 @@ class MyTalksPageState extends State<MyTalksPage> {
               FocusScope.of(context).requestFocus(new FocusNode());
             },
             child: talks),
-        drawer: MyDrawer());
+        drawer: DrawerComponent());
   }
 }
 

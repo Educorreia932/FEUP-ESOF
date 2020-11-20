@@ -1,10 +1,10 @@
-import 'package:ask_away/screens/MainScreen.dart';
+import 'file:///C:/Users/skelo/OneDrive/Ambiente%20de%20Trabalho/open-cx-t1g2-escama/ask_away/lib/screens/main_screen/MainScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
 
-import 'components/MenuComponent.dart';
+import 'screens/main_screen/components/DrawerComponent.dart';
 import 'components/QuestionComponent.dart';
 
 String appTitle = 'Ask Away';
@@ -48,27 +48,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-// class MyHomePageState extends StatefulWidget {
-//   @override
-//   _MyHomePageState createState() => new _MyHomePageState();
-// }
-//
-// class _MyHomePageState extends State<MyHomePage> {
-//   QuestionList qList = new QuestionList();
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//         backgroundColor: Colors.blue[50],
-//         appBar: AppBar(
-//           title: Text(widget.title),
-//         ),
-//         body: new GestureDetector(
-//             onTap: () {
-//               FocusScope.of(context).requestFocus(new FocusNode());
-//             },
-//             child: qList),
-//         drawer: MyDrawer());
-//   }
-// }

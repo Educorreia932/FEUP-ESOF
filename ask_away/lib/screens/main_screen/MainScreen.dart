@@ -1,7 +1,9 @@
-import 'package:ask_away/components/MenuComponent.dart';
+import 'package:ask_away/components/AppBarComponent.dart';
 import 'package:ask_away/components/SimpleButton.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+
+import 'components/DrawerComponent.dart';
 
 GlobalKey<ScaffoldState> _drawerKey = GlobalKey();
 
@@ -10,36 +12,8 @@ class MainScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _drawerKey,
-      drawer: MyDrawer(),
-      appBar: AppBar(
-        toolbarHeight: 100,
-        leading: Padding(
-          padding: const EdgeInsets.only(left: 10),
-          child: new IconButton(
-            icon: new Icon(
-              Icons.menu,
-              size: 40,
-              color: Colors.black,
-            ),
-            onPressed: () => {_drawerKey.currentState.openDrawer()},
-          ),
-        ),
-        backgroundColor: Color(0xFFE5E5E5),
-        elevation: 0.0,
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(
-              top: 20,
-              right: 10,
-            ),
-            child: CircleAvatar(
-              backgroundColor: Colors.transparent,
-              radius: 50,
-              backgroundImage: AssetImage('assets/images/avatar.png'),
-            ),
-          ),
-        ],
-      ),
+      drawer: DrawerComponent(),
+      appBar: AppBarComponent(_drawerKey),
       body: Container(
         color: Color(0xFFE5E5E5),
         child: Column(
@@ -96,3 +70,5 @@ class MainScreen extends StatelessWidget {
     );
   }
 }
+
+

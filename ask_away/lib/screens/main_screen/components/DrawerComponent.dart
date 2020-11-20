@@ -1,14 +1,13 @@
-import 'package:ask_away/screens/MainScreen.dart';
 import 'package:ask_away/screens/authentication/LoginScreen.dart';
 import 'package:ask_away/screens/TalkScreen.dart';
 import 'package:ask_away/screens/authentication/RegisterScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../screens/user_profile/UserProfileScreen.dart';
-import '../main.dart';
+import '../../user_profile/UserProfile.dart';
+import '../MainScreen.dart';
 
-class MyDrawer extends StatelessWidget {
+class DrawerComponent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
