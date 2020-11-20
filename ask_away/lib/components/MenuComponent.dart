@@ -1,3 +1,4 @@
+import 'package:ask_away/screens/MainScreen.dart';
 import 'package:ask_away/screens/authentication/LoginScreen.dart';
 import 'package:ask_away/screens/TalkScreen.dart';
 import 'package:ask_away/screens/authentication/RegisterScreen.dart';
@@ -45,9 +46,8 @@ class MyDrawer extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => MyHomePage(
-                          title: appTitle,
-                        )),
+                  builder: (context) => MainScreen(),
+                ),
               );
             },
           ),
