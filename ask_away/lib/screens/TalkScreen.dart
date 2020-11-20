@@ -32,7 +32,6 @@ class MyTalksPageState extends State<MyTalksPage> {
   }
 }
 
-
 class TalkList extends StatefulWidget {
   @override
   TalkListState createState() => new TalkListState();
@@ -42,9 +41,12 @@ class TalkListState extends State<TalkList> {
   final DateFormat formatterDate = DateFormat('dd/MM/yyyy     HH:mm');
 
   List<Talk> talks = [
-    new Talk("Demencia Artificial", "Talk sobre emular o Padoru em software, com todos os detalhes necessários para um aprendiz desenvolver o"
+    new Talk(
+        "Demencia Artificial",
+        "Talk sobre emular o Padoru em software, com todos os detalhes necessários para um aprendiz desenvolver o"
             "seu próprio Padoru pessoal",
-        new DateTime.utc(2020, 9, 11, 18, 30), "Sitio1"),
+        new DateTime.utc(2020, 9, 11, 18, 30),
+        "Sitio1"),
     new Talk("Nova talk", "Esta talk é nova fyi",
         new DateTime.utc(2020, 12, 1, 14), "Sitio2")
   ];
@@ -79,10 +81,10 @@ class TalkListState extends State<TalkList> {
             Row(
               children: [
                 IconTheme(
-                    data: new IconThemeData(
-                      color: Colors.blue,
-                    ),
-                    child: Icon(Icons.date_range),
+                  data: new IconThemeData(
+                    color: Colors.blue,
+                  ),
+                  child: Icon(Icons.date_range),
                 ),
                 Text(
                   "  " + formatterDate.format(talk.date),
@@ -138,11 +140,10 @@ class TalkListState extends State<TalkList> {
               child: Column(
                 children: [
                   Container(
-                    alignment: Alignment.centerLeft,
-                    margin: EdgeInsets.only(left: 10.0, bottom: 10.0),
+                      alignment: Alignment.centerLeft,
+                      margin: EdgeInsets.only(left: 10.0, bottom: 10.0),
                       child: Text(talk.description,
-                          style: TextStyle(fontSize: 17.0))
-                  ),
+                          style: TextStyle(fontSize: 17.0))),
                   _userNdate(talk),
                 ],
               )),

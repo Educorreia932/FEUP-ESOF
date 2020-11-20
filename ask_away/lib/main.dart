@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 
-
 import 'components/MenuComponent.dart';
 import 'components/QuestionComponent.dart';
 
@@ -23,7 +22,7 @@ class MyApp extends StatelessWidget {
       builder: (context, AsyncSnapshot snapshot) {
         if (snapshot.hasData) {
           return MaterialApp(
-            title: 'Flutter Demo',
+            title: 'Ask Away',
             theme: ThemeData(
               primarySwatch: Colors.blue,
               visualDensity: VisualDensity.adaptivePlatformDensity,
@@ -78,5 +77,3 @@ class _MyHomePageState extends State<MyHomePage> {
         drawer: MyDrawer());
   }
 }
-
-
