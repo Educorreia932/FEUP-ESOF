@@ -53,6 +53,12 @@ class UserProfileState extends State<UserProfile> {
                         height: 20,
                         thickness: 1,
                       ),
+                      Text(
+                        "Pee Poo Pee Poo",
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -88,7 +94,14 @@ class UserProfileState extends State<UserProfile> {
                               QuestionCard()
                             ],
                           ),
-                        )
+                        ),
+                        Text(
+                          "Attended Talks",
+                          style: TextStyle(
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ],
                     ),
                   ),

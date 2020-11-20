@@ -1,3 +1,4 @@
+import 'package:ask_away/screens/LoginScreen.dart';
 import 'package:ask_away/screens/TalkScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -71,6 +72,22 @@ class MyDrawer extends StatelessWidget {
               // ...
               // Then close the drawer
               Navigator.pop(context);
+            },
+          ),
+          ListTile(
+            title: Text(
+              'Login',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+            ),
+            onTap: () {
+              // Update the state of the app
+              // ...
+              // Then close the drawer
+              Navigator.pop(context);
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => LoginScreen()),
+              );
             },
           ),
         ],
