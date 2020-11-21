@@ -98,17 +98,16 @@ class UserProfileState extends State<UserProfile> {
               child: Column(
                 children: [
                   SectionHeader("Asked Questions", 5),
-                  Flexible(
-                    child: ListView(
-                      children: [
-                        QuestionCard(),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        QuestionCard(),
-                      ],
-                    ),
-                  )
+                  Column(
+                    children: [
+                      QuestionCard(),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      QuestionCard(),
+                    ],
+                  ),
+                  SectionHeader("Answers", 3),
                 ],
               ),
             ),

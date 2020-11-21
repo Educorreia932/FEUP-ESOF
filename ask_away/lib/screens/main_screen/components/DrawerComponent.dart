@@ -1,11 +1,9 @@
 import 'package:ask_away/screens/authentication/LoginScreen.dart';
-import 'package:ask_away/screens/TalkScreen.dart';
 import 'package:ask_away/screens/authentication/RegisterScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../user_profile/UserProfile.dart';
-import '../MainScreen.dart';
 
 class DrawerComponent extends StatelessWidget {
   @override
@@ -13,64 +11,49 @@ class DrawerComponent extends StatelessWidget {
     return Drawer(
       child: ListView(
         children: <Widget>[
-          Container(
-            height: 100,
-            child: DrawerHeader(
-              child: Row(children: <Widget>[
-                Column(children: <Widget>[
-                  _UserIcon(context),
-                ]),
-                Container(
-                  padding: new EdgeInsets.only(left: 20),
-                  child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text('Mr. Padoru',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 20))),
-                ),
-              ]),
-            ),
-            decoration: BoxDecoration(
-              color: Colors.blue,
+          DrawerHeader(
+            child: RichText(
+              text: TextSpan(
+                children: [
+                  TextSpan(
+                    text: "Logged in as\n",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 35,
+                    ),
+                  ),
+                  TextSpan(
+                    text: "Educorreia932",
+                    style: TextStyle(
+                      color: Color(0xFFE11D1D),
+                      fontSize: 35,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
           ListTile(
-            title: Text('Questions',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+            title: Text(
+              'Settings',
+              style: TextStyle(
+                fontWeight: FontWeight.normal ,
+                fontSize: 35,
+              ),
+            ),
             onTap: () {
-              // Update the state of the app
-              // ...
-              // Then close the drawer
               Navigator.pop(context);
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => MainScreen(),
-                ),
-              );
             },
           ),
           ListTile(
-            title: Text('Talks',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+            title: Text(
+              'About',
+              style: TextStyle(
+                fontWeight: FontWeight.normal,
+                fontSize: 35,
+              ),
+            ),
             onTap: () {
-              // Update the state of the app
-              // ...
-              // Then close the drawer
-              Navigator.pop(context);
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => MyTalksPage()),
-              );
-            },
-          ),
-          ListTile(
-            title: Text('Settings',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
-            onTap: () {
-              // Update the state of the app
-              // ...
-              // Then close the drawer
               Navigator.pop(context);
             },
           ),
@@ -80,9 +63,6 @@ class DrawerComponent extends StatelessWidget {
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
             ),
             onTap: () {
-              // Update the state of the app
-              // ...
-              // Then close the drawer
               Navigator.pop(context);
               Navigator.push(
                 context,
@@ -96,9 +76,6 @@ class DrawerComponent extends StatelessWidget {
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
             ),
             onTap: () {
-              // Update the state of the app
-              // ...
-              // Then close the drawer
               Navigator.pop(context);
               Navigator.push(
                 context,
@@ -110,21 +87,4 @@ class DrawerComponent extends StatelessWidget {
       ),
     );
   }
-}
-
-Widget _UserIcon(BuildContext context) {
-  return InkWell(
-    onTap: () {
-      Navigator.pop(context);
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => UserProfile()),
-      );
-    },
-    child: CircleAvatar(
-      radius: 30,
-      backgroundImage: AssetImage('assets/images/avatar.jpg'),
-      backgroundColor: Colors.transparent,
-    ),
-  );
 }
