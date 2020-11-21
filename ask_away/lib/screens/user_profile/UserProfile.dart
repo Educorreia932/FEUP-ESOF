@@ -1,4 +1,5 @@
 import 'package:ask_away/components/UserIcon.dart';
+import 'package:ask_away/screens/main_screen/MainScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -11,96 +12,114 @@ class UserProfileState extends State<UserProfile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: UserProfileAppBar(),
+      appBar: UserProfileAppBar(context),
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.only(
-              left: 20,
-              right: 20,
-            ),
+          Container(
+            color: Color(0xFFECECEC),
             child: Container(
-              color: Color(0xFFE5E5E5),
-              child: Container(
-                height: 200,
+              padding: EdgeInsets.only(
+                left: 20,
+                right: 20,
+              ),
+              margin: EdgeInsets.only(
+                bottom: 20,
+              ),
+              height: 200,
+              decoration: BoxDecoration(
                 color: Colors.white,
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        UserIcon(),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Eduardo Correia",
-                              style: TextStyle(
-                                fontSize: 35,
-                              ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.5),
+                    spreadRadius: 1,
+                    blurRadius: 5,
+                    offset: Offset(0, 5), // changes position of shadow
+                  ),
+                ],
+              ),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      UserIcon(),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Eduardo Correia",
+                            style: TextStyle(
+                              fontSize: 35,
                             ),
-                            Text(
-                              "Asking questions",
-                              style: TextStyle(
-                                color: Color(0xFFC8C8C8),
-                                fontSize: 25,
-                              ),
+                          ),
+                          Text(
+                            "Asking questions",
+                            style: TextStyle(
+                              color: Color(0xFFC8C8C8),
+                              fontSize: 25,
                             ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Reputation",
-                              style: TextStyle(
-                                color: Color(0xFFE11D1D),
-                                fontSize: 25,
-                              ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Reputation",
+                            style: TextStyle(
+                              color: Color(0xFFE11D1D),
+                              fontSize: 25,
                             ),
-                            Text(
-                              "159",
-                              style: TextStyle(
-                                fontSize: 30,
-                              ),
+                          ),
+                          Text(
+                            "159",
+                            style: TextStyle(
+                              fontSize: 30,
                             ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
           ),
           Expanded(
             child: Container(
               color: Color(0xFFECECEC),
-              child: Padding(
-                padding: const EdgeInsets.all(20),
-                child: Column(
-                  children: [
-                    SectionHeader("Asked Questions", 5),
-                    Flexible(
-                      child: ListView(
-                        children: [QuestionCard()],
-                      ),
-                    )
-                  ],
-                ),
+              padding: const EdgeInsets.only(
+                left: 20,
+                right: 20,
+              ),
+              child: Column(
+                children: [
+                  SectionHeader("Asked Questions", 5),
+                  Flexible(
+                    child: ListView(
+                      children: [
+                        QuestionCard(),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        QuestionCard(),
+                      ],
+                    ),
+                  )
+                ],
               ),
             ),
-          )
+          ),
         ],
       ),
     );
   }
 }
 
-Widget UserProfileAppBar() {
+Widget UserProfileAppBar(BuildContext context) {
   return AppBar(
     toolbarHeight: 80,
     leading: Padding(
@@ -111,7 +130,13 @@ Widget UserProfileAppBar() {
           size: 40,
           color: Colors.black,
         ),
-        onPressed: () => {},
+        onPressed: () {
+          Navigator.pop(context);
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => MainScreen()),
+          );
+        },
       ),
     ),
     backgroundColor: Colors.white,
@@ -127,9 +152,15 @@ Widget UserProfileAppBar() {
             size: 40,
             color: Colors.black,
           ),
-          onPressed: () => {},
+          onPressed: () {
+            Navigator.pop(context);
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => MainScreen()),
+            );
+          },
         ),
-      )
+      ),
     ],
   );
 }
