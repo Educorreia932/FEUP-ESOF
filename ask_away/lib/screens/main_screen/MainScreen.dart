@@ -1,5 +1,5 @@
-import 'package:ask_away/components/AppBarComponent.dart';
 import 'package:ask_away/components/SimpleButton.dart';
+import 'package:ask_away/components/UserIcon.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
@@ -13,7 +13,7 @@ class MainScreen extends StatelessWidget {
     return Scaffold(
       key: _drawerKey,
       drawer: DrawerComponent(),
-      appBar: AppBarComponent(_drawerKey),
+      appBar: MainScreenAppBar(_drawerKey),
       body: Container(
         color: Color(0xFFE5E5E5),
         child: Column(
@@ -69,6 +69,33 @@ class MainScreen extends StatelessWidget {
       ),
     );
   }
+}
+
+MainScreenAppBar(GlobalKey<ScaffoldState> _drawerKey) {
+  return AppBar(
+    toolbarHeight: 100,
+    leading: Padding(
+      padding: const EdgeInsets.only(left: 10),
+      child: new IconButton(
+        icon: new Icon(
+          Icons.menu,
+          size: 40,
+          color: Colors.black,
+        ),
+        onPressed: () => {_drawerKey.currentState.openDrawer()},
+      ),
+    ),
+    backgroundColor: Color(0xFFE5E5E5),
+    elevation: 0.0,
+    actions: [
+      Padding(
+          padding: const EdgeInsets.only(
+            top: 20,
+            right: 10,
+          ),
+          child: UserIcon()),
+    ],
+  );
 }
 
 
