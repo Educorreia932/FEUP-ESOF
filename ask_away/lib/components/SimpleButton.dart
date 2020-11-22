@@ -6,7 +6,7 @@ class SimpleButton extends StatelessWidget {
 
   SimpleButton(String text) {
     this.text = Text(
-      "Find talk",
+      text,
       style: TextStyle(
         fontSize: 37,
         fontWeight: FontWeight.normal,

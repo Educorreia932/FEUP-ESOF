@@ -1,4 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ask_away/components/SimpleButton.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -10,74 +10,34 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class RegisterScreenState extends State<RegisterScreen> {
-  Widget _LoginForm() {
-    return Column(
-      children: <Widget>[
-        EntryField("Email"),
-        EntryField("Password", isPassword: true),
-      ],
-    );
-  }
-
-  Widget _SubmitButton() {
-    return InkWell(
-      onTap: _Register,
-      child: Container(
-        width: MediaQuery.of(context).size.width,
-        padding: EdgeInsets.symmetric(vertical: 15),
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(5)),
-            boxShadow: <BoxShadow>[
-              BoxShadow(
-                  color: Colors.grey.shade200,
-                  offset: Offset(2, 4),
-                  blurRadius: 5,
-                  spreadRadius: 2)
-            ],
-            gradient: LinearGradient(
-                begin: Alignment.centerLeft,
-                end: Alignment.centerRight,
-                colors: [
-                  Color(0xfffbb448),
-                  Color(0xfff7892b),
-                ])),
-        child: Text(
-          'Register',
-          style: TextStyle(fontSize: 20, color: Colors.white),
-        ),
-      ),
-    );
-  }
-
-  void _Register() {
-    final login = loginController.text;
-    final password = passwordController.text;
-
-    print("Login: $login , Senha: $password ");
-
-    FirebaseFirestore.instance.collection('Users').add(
-      {
-        "login": login,
-        "password": password,
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Register"),
-      ),
-      body: Container(
-        child: Column(
-          children: [
-            _LoginForm(),
-            _SubmitButton(),
-          ],
-        ),
+      body: Column(
+        children: [
+          Container(
+            color: Colors.white,
+            height: 200,
+            padding: EdgeInsets.only(
+              left: 35,
+              right: 35,
+            ),
+            child: Column(
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    EntryField(EntryFieldType.USERNAME),
+                    EntryField(EntryFieldType.PASSWORD),
+                  ],
+                ),
+                SimpleButton("Login")
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
 }
+
