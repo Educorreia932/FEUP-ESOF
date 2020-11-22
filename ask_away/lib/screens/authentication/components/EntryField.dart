@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 enum EntryFieldType {
+  EMAIL,
   USERNAME,
   PASSWORD,
 }
@@ -10,6 +11,9 @@ Widget EntryField(EntryFieldType entryFieldType) {
   bool _obscured = false;
 
   switch (entryFieldType) {
+    case EntryFieldType.EMAIL:
+      _title = "E-Mail";
+      break;
     case EntryFieldType.USERNAME:
       _title = "Username";
       break;
@@ -17,6 +21,7 @@ Widget EntryField(EntryFieldType entryFieldType) {
       _title = "Password";
       _obscured = true;
       break;
+
   }
 
   return Container(
