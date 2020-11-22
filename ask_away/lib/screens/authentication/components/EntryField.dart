@@ -21,7 +21,6 @@ Widget EntryField(EntryFieldType entryFieldType) {
       _title = "Password";
       _obscured = true;
       break;
-
   }
 
   return Container(

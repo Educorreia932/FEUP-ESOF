@@ -3,7 +3,8 @@ import 'package:ask_away/components/UserIcon.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
-import 'components/DrawerComponent.dart';
+import '../talks_screen/TalksScreen.dart';
+import 'components/SideMenu.dart';
 
 GlobalKey<ScaffoldState> _drawerKey = GlobalKey();
 
@@ -55,7 +56,20 @@ class MainScreen extends StatelessWidget {
                             Image(
                               image: AssetImage('assets/images/logo.png'),
                             ),
-                            SimpleButton("Find talk")
+                            SimpleButton(
+                              "Find talk",
+                              () {
+                                Navigator.pop(context);
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => TalksScreen(),
+                                  ),
+                                );
+                              },
+                              37,
+                              Color(0xFFE11D1D),
+                            )
                           ],
                         ),
                       ),
@@ -97,5 +111,3 @@ MainScreenAppBar(GlobalKey<ScaffoldState> _drawerKey) {
     ],
   );
 }
-
-

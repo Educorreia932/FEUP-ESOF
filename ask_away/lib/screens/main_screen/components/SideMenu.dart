@@ -3,8 +3,6 @@ import 'package:ask_away/screens/authentication/RegisterScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../../user_profile/UserProfile.dart';
-
 class DrawerComponent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

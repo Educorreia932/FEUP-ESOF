@@ -2,17 +2,22 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class SimpleButton extends StatelessWidget {
-  Text text;
+  Text _text;
+  Function _action;
+  Color _backgroundColor;
 
-  SimpleButton(String text) {
-    this.text = Text(
+  SimpleButton(String text, VoidCallback action, double fontSize, Color backgroundColor) {
+    this._text = Text(
       text,
       style: TextStyle(
-        fontSize: 37,
+        fontSize: fontSize,
         fontWeight: FontWeight.normal,
         color: Colors.white,
       ),
     );
+
+    this._action = action;
+    this._backgroundColor = backgroundColor;
   }
 
   @override
@@ -20,14 +25,14 @@ class SimpleButton extends StatelessWidget {
     return SizedBox(
       width: double.infinity,
       child: InkWell(
-        onTap: null,
+        onTap: _action,
         child: Container(
           height: 57,
           decoration: new BoxDecoration(
-            color: Color(0xFFE11D1D),
+            color: _backgroundColor,
             borderRadius: new BorderRadius.circular(14.0),
           ),
-          child: Center(child: text),
+          child: Center(child: _text),
         ),
       ),
     );

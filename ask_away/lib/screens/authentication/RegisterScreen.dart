@@ -52,7 +52,12 @@ class RegisterScreenState extends State<RegisterScreen> {
               right: 40,
               bottom: 40,
             ),
-            child: SimpleButton("Register"),
+            child: SimpleButton(
+              "Register",
+              null,
+              37,
+              Color(0xFFE11D1D)
+            ),
           ),
           RichText(
             text: TextSpan(
@@ -81,3 +86,4 @@ class RegisterScreenState extends State<RegisterScreen> {
   }
 }
 
+ChangeScreen() {}

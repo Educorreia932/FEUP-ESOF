@@ -1,6 +1,5 @@
 import 'package:ask_away/components/SimpleAppBar.dart';
 import 'package:ask_away/components/SimpleButton.dart';
-import 'package:ask_away/screens/main_screen/MainScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -52,7 +51,12 @@ class LoginScreenState extends State<LoginScreen> {
               right: 40,
               bottom: 40,
             ),
-            child: SimpleButton("Login"),
+            child: SimpleButton(
+              "Login",
+              null,
+              37,
+              Color(0xFFE11D1D),
+            ),
           ),
           RichText(
             text: TextSpan(
@@ -80,4 +84,3 @@ class LoginScreenState extends State<LoginScreen> {
     );
   }
 }
-
