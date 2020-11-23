@@ -1,5 +1,5 @@
 import 'package:ask_away/components/SimpleButton.dart';
-import 'package:ask_away/screens/talks_screen/TalksScreen.dart';
+import 'package:ask_away/screens/talks_questions/TalkQuestionsScreen.dart';
 import 'package:flutter/material.dart';
 
 class TalkCard extends StatefulWidget {
@@ -111,7 +111,7 @@ class TalkCardState extends State<TalkCard> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => TalksScreen(),
+                    builder: (context) => TalkQuestionsScreen(),
                   ),
                 );
               },

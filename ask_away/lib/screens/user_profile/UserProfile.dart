@@ -1,5 +1,5 @@
-import 'package:ask_away/components/QuestionCard.dart';
 import 'package:ask_away/components/UserIcon.dart';
+import 'package:ask_away/components/cards/QuestionCard.dart';
 import 'package:ask_away/screens/main_screen/MainScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

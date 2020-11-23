@@ -37,7 +37,7 @@ Widget EntryField(EntryFieldType entryFieldType) {
         SizedBox(
           height: 10,
         ),
-        TextField(
+        TextFormField(
           obscureText: _obscured,
           decoration: InputDecoration(
             fillColor: Color(0xFFE5E5E5),

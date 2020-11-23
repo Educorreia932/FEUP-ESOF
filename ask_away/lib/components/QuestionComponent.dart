@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:ask_away/models/Question.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +5,7 @@ import 'package:flutter/painting.dart';
 
 import 'VotingComponent.dart';
 
+// ignore: must_be_immutable
 class QuestionWidget extends StatelessWidget {
   Question question;
   Voting voting;
