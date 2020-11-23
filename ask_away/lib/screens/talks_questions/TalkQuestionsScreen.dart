@@ -26,7 +26,12 @@ class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
             ),
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.all(32),
+                padding: const EdgeInsets.only(
+                  left: 32,
+                  right: 32,
+                  top: 32,
+                  bottom: 20,
+                ),
                 child: Column(
                   children: [
                     Expanded(
@@ -53,33 +58,10 @@ class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
                         ],
                       ),
                     ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: TextField(
-                            maxLines: null,
-                            decoration: InputDecoration(
-                              fillColor: Colors.white,
-                              filled: true,
-                              hintText: "Let your question be heard",
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(20),
-                                borderSide: BorderSide(
-                                  width: 0,
-                                  style: BorderStyle.none,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        IconButton(
-                          icon: Icon(Icons.send),
-                          iconSize: 30,
-                          color: Color(0xFFE11D1D),
-                          onPressed: null,
-                        ),
-                      ],
+                    SizedBox(
+                      height: 20,
                     ),
+                    SendQuestionField(),
                   ],
                 ),
               ),
@@ -87,6 +69,39 @@ class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
           ],
         ),
       ),
+    );
+  }
+}
+
+class SendQuestionField extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          child: TextField(
+            maxLines: null,
+            decoration: InputDecoration(
+              fillColor: Colors.white,
+              filled: true,
+              hintText: "Let your question be heard",
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(20),
+                borderSide: BorderSide(
+                  width: 0,
+                  style: BorderStyle.none,
+                ),
+              ),
+            ),
+          ),
+        ),
+        IconButton(
+          icon: Icon(Icons.send),
+          color: Color(0xFFE11D1D),
+          iconSize: 37,
+          onPressed: null,
+        ),
+      ],
     );
   }
 }

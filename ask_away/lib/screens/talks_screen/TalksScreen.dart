@@ -1,7 +1,7 @@
 import 'package:ask_away/components/cards/TalkCard.dart';
+import 'package:ask_away/models/Talk.dart';
 import 'package:ask_away/screens/main_screen/MainScreen.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart'; // For date format
 
 class TalksScreen extends StatefulWidget {
   @override
@@ -9,6 +9,19 @@ class TalksScreen extends StatefulWidget {
 }
 
 class TalksScreenState extends State<TalksScreen> {
+  List<Talk> talks = [
+    new Talk(
+        "Ultimate question",
+        "What is the answer to the ultimate question of life, the universe and everything?",
+        new DateTime.utc(2020, 9, 11, 18, 30),
+        "Earth"),
+    new Talk(
+        "Ultimate question",
+        "What is the answer to the ultimate question of life, the universe and everything?",
+        new DateTime.utc(2020, 9, 11, 18, 30),
+        "Earth"),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,9 +42,7 @@ class TalksScreenState extends State<TalksScreen> {
               child: Padding(
                 padding: const EdgeInsets.all(32),
                 child: ListView(
-                  children: [
-                    TalkCard(),
-                  ],
+                  children: talks.map<TalkCard>((Talk talk) => TalkCard()).toList(),
                 ),
               ),
             )
@@ -87,5 +98,3 @@ Widget TalksScreenAppBar(BuildContext context) {
     ],
   );
 }
-
-
