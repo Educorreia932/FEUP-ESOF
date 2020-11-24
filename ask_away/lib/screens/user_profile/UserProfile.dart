@@ -1,5 +1,4 @@
 import 'package:ask_away/components/UserIcon.dart';
-import 'package:ask_away/components/cards/QuestionCard.dart';
 import 'package:ask_away/screens/main_screen/MainScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -101,11 +100,11 @@ class UserProfileState extends State<UserProfile> {
                   SectionHeader("Asked Questions", 5),
                   Column(
                     children: [
-                      QuestionCard(),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      QuestionCard(),
+                      // QuestionCard(),
+                      // SizedBox(
+                      //   height: 10,
+                      // ),
+                      // QuestionCard(),
                     ],
                   ),
                   SectionHeader("Answers", 3),

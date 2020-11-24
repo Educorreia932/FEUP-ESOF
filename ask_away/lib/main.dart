@@ -4,9 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
 
-import 'screens/main_screen/components/SideMenu.dart';
-import 'components/QuestionComponent.dart';
-
 String appTitle = 'Ask Away';
 
 void main() {

@@ -1,6 +1,14 @@
+import 'package:ask_away/models/Question.dart';
 import 'package:flutter/material.dart';
 
+import 'components/VotingComponent.dart';
+
 class QuestionCard extends StatefulWidget {
+  Question _question;
+  Function _callback;
+
+  QuestionCard(this._question, this._callback);
+
   @override
   State<StatefulWidget> createState() => QuestionCardState();
 }
@@ -9,7 +17,6 @@ class QuestionCardState extends State<QuestionCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      // height: 100,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(18)),
         color: Colors.white,
@@ -39,8 +46,7 @@ class QuestionCardState extends State<QuestionCard> {
               overflow: TextOverflow.ellipsis,
               maxLines: 2,
               text: TextSpan(
-                text:
-                    "What is the answer to the ultimate question of life, the universe and everything?",
+                text: widget._question.text,
                 style: TextStyle(
                   fontSize: 18,
                   color: Color(0xFF979797),
@@ -50,30 +56,7 @@ class QuestionCardState extends State<QuestionCard> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(
-                  children: [
-                    GestureDetector(
-                      onTap: null,
-                      child: Icon(
-                        Icons.keyboard_arrow_up,
-                        size: 30,
-                      ),
-                    ),
-                    Text(
-                      "24",
-                      style: TextStyle(
-                        fontSize: 16,
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: null,
-                      child: Icon(
-                        Icons.keyboard_arrow_down,
-                        size: 30,
-                      ),
-                    ),
-                  ],
-                ),
+                VotingComponent(widget._question.votes, widget._callback),
                 RichText(
                   text: TextSpan(
                     style: TextStyle(
@@ -103,3 +86,5 @@ class QuestionCardState extends State<QuestionCard> {
     );
   }
 }
+
+

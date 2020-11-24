@@ -1,12 +1,9 @@
-import 'package:ask_away/components/QuestionComponent.dart';
-
 import 'User.dart';
 
 class Talk {
   int id;
   String title;
   String description;
-  QuestionList questionList;
 
   //UserList userList; TODO
   DateTime date;

@@ -7,5 +7,7 @@ class Vote {
   VoteType type;
 
   // Casted time
-  Vote(this.type);
+  Vote(this.type) {
+    this.type = type;
+  }
 }
