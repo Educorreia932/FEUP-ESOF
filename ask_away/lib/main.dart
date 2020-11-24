@@ -1,9 +1,8 @@
+import 'package:ask_away/screens/main_screen/MainScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-
-import 'components/MenuComponent.dart';
-import 'components/QuestionComponent.dart';
+import 'package:flutter/services.dart';
 
 String appTitle = 'Ask Away';
 
@@ -17,63 +16,32 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setEnabledSystemUIOverlays([]); // Make application fullscreen
+
     return FutureBuilder(
       future: _initialization,
       builder: (context, AsyncSnapshot snapshot) {
         if (snapshot.hasData) {
           return MaterialApp(
             title: 'Ask Away',
+            debugShowCheckedModeBanner: false,
             theme: ThemeData(
-              primarySwatch: Colors.blue,
               visualDensity: VisualDensity.adaptivePlatformDensity,
             ),
-            home: MyHomePage(title: 'Ask Away'),
+            home: MainScreen(),
           );
-        } else if (snapshot.hasError) {
-          print("error");
+        }
+
+        else if (snapshot.hasError) {
+          print("Error");
           return Container();
-        } else {
-          print("loading");
+        }
+
+        else {
+          print("Loading...");
           return Container();
         }
       },
     );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-
-  final String title;
-
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-void createQuestion() {
-  return;
-}
-
-class MyHomePageState extends StatefulWidget {
-  @override
-  _MyHomePageState createState() => new _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  QuestionList qList = new QuestionList();
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: Colors.blue[50],
-        appBar: AppBar(
-          title: Text(widget.title),
-        ),
-        body: new GestureDetector(
-            onTap: () {
-              FocusScope.of(context).requestFocus(new FocusNode());
-            },
-            child: qList),
-        drawer: MyDrawer());
   }
 }
