@@ -16,7 +16,7 @@ class Talk {
     this.description = description;
     this.date = date;
     this.location = location;
-    this.creator = new User(0, "Mr. Padoru"); //change to receive in constructor
+    this.creator = new User("Mr. Padoru"); //change to receive in constructor
     //TODO user list (speakers and moderators)
 
     this.isExpanded = false;
