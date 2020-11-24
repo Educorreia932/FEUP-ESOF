@@ -1,5 +1,6 @@
-import 'file:///C:/Users/skelo/OneDrive/Ambiente%20de%20Trabalho/open-cx-t1g2-escama/ask_away/lib/components/cards/question_card/QuestionCard.dart';
+import 'package:ask_away/components/cards/question_card/QuestionCard.dart';
 import 'package:ask_away/models/Question.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ask_away/models/Vote.dart';
 import 'package:ask_away/screens/talks_screen/TalksScreen.dart';
 import 'package:flutter/material.dart';
@@ -10,10 +11,8 @@ class TalkQuestionsScreen extends StatefulWidget {
 }
 
 class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
-  List<Question> questions = [
-    Question("Question #1", [Vote(VoteType.up), Vote(VoteType.up)]),
-    Question("Question #2", [Vote(VoteType.up)]),
-  ];
+  List<Question> questions = [];
+  bool loaded = false;
 
   void addQuestion(String question) {
     if (question != "")
@@ -38,6 +37,19 @@ class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (!loaded) {
+      FirebaseFirestore.instance
+          .collection('Questions')
+          .get()
+          .then((QuerySnapshot querySnapshot) => {
+        querySnapshot.docs.forEach((doc) {
+          questions.add(new Question(doc["text"],[]));
+        }
+        ),
+        setState(() {})
+      });
+      loaded = true;
+    }
     return Scaffold(
       appBar: TalksScreenAppBar(context),
       body: Container(
