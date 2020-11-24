@@ -29,7 +29,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                 ),
               ],
             ),
-            height: 520,
+            height: 450,
             padding: EdgeInsets.only(
               left: 35,
               right: 35,
