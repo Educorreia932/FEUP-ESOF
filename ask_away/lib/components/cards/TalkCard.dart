@@ -47,7 +47,7 @@ class TalkCardState extends State<TalkCard> {
                     ],
                   ),
                   AnimatedContainer(
-                    height: displayText ? 0 : 100,
+                    height: displayText ? 100 : 0,
                     duration: Duration(milliseconds: 500),
                     curve: Curves.fastOutSlowIn,
                     child: Padding(
