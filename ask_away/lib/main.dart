@@ -1,4 +1,4 @@
-import 'file:///C:/Users/skelo/OneDrive/Ambiente%20de%20Trabalho/open-cx-t1g2-escama/ask_away/lib/screens/main_screen/MainScreen.dart';
+import 'package:ask_away/screens/main_screen/MainScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
