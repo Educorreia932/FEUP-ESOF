@@ -15,12 +15,16 @@ class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
   bool loaded = false;
 
   void addQuestion(String question) {
-    if (question != "")
-      setState(
-        () {
-          questions.add(new Question(question, []));
-        },
-      );
+    if (question != "") {
+      // Call the user's CollectionReference to add a new user
+      FirebaseFirestore.instance
+          .collection('Questions').add({
+        'text': question
+      }).then((value) =>
+          setState(() {
+            questions.add(new Question(question,[]));
+          }));
+    }
   }
 
   void callback() {
@@ -87,7 +91,7 @@ class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
                     SizedBox(
                       height: 20,
                     ),
-                    SendQuestionField(),
+                    SendQuestionField(this),
                   ],
                 ),
               ),
@@ -100,6 +104,13 @@ class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
 }
 
 class SendQuestionField extends StatelessWidget {
+  TextEditingController questionController = new TextEditingController();
+  TalkQuestionsScreenState talkQuestionsScreenState;
+
+  SendQuestionField(TalkQuestionsScreenState talkQuestionsScreenState){
+    this.talkQuestionsScreenState = talkQuestionsScreenState;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -107,6 +118,7 @@ class SendQuestionField extends StatelessWidget {
         Expanded(
           child: TextField(
             maxLines: null,
+            controller: questionController,
             decoration: InputDecoration(
               fillColor: Colors.white,
               filled: true,
@@ -125,7 +137,10 @@ class SendQuestionField extends StatelessWidget {
           icon: Icon(Icons.send),
           color: Color(0xFFE11D1D),
           iconSize: 37,
-          onPressed: null,
+          onPressed: () {
+            this.talkQuestionsScreenState.addQuestion(questionController.text);
+            questionController.clear();
+            },
         ),
       ],
     );
