@@ -21,19 +21,19 @@ class Question {
     return total;
   }
 
-  int getPosVotes() {
+  int getUpVotes() {
     int total = 0;
-    for (int i = 0; i < votes.length; i++) {
+    for (int i = 0; i < votes.length; i++)
       if (votes[i].type == VoteType.up) total++;
-    }
+
     return total;
   }
 
-  int getNegVotes() {
+  int getDownVotes() {
     int total = 0;
-    for (int i = 0; i < votes.length; i++) {
+    for (int i = 0; i < votes.length; i++)
       if (votes[i].type == VoteType.up) total++;
-    }
+
     return total;
   }
 }

@@ -1,4 +1,5 @@
 import 'package:ask_away/components/cards/QuestionCard.dart';
+import 'package:ask_away/models/Question.dart';
 import 'package:ask_away/screens/talks_screen/TalksScreen.dart';
 import 'package:flutter/material.dart';
 
@@ -8,6 +9,17 @@ class TalkQuestionsScreen extends StatefulWidget {
 }
 
 class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
+  List<Question> questions = [
+    Question("Question #1"),
+  ];
+
+  void addQuestion(String question) {
+    if (question != "")
+      setState(() {
+        questions.add(new Question(question));
+      });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,24 +50,7 @@ class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
                       child: ListView(
                         scrollDirection: Axis.vertical,
                         shrinkWrap: true,
-                        children: [
-                          QuestionCard(),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          QuestionCard(),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          QuestionCard(),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          QuestionCard(),
-                          SizedBox(
-                            height: 20,
-                          ),
-                        ],
+                        children: questions.map<QuestionCard>((Question question) => QuestionCard()).toList(),
                       ),
                     ),
                     SizedBox(
