@@ -6,9 +6,10 @@ import 'package:flutter/rendering.dart';
 import '../talks_screen/TalksScreen.dart';
 import 'components/SideMenu.dart';
 
-GlobalKey<ScaffoldState> _drawerKey = GlobalKey();
+
 
 class MainScreen extends StatelessWidget {
+  GlobalKey<ScaffoldState> _drawerKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(

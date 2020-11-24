@@ -11,8 +11,8 @@ class TalksScreen extends StatefulWidget {
 class TalksScreenState extends State<TalksScreen> {
   List<Talk> talks = [
     new Talk(
-        "Ultimate question",
-        "What is the answer to the ultimate question of life, the universe and everything?",
+        "Ultimate talk",
+        "What is the answer to the ultimate talk of life, the universe and everything?",
         new DateTime.utc(2020, 9, 11, 18, 30),
         "Earth"),
     new Talk(
@@ -42,7 +42,7 @@ class TalksScreenState extends State<TalksScreen> {
               child: Padding(
                 padding: const EdgeInsets.all(32),
                 child: ListView(
-                  children: talks.map<TalkCard>((Talk talk) => TalkCard()).toList(),
+                  children: talks.map<TalkCard>((Talk talk) => TalkCard(talk)).toList(),
                 ),
               ),
             )
