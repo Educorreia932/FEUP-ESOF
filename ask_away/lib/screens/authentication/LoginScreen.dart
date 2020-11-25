@@ -1,9 +1,22 @@
 import 'package:ask_away/components/SimpleAppBar.dart';
 import 'package:ask_away/components/SimpleButton.dart';
+import 'package:ask_away/services/Auth.dart';
+import 'package:ask_away/services/AuthProvider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'components/EntryField.dart';
+
+String _email;
+String _password;
+
+void loginSetEmail(String email) {
+  _email = email;
+}
+
+void loginSetPassword(String password) {
+  _password = password;
+}
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -11,6 +24,29 @@ class LoginScreen extends StatefulWidget {
 }
 
 class LoginScreenState extends State<LoginScreen> {
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
+  bool validateAndSave() {
+    final FormState form = formKey.currentState;
+
+    if (form.validate()) {
+      form.save();
+      return true;
+    }
+
+    return false;
+  }
+
+  Future<void> validateAndSubmit() async {
+    validateAndSave();
+
+    final BaseAuth auth = AuthProvider.of(context).auth;
+    print(_email);
+    final String userId = await auth.signInWithEmailAndPassword(_email, _password);
+
+    print('User logged in: $userId');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,12 +73,15 @@ class LoginScreenState extends State<LoginScreen> {
             margin: EdgeInsets.only(
               bottom: 70,
             ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                EntryField(EntryFieldType.USERNAME),
-                EntryField(EntryFieldType.PASSWORD),
-              ],
+            child: Form(
+              key: formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  EntryField(EntryFieldType.EMAIL, FormType.LOGIN),
+                  EntryField(EntryFieldType.PASSWORD, FormType.LOGIN),
+                ],
+              ),
             ),
           ),
           Padding(
@@ -53,7 +92,7 @@ class LoginScreenState extends State<LoginScreen> {
             ),
             child: SimpleButton(
               "Login",
-              null,
+              validateAndSubmit,
               37,
               Color(0xFFE11D1D),
             ),
@@ -84,3 +123,7 @@ class LoginScreenState extends State<LoginScreen> {
     );
   }
 }
+
+
+
+

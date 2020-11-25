@@ -1,21 +1,48 @@
 import 'package:ask_away/components/SimpleButton.dart';
 import 'package:ask_away/components/UserIcon.dart';
+import 'package:ask_away/screens/BuildWaitingScreen.dart';
+import 'package:ask_away/services/Auth.dart';
+import 'package:ask_away/services/AuthProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 import '../talks_screen/TalksScreen.dart';
 import 'components/SideMenu.dart';
 
+class MainScreenBuilder extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final BaseAuth auth = AuthProvider.of(context).auth;
 
+    return StreamBuilder<String>(
+      stream: auth.onAuthStateChanged,
+      builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+        if (snapshot.connectionState == ConnectionState.active) {
+          String currentUser = snapshot.data;
+          print(currentUser);
+          final bool isLoggedIn = currentUser != null;
+
+          return MainScreen(isLoggedIn);
+        }
+
+        return BuildWaitingScreen();
+      },
+    );
+  }
+}
 
 class MainScreen extends StatelessWidget {
+  bool _isLoggedIn;
   GlobalKey<ScaffoldState> _drawerKey = GlobalKey<ScaffoldState>();
+
+  MainScreen(this._isLoggedIn);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _drawerKey,
       drawer: DrawerComponent(),
-      appBar: MainScreenAppBar(_drawerKey),
+      appBar: MainScreenAppBar(_drawerKey, _isLoggedIn),
       body: Container(
         color: Color(0xFFE5E5E5),
         child: Column(
@@ -86,7 +113,7 @@ class MainScreen extends StatelessWidget {
   }
 }
 
-MainScreenAppBar(GlobalKey<ScaffoldState> _drawerKey) {
+MainScreenAppBar(GlobalKey<ScaffoldState> _drawerKey, bool _isLoggedIn) {
   return AppBar(
     toolbarHeight: 100,
     leading: Padding(
@@ -104,11 +131,12 @@ MainScreenAppBar(GlobalKey<ScaffoldState> _drawerKey) {
     elevation: 0.0,
     actions: [
       Padding(
-          padding: const EdgeInsets.only(
-            top: 20,
-            right: 10,
-          ),
-          child: UserIcon()),
+        padding: const EdgeInsets.only(
+          top: 20,
+          right: 10,
+        ),
+        child: _isLoggedIn ? UserIcon() : Text("Login"),
+      ),
     ],
   );
 }

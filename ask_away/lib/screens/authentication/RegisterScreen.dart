@@ -1,9 +1,27 @@
 import 'package:ask_away/components/SimpleAppBar.dart';
 import 'package:ask_away/components/SimpleButton.dart';
+import 'package:ask_away/services/Auth.dart';
+import 'package:ask_away/services/AuthProvider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'components/EntryField.dart';
+
+String _email;
+String _username;
+String _password;
+
+void registerSetEmail(String email) {
+  _email = email;
+}
+
+void registerSetUsername(String username) {
+  _username = username;
+}
+
+void registerSetPassword(String password) {
+  _password = password;
+}
 
 class RegisterScreen extends StatefulWidget {
   @override
@@ -11,6 +29,28 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class RegisterScreenState extends State<RegisterScreen> {
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
+  bool validateAndSave() {
+    final FormState form = formKey.currentState;
+
+    if (form.validate()) {
+      form.save();
+      return true;
+    }
+
+    return false;
+  }
+
+  Future<void> validateAndSubmit() async {
+    validateAndSave();
+
+    final BaseAuth auth = AuthProvider.of(context).auth;
+    final String userId = await auth.createUserWithEmailAndPassword(_email, _password);
+
+    print('Registered user: $userId');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,13 +77,16 @@ class RegisterScreenState extends State<RegisterScreen> {
             margin: EdgeInsets.only(
               bottom: 70,
             ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                EntryField(EntryFieldType.EMAIL),
-                EntryField(EntryFieldType.USERNAME),
-                EntryField(EntryFieldType.PASSWORD),
-              ],
+            child: Form(
+              key: formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  EntryField(EntryFieldType.EMAIL, FormType.REGISTER),
+                  EntryField(EntryFieldType.USERNAME, FormType.REGISTER),
+                  EntryField(EntryFieldType.PASSWORD, FormType.REGISTER),
+                ],
+              ),
             ),
           ),
           Padding(
@@ -54,9 +97,9 @@ class RegisterScreenState extends State<RegisterScreen> {
             ),
             child: SimpleButton(
               "Register",
-              null,
+              validateAndSubmit,
               37,
-              Color(0xFFE11D1D)
+              Color(0xFFE11D1D),
             ),
           ),
           RichText(
@@ -85,5 +128,3 @@ class RegisterScreenState extends State<RegisterScreen> {
     );
   }
 }
-
-ChangeScreen() {}
