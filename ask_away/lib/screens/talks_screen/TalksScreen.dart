@@ -1,6 +1,7 @@
 import 'package:ask_away/components/cards/TalkCard.dart';
 import 'package:ask_away/models/Talk.dart';
 import 'package:ask_away/screens/main_screen/MainScreen.dart';
+import 'package:ask_away/screens/talks_screen/CreateTalkScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -29,17 +30,7 @@ class TalksScreenState extends State<TalksScreen> {
   //       new Duration(hours: 1, minutes: 30)),
   // ];
 
-  void addTalk(String title, String description, DateTime date, String location, int duration) {
-    if (title != "" && description != "" && date != null && location != "" && duration != null) {
-      // Call the user's CollectionReference to add a new user
-      FirebaseFirestore.instance
-          .collection('Talks')
-          .add({'title': title, 'description' : description, 'date' : date, 'location' : location, 'duration':duration})
-          .then((value) => setState(() {
-        talks.add(new Talk(value.id, title, description, date, location, duration));
-      }));
-    }
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -84,6 +75,17 @@ class TalksScreenState extends State<TalksScreen> {
             )
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+          onPressed: () {
+            Navigator.pop(context);
+            Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => CreateTalkScreen()),
+            );
+          },
+          icon: Icon(Icons.add),
+          label: Text('New Talk')
       ),
     );
   }
