@@ -16,7 +16,7 @@ Widget SimpleAppBar(BuildContext context) {
           Navigator.pop(context);
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => MainScreen()),
+            MaterialPageRoute(builder: (context) => MainScreenBuilder()),
           );
         },
       ),

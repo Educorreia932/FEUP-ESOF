@@ -1,4 +1,4 @@
-import 'User.dart';
+import 'AppUser.dart';
 
 enum VoteType { up, down }
 

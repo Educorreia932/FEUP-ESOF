@@ -1,4 +1,4 @@
-import 'User.dart';
+import 'AppUser.dart';
 import 'Vote.dart';
 
 class Question {

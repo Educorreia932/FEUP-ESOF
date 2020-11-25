@@ -40,7 +40,7 @@ class LoginScreenState extends State<LoginScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                EntryField(EntryFieldType.USERNAME),
+                EntryField(EntryFieldType.EMAIL),
                 EntryField(EntryFieldType.PASSWORD),
               ],
             ),

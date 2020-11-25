@@ -1,15 +1,40 @@
 import 'package:ask_away/components/SimpleButton.dart';
 import 'package:ask_away/components/UserIcon.dart';
+import 'package:ask_away/screens/BuildWaitingScreen.dart';
+import 'package:ask_away/services/Auth.dart';
+import 'package:ask_away/services/AuthProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 import '../talks_screen/TalksScreen.dart';
 import 'components/SideMenu.dart';
 
+class MainScreenBuilder extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final BaseAuth auth = AuthProvider.of(context).auth;
 
+    return StreamBuilder<String>(
+      stream: auth.onAuthStateChanged,
+      builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+        if (snapshot.connectionState == ConnectionState.active) {
+          final bool isLoggedIn = snapshot.hasData;
+
+          return MainScreen(isLoggedIn);
+        }
+
+        return BuildWaitingScreen();
+      },
+    );
+  }
+}
 
 class MainScreen extends StatelessWidget {
+  bool _isLoggedIn;
   GlobalKey<ScaffoldState> _drawerKey = GlobalKey<ScaffoldState>();
+
+  MainScreen(_isLoggedIn);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
