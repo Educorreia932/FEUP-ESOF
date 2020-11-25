@@ -51,49 +51,55 @@ class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
               });
       loaded = true;
     }
-    return Scaffold(
-      appBar: QuestionsScreenAppBar(context),
-      body: Container(
-        color: Color(0xFFECECEC),
-        child: Column(
-          children: [
-            Container(
-              child: Text(
-                "Talk #1",
-                style: TextStyle(
-                  fontSize: 38,
+    return GestureDetector(
+        onTap: () {
+
+          FocusScope.of(context).requestFocus(new FocusNode());
+        },
+      child: Scaffold(
+        appBar: QuestionsScreenAppBar(context),
+        body: Container(
+          color: Color(0xFFECECEC),
+          child: Column(
+            children: [
+              Container(
+                child: Text(
+                  "Talk #1",
+                  style: TextStyle(
+                    fontSize: 38,
+                  ),
                 ),
               ),
-            ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(
-                  left: 32,
-                  right: 32,
-                  top: 32,
-                  bottom: 20,
-                ),
-                child: Column(
-                  children: [
-                    Expanded(
-                      child: ListView(
-                        scrollDirection: Axis.vertical,
-                        shrinkWrap: true,
-                        children: questions
-                            .map<QuestionCard>((Question question) =>
-                                QuestionCard(question, callback))
-                            .toList(),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                    left: 32,
+                    right: 32,
+                    top: 32,
+                    bottom: 20,
+                  ),
+                  child: Column(
+                    children: [
+                      Expanded(
+                        child: ListView(
+                          scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
+                          children: questions
+                              .map<QuestionCard>((Question question) =>
+                                  QuestionCard(question, callback))
+                              .toList(),
+                        ),
                       ),
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    SendQuestionField(this),
-                  ],
+                      SizedBox(
+                        height: 20,
+                      ),
+                      SendQuestionField(this),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

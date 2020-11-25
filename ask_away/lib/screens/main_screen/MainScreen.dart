@@ -31,6 +31,14 @@ class MainScreenBuilder extends StatelessWidget {
   }
 }
 
+class MyBehavior extends ScrollBehavior {
+  @override
+  Widget buildViewportChrome(
+      BuildContext context, Widget child, AxisDirection axisDirection) {
+    return child;
+  }
+}
+
 class MainScreen extends StatelessWidget {
   bool _isLoggedIn;
   GlobalKey<ScaffoldState> _drawerKey = GlobalKey<ScaffoldState>();
@@ -45,68 +53,61 @@ class MainScreen extends StatelessWidget {
       appBar: MainScreenAppBar(_drawerKey, _isLoggedIn),
       body: Container(
         color: Color(0xFFE5E5E5),
-        child: Column(
-          children: [
-            Expanded(
-              child: Padding(
-                padding: EdgeInsets.only(
-                  top: 10,
-                  left: 40,
-                  right: 40,
+        child: ScrollConfiguration(
+          behavior: MyBehavior(),
+          child: ListView(
+            children: [
+              Padding(
+                padding: EdgeInsets.only(left: MediaQuery.of(context).size.width/15,right: MediaQuery.of(context).size.width/15),
+                child: Text(
+                  "Ask Away",
+                  style: TextStyle(
+                    fontSize: 55,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(left: MediaQuery.of(context).size.width/15),
+                child: Text(
+                  "Every great answer starts with a great question.",
+                  style: TextStyle(
+                    color: Color(0xFF9A9A9A),
+                    fontSize: 35,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(
+                  top: 50,
+                  bottom: 70,
+                  left: 20,
+                  right: 20,
                 ),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      "Ask Away",
-                      style: TextStyle(
-                        fontSize: 55,
-                      ),
+                    Image(
+                      image: AssetImage('assets/images/logo.png'),
                     ),
-                    Text(
-                      "Every great answer starts with a great question.",
-                      style: TextStyle(
-                        color: Color(0xFF9A9A9A),
-                        fontSize: 35,
-                      ),
-                    ),
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                          top: 50,
-                          bottom: 70,
-                          left: 20,
-                          right: 20,
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Image(
-                              image: AssetImage('assets/images/logo.png'),
-                            ),
-                            SimpleButton(
-                              "Find talk",
-                              () {
-                                Navigator.pop(context);
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => TalksScreen(),
-                                  ),
-                                );
-                              },
-                              37,
-                              Color(0xFFE11D1D),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
+                    SimpleButton(
+                      "Find talk",
+                      () {
+                        Navigator.pop(context);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => TalksScreen(),
+                          ),
+                        );
+                      },
+                      37,
+                      Color(0xFFE11D1D),
+                    )
                   ],
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

@@ -15,19 +15,6 @@ class TalksScreen extends StatefulWidget {
 class TalksScreenState extends State<TalksScreen> {
   bool loaded = false;
   List<Talk> talks = [];
-  //   new Talk(
-  //       "Ultimate talk",
-  //       "What is the answer to the ultimate talk of life, the universe and everything?",
-  //       new DateTime.utc(2020, 9, 11, 18, 30),
-  //       "Earth",
-  //       new Duration(hours: 2)),
-  //   new Talk(
-  //       "Ultimate question",
-  //       "What is the answer to the ultimate question of life, the universe and everything?",
-  //       new DateTime.utc(2020, 9, 11, 18, 30),
-  //       "Earth",
-  //       new Duration(hours: 1, minutes: 30)),
-  // ];
 
   void addTalk(String title, String description, DateTime date, String location, int duration) {
     if (title != "" && description != "" && date != null && location != "" && duration != null) {

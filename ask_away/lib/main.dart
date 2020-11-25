@@ -20,7 +20,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setEnabledSystemUIOverlays([]); // Make application fullscreen
-
     return FutureBuilder(
       future: _initialization,
       builder: (context, AsyncSnapshot snapshot) {

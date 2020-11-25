@@ -45,17 +45,31 @@ class UserProfileState extends State<UserProfile> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            "Eduardo Correia",
-                            style: TextStyle(
-                              fontSize: 35,
+                          Container(
+                            width : MediaQuery.of(context).size.width*0.50,
+                            child: RichText(
+                              overflow: TextOverflow.ellipsis,
+                              text: TextSpan(
+                                text: "Eduardo Correia",
+
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: MediaQuery.of(context).size.width*0.06,
+                                ),
+                              ),
                             ),
                           ),
-                          Text(
-                            "Asking questions",
-                            style: TextStyle(
-                              color: Color(0xFFC8C8C8),
-                              fontSize: 25,
+                          Container(
+                            width : MediaQuery.of(context).size.width*0.50,
+                            child: RichText(
+                              overflow: TextOverflow.ellipsis,
+                              text: TextSpan(
+                                text: "Asking questions",
+                                style: TextStyle(
+                                  color: Color(0xFFC8C8C8),
+                                  fontSize: MediaQuery.of(context).size.width*0.045,
+                                ),
+                              ),
                             ),
                           ),
                         ],
