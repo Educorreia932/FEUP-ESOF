@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class TalksScreen extends StatefulWidget {
   @override
@@ -12,23 +13,51 @@ class TalksScreen extends StatefulWidget {
 }
 
 class TalksScreenState extends State<TalksScreen> {
-  List<Talk> talks = [
-    new Talk(
-        "Ultimate talk",
-        "What is the answer to the ultimate talk of life, the universe and everything?",
-        new DateTime.utc(2020, 9, 11, 18, 30),
-        "Earth",
-        new Duration(hours: 2)),
-    new Talk(
-        "Ultimate question",
-        "What is the answer to the ultimate question of life, the universe and everything?",
-        new DateTime.utc(2020, 9, 11, 18, 30),
-        "Earth",
-        new Duration(hours: 1, minutes: 30)),
-  ];
+  bool loaded = false;
+  List<Talk> talks = [];
+  //   new Talk(
+  //       "Ultimate talk",
+  //       "What is the answer to the ultimate talk of life, the universe and everything?",
+  //       new DateTime.utc(2020, 9, 11, 18, 30),
+  //       "Earth",
+  //       new Duration(hours: 2)),
+  //   new Talk(
+  //       "Ultimate question",
+  //       "What is the answer to the ultimate question of life, the universe and everything?",
+  //       new DateTime.utc(2020, 9, 11, 18, 30),
+  //       "Earth",
+  //       new Duration(hours: 1, minutes: 30)),
+  // ];
+
+  void addTalk(String title, String description, DateTime date, String location, int duration) {
+    if (title != "" && description != "" && date != null && location != "" && duration != null) {
+      // Call the user's CollectionReference to add a new user
+      FirebaseFirestore.instance
+          .collection('Talks')
+          .add({'title': title, 'description' : description, 'date' : date, 'location' : location, 'duration':duration})
+          .then((value) => setState(() {
+        talks.add(new Talk(value.id, title, description, date, location, duration));
+      }));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    // if(!loaded)
+    // addTalk("Teste Talk", "wow isto é teste", new DateTime.utc(2020, 9, 11, 18, 30), "aqui", 70);
+    if (!loaded) {
+      FirebaseFirestore.instance
+          .collection('Talks')
+          .get()
+          .then((QuerySnapshot querySnapshot) => {
+        querySnapshot.docs.forEach((doc) {
+          talks.add(new Talk(doc.id, doc["title"], doc["description"], doc["date"].toDate(), doc["location"], doc["duration"]));
+        }),
+        setState(() {})
+      });
+      loaded = true;
+    }
+
     return Scaffold(
       appBar: TalksScreenAppBar(context),
       body: Container(
@@ -111,7 +140,7 @@ Route _createCalendarRoute() {
   return PageRouteBuilder(
     pageBuilder: (context, animation, secondaryAnimation) => TalkSchedule(),
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
-      var begin = Offset(0.0, 1.0);
+      var begin = Offset(1.0, 0.0);
       var end = Offset.zero;
       var curve = Curves.ease;
 
@@ -178,19 +207,19 @@ class TalkScheduleState extends State<TalkSchedule> {
 
   List<Talk> scheduled = [
     //TODO : change to read from user scheduled (database)
-    new Talk(
+    new Talk("dafanasfnjkas",
         "Padoru Artificial",
         "Talk sobre emular o Padoru em software, com todos os detalhes necessários para um aprendiz desenvolver o"
             "seu próprio Padoru pessoal",
         new DateTime.utc(2020, 9, 11, 18, 30),
         "Sitio1",
-        new Duration(hours: 2)),
-    new Talk(
+        120),
+    new Talk("adsajfnasjfnajs",
         "Nova talk",
         "Esta talk é nova fyi",
         new DateTime.utc(2020, 12, 1, 14),
         "Sitio2",
-        new Duration(hours: 1, minutes: 30)),
+        90),
   ];
 
   void calendarTapped(CalendarTapDetails calendarTapDetails) {
