@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../LoginScreen.dart';
 import '../RegisterScreen.dart';
 
 String validateEmail(String value) {
@@ -10,13 +11,18 @@ String validatePassword(String value) {
   return value.isEmpty ? 'Password can\'t be empty' : null;
 }
 
+enum FormType {
+  LOGIN,
+  REGISTER
+}
+
 enum EntryFieldType {
   EMAIL,
   USERNAME,
   PASSWORD,
 }
 
-Widget EntryField(EntryFieldType entryFieldType) {
+Widget EntryField(EntryFieldType entryFieldType, FormType formType) {
   String _title;
   bool _obscured = false;
   Function _validator;
@@ -26,17 +32,17 @@ Widget EntryField(EntryFieldType entryFieldType) {
     case EntryFieldType.EMAIL:
       _title = "E-Mail";
       _validator = validateEmail;
-      _setter = setEmail;
+      _setter = formType == FormType.LOGIN? loginSetEmail : registerSetEmail;
       break;
     case EntryFieldType.USERNAME:
       _title = "Username";
-      _setter = setUsername;
+      _setter = registerSetUsername;
       break;
     case EntryFieldType.PASSWORD:
       _title = "Password";
       _obscured = true;
       _validator = validatePassword;
-      _setter = setPassword;
+      _setter = formType == FormType.LOGIN? loginSetPassword : registerSetPassword;
       break;
   }
 

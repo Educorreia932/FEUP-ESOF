@@ -11,15 +11,15 @@ String _email;
 String _username;
 String _password;
 
-void setEmail(String email) {
+void registerSetEmail(String email) {
   _email = email;
 }
 
-void setUsername(String username) {
+void registerSetUsername(String username) {
   _username = username;
 }
 
-void setPassword(String password) {
+void registerSetPassword(String password) {
   _password = password;
 }
 
@@ -47,6 +47,7 @@ class RegisterScreenState extends State<RegisterScreen> {
 
     final BaseAuth auth = AuthProvider.of(context).auth;
     final String userId = await auth.createUserWithEmailAndPassword(_email, _password);
+
     print('Registered user: $userId');
   }
 
@@ -81,9 +82,9 @@ class RegisterScreenState extends State<RegisterScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  EntryField(EntryFieldType.EMAIL),
-                  EntryField(EntryFieldType.USERNAME),
-                  EntryField(EntryFieldType.PASSWORD),
+                  EntryField(EntryFieldType.EMAIL, FormType.REGISTER),
+                  EntryField(EntryFieldType.USERNAME, FormType.REGISTER),
+                  EntryField(EntryFieldType.PASSWORD, FormType.REGISTER),
                 ],
               ),
             ),

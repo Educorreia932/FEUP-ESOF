@@ -9,17 +9,17 @@ import 'package:flutter/rendering.dart';
 import '../talks_screen/TalksScreen.dart';
 import 'components/SideMenu.dart';
 
-
 class MainScreenBuilder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final BaseAuth auth = AuthProvider.of(context).auth;
 
     return StreamBuilder<String>(
-        stream: auth.onAuthStateChanged,
+      stream: auth.onAuthStateChanged,
       builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
         if (snapshot.connectionState == ConnectionState.active) {
           String currentUser = snapshot.data;
+          print(currentUser);
           final bool isLoggedIn = currentUser != null;
 
           return MainScreen(isLoggedIn);
