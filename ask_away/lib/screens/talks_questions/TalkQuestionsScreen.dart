@@ -1,7 +1,7 @@
 import 'package:ask_away/components/cards/question_card/QuestionCard.dart';
 import 'package:ask_away/models/Question.dart';
+import 'package:ask_away/screens/main_screen/MainScreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:ask_away/models/Vote.dart';
 import 'package:ask_away/screens/talks_screen/TalksScreen.dart';
 import 'package:flutter/material.dart';
 
@@ -18,12 +18,10 @@ class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
     if (question != "") {
       // Call the user's CollectionReference to add a new user
       FirebaseFirestore.instance
-          .collection('Questions').add({
-        'text': question
-      }).then((value) =>
-          setState(() {
-            questions.add(new Question(question,[]));
-          }));
+          .collection('Questions')
+          .add({'text': question}).then((value) => setState(() {
+                questions.add(new Question(question, []));
+              }));
     }
   }
 
@@ -46,16 +44,15 @@ class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
           .collection('Questions')
           .get()
           .then((QuerySnapshot querySnapshot) => {
-        querySnapshot.docs.forEach((doc) {
-          questions.add(new Question(doc["text"],[]));
-        }
-        ),
-        setState(() {})
-      });
+                querySnapshot.docs.forEach((doc) {
+                  questions.add(new Question(doc["text"], []));
+                }),
+                setState(() {})
+              });
       loaded = true;
     }
     return Scaffold(
-      appBar: TalksScreenAppBar(context),
+      appBar: QuestionsScreenAppBar(context),
       body: Container(
         color: Color(0xFFECECEC),
         child: Column(
@@ -83,8 +80,8 @@ class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
                         scrollDirection: Axis.vertical,
                         shrinkWrap: true,
                         children: questions
-                            .map<QuestionCard>(
-                                (Question question) => QuestionCard(question, callback))
+                            .map<QuestionCard>((Question question) =>
+                                QuestionCard(question, callback))
                             .toList(),
                       ),
                     ),
@@ -108,10 +105,9 @@ class SendQuestionField extends StatelessWidget {
   TextEditingController questionController = new TextEditingController();
   TalkQuestionsScreenState talkQuestionsScreenState;
 
-  SendQuestionField(TalkQuestionsScreenState talkQuestionsScreenState){
+  SendQuestionField(TalkQuestionsScreenState talkQuestionsScreenState) {
     this.talkQuestionsScreenState = talkQuestionsScreenState;
   }
-
 
   Widget build(BuildContext context) {
     return Row(
@@ -147,3 +143,51 @@ class SendQuestionField extends StatelessWidget {
     );
   }
 }
+
+Widget QuestionsScreenAppBar(BuildContext context) {
+  return AppBar(
+    toolbarHeight: 80,
+    backgroundColor: Color(0xFFECECEC),
+    leading: Padding(
+      padding: const EdgeInsets.only(left: 10),
+      child: new IconButton(
+        icon: new Icon(
+          Icons.arrow_back,
+          size: 40,
+          color: Colors.black,
+        ),
+        onPressed: () {
+          Navigator.pop(context);
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => TalksScreen()),
+          );
+        },
+      ),
+    ),
+    elevation: 0.0,
+    actions: [
+      Padding(
+        padding: const EdgeInsets.only(
+          right: 20,
+        ),
+        child: new IconButton(
+          icon: new Icon(
+            Icons.sort,
+            size: 40,
+            color: Colors.black,
+          ),
+          onPressed: () {
+            Navigator.pop(context);
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => MainScreen()),
+            );
+          },
+        ),
+      ),
+    ],
+  );
+}
+
+
