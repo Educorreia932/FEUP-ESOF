@@ -9,16 +9,18 @@ import 'package:flutter/rendering.dart';
 import '../talks_screen/TalksScreen.dart';
 import 'components/SideMenu.dart';
 
+
 class MainScreenBuilder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final BaseAuth auth = AuthProvider.of(context).auth;
 
     return StreamBuilder<String>(
-      stream: auth.onAuthStateChanged,
+        stream: auth.onAuthStateChanged,
       builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
         if (snapshot.connectionState == ConnectionState.active) {
-          final bool isLoggedIn = snapshot.hasData;
+          String currentUser = snapshot.data;
+          final bool isLoggedIn = currentUser != null;
 
           return MainScreen(isLoggedIn);
         }
@@ -33,14 +35,14 @@ class MainScreen extends StatelessWidget {
   bool _isLoggedIn;
   GlobalKey<ScaffoldState> _drawerKey = GlobalKey<ScaffoldState>();
 
-  MainScreen(_isLoggedIn);
+  MainScreen(this._isLoggedIn);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _drawerKey,
       drawer: DrawerComponent(),
-      appBar: MainScreenAppBar(_drawerKey),
+      appBar: MainScreenAppBar(_drawerKey, _isLoggedIn),
       body: Container(
         color: Color(0xFFE5E5E5),
         child: Column(
@@ -111,7 +113,7 @@ class MainScreen extends StatelessWidget {
   }
 }
 
-MainScreenAppBar(GlobalKey<ScaffoldState> _drawerKey) {
+MainScreenAppBar(GlobalKey<ScaffoldState> _drawerKey, bool _isLoggedIn) {
   return AppBar(
     toolbarHeight: 100,
     leading: Padding(
@@ -129,11 +131,12 @@ MainScreenAppBar(GlobalKey<ScaffoldState> _drawerKey) {
     elevation: 0.0,
     actions: [
       Padding(
-          padding: const EdgeInsets.only(
-            top: 20,
-            right: 10,
-          ),
-          child: UserIcon()),
+        padding: const EdgeInsets.only(
+          top: 20,
+          right: 10,
+        ),
+        child: _isLoggedIn ? UserIcon() : Text("Login"),
+      ),
     ],
   );
 }
