@@ -1,6 +1,5 @@
 import 'package:ask_away/components/SimpleAppBar.dart';
 import 'package:ask_away/components/SimpleButton.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -14,8 +13,6 @@ class LoginScreen extends StatefulWidget {
 class LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
-
-
     return Scaffold(
       appBar: SimpleAppBar(context),
       body: Column(
