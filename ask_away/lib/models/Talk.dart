@@ -1,4 +1,4 @@
-import 'User.dart';
+import 'AppUser.dart';
 
 class Talk {
   String id;
@@ -19,7 +19,7 @@ class Talk {
     this.date = date;
     this.location = location;
     this.duration = new Duration(minutes: duration);
-    this.creator = new User(0, "Mr. Padoru"); //change to receive in constructor
+    this.creator = new User("Mr. Padoru"); //change to receive in constructor
     //TODO user list (speakers and moderators)
 
     this.isExpanded = false;

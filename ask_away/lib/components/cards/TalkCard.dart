@@ -107,7 +107,7 @@ class TalkCardState extends State<TalkCard> {
                               Icon(Icons.calendar_today),
                               Text(
                                 formatterDate.format(widget.talk.date),
-                                style: TextStyle(fontSize: 16),
+                                style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.045),
                               )
                             ],
                           ),
@@ -123,7 +123,7 @@ class TalkCardState extends State<TalkCard> {
                                         durationFormat.format(widget.talk.date) +
                                             ' - ' +
                                             durationFormat.format(endTime),
-                                    style: TextStyle(color: Colors.black,fontSize: 16),
+                                    style: TextStyle(color: Colors.black,fontSize: MediaQuery.of(context).size.width*0.045),
                                   ),
                                 ]),
                               )

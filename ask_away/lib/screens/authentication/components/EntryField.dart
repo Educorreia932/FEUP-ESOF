@@ -1,25 +1,48 @@
 import 'package:flutter/material.dart';
 
+import '../LoginScreen.dart';
+import '../RegisterScreen.dart';
+
+String validateEmail(String value) {
+  return value.isEmpty ? 'Email can\'t be empty' : null;
+}
+
+String validatePassword(String value) {
+  return value.isEmpty ? 'Password can\'t be empty' : null;
+}
+
+enum FormType {
+  LOGIN,
+  REGISTER
+}
+
 enum EntryFieldType {
   EMAIL,
   USERNAME,
   PASSWORD,
 }
 
-Widget EntryField(EntryFieldType entryFieldType) {
+Widget EntryField(EntryFieldType entryFieldType, FormType formType) {
   String _title;
   bool _obscured = false;
+  Function _validator;
+  Function _setter;
 
   switch (entryFieldType) {
     case EntryFieldType.EMAIL:
       _title = "E-Mail";
+      _validator = validateEmail;
+      _setter = formType == FormType.LOGIN? loginSetEmail : registerSetEmail;
       break;
     case EntryFieldType.USERNAME:
       _title = "Username";
+      _setter = registerSetUsername;
       break;
     case EntryFieldType.PASSWORD:
       _title = "Password";
       _obscured = true;
+      _validator = validatePassword;
+      _setter = formType == FormType.LOGIN? loginSetPassword : registerSetPassword;
       break;
   }
 
@@ -39,6 +62,10 @@ Widget EntryField(EntryFieldType entryFieldType) {
         ),
         TextFormField(
           obscureText: _obscured,
+          validator: _validator,
+          onSaved: (String value) {
+            _setter(value);
+          },
           decoration: InputDecoration(
             fillColor: Color(0xFFE5E5E5),
             filled: true,
