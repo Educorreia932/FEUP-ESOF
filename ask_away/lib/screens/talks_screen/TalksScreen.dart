@@ -112,7 +112,7 @@ Widget TalksScreenAppBar(BuildContext context) {
             color: Colors.black,
           ),
           onPressed: () {
-            Navigator.pop(context);
+            //Navigator.pop(context);
             // Navigator.push(
             //   context,
             //   MaterialPageRoute(builder: (context) => MainScreen()),
@@ -130,6 +130,24 @@ Route _createCalendarRoute() {
     pageBuilder: (context, animation, secondaryAnimation) => TalkSchedule(),
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
       var begin = Offset(1.0, 0.0);
+      var end = Offset.zero;
+      var curve = Curves.ease;
+
+      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+      return SlideTransition(
+        position: animation.drive(tween),
+        child: child,
+      );
+    },
+  );
+}
+
+Route _createTalksRoute() {
+  return PageRouteBuilder(
+    pageBuilder: (context, animation, secondaryAnimation) => TalksScreen(),
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      var begin = Offset(-1.0,0);
       var end = Offset.zero;
       var curve = Curves.ease;
 
@@ -281,10 +299,7 @@ Widget ScheduleAppBar(BuildContext context) {
         ),
         onPressed: () {
           Navigator.pop(context);
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => TalksScreen()),
-          );
+          Navigator.of(context).push(_createTalksRoute());
         },
       ),
     ),
