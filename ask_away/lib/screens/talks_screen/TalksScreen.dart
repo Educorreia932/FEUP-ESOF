@@ -117,6 +117,7 @@ Widget TalksScreenAppBar(BuildContext context) {
             //   context,
             //   MaterialPageRoute(builder: (context) => MainScreen()),
             // );
+            Navigator.pop(context);
             Navigator.of(context).push(_createCalendarRoute());
           },
         ),
