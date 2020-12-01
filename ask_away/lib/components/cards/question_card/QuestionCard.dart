@@ -1,5 +1,10 @@
 import 'package:ask_away/models/Question.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+
+
+
 
 import 'components/VotingComponent.dart';
 
@@ -16,10 +21,15 @@ class QuestionCard extends StatefulWidget {
 class QuestionCardState extends State<QuestionCard> {
   void upvote()
   {
+    // Get document reference
+    final DocumentReference docRef = FirebaseFirestore.instance.collection("Questions").doc(this.widget._question.id);
+    docRef.update({"votes": FieldValue.increment(1)});
     this.widget._question.votes++;
   }
   void downvote()
   {
+    final DocumentReference docRef = FirebaseFirestore.instance.collection("Questions").doc(this.widget._question.id);
+    docRef.update({"votes": FieldValue.increment(-1)});
     this.widget._question.votes--;
   }
   @override
