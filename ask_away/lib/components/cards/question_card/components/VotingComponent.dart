@@ -4,10 +4,10 @@ import 'package:ask_away/screens/main_screen/MainScreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-enum VoteType {
-  UP,
-  DOWN
-}
+int previousTimeStamp;
+int currentTimeStamp;
+
+enum VoteType { UP, DOWN }
 
 extension VoteValue on VoteType {
   static const values = {
@@ -27,52 +27,6 @@ class VotingComponent extends StatefulWidget {
     return votes;
   }
 
-  void vote(VoteType voteType) {
-    User user;
-    String questionID = question.id;
-    DocumentReference userRef = FirebaseFirestore.instance.collection('Users').doc(currentUser);
-
-    FirebaseFirestore.instance.runTransaction(
-      (transaction) {
-        return userRef.get().then(
-          (value) {
-            user = User.fromData(value.data());
-            DocumentReference docRef = FirebaseFirestore.instance.collection("Questions").doc(questionID);
-
-            // User didn't have a vote in this question
-            if (!user.votes.containsKey(questionID)) {
-              docRef.update({"votes": FieldValue.increment(voteType.value)});
-              question.votes += voteType.value;
-
-              user.votes[questionID] = voteType.value;
-              userRef.update({"votes": user.votes});
-            }
-
-            // User already had a vote of the same type
-            else if (user.votes[questionID] == voteType.value) {
-              docRef.update({"votes": FieldValue.increment(-voteType.value)});
-              question.votes -= voteType.value;
-
-              user.votes.remove(questionID);
-              userRef.update({"votes": user.votes});
-            }
-
-            // User already had a vote of the opposite type
-            else {
-              docRef.update({"votes": FieldValue.increment(2 * voteType.value)});
-              question.votes += 2 * voteType.value;
-
-              user.votes[questionID] = voteType.value;
-              userRef.update({"votes": user.votes});
-            }
-
-            callback();
-          },
-        );
-      },
-    );
-  }
-
   VotingComponent(this.votes, this.callback, this.question);
 
   @override
@@ -80,6 +34,60 @@ class VotingComponent extends StatefulWidget {
 }
 
 class _VotingComponentState extends State<VotingComponent> {
+  void vote(VoteType voteType) {
+    int elapsedTime = currentTimeStamp - previousTimeStamp;
+
+    User user;
+    String questionID = widget.question.id;
+    DocumentReference userRef = FirebaseFirestore.instance.collection('Users').doc(currentUser);
+
+    print(elapsedTime);
+
+    if (elapsedTime >= 2000) {
+      FirebaseFirestore.instance.runTransaction(
+        (transaction) {
+          return userRef.get().then(
+            (value) {
+              user = User.fromData(value.data());
+              DocumentReference docRef = FirebaseFirestore.instance.collection("Questions").doc(questionID);
+
+              // User didn't have a vote in this question
+              if (!user.votes.containsKey(questionID)) {
+                docRef.update({"votes": FieldValue.increment(voteType.value)});
+                widget.question.votes += voteType.value;
+
+                user.votes[questionID] = voteType.value;
+              }
+
+              // User already had a vote of the same type
+              else if (user.votes[questionID] == voteType.value) {
+                docRef.update({"votes": FieldValue.increment(-voteType.value)});
+                widget.question.votes -= voteType.value;
+
+                user.votes.remove(questionID);
+              }
+
+              // User already had a vote of the opposite type
+              else {
+                docRef.update({"votes": FieldValue.increment(2 * voteType.value)});
+                widget.question.votes += 2 * voteType.value;
+
+                user.votes[questionID] = voteType.value;
+              }
+
+              userRef.update({"votes": user.votes});
+              widget.callback();
+
+            },
+          );
+        },
+      );
+      previousTimeStamp = currentTimeStamp;
+    }
+
+    currentTimeStamp = DateTime.now().millisecondsSinceEpoch;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -89,7 +97,7 @@ class _VotingComponentState extends State<VotingComponent> {
           iconSize: 30,
           onPressed: () => setState(
             () {
-              widget.vote(VoteType.UP);
+              vote(VoteType.UP);
               widget.callback();
             },
           ),
@@ -105,7 +113,7 @@ class _VotingComponentState extends State<VotingComponent> {
           iconSize: 30,
           onPressed: () => setState(
             () {
-              widget.vote(VoteType.DOWN);
+              vote(VoteType.DOWN);
               widget.callback();
             },
           ),
