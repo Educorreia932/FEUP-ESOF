@@ -1,24 +1,18 @@
 import 'package:ask_away/models/Vote.dart';
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class VotingComponent extends StatefulWidget {
-  List<Vote> votes;
+  int votes;
   Function callback;
+  Function upvote;
+  Function downvote;
 
   int getTotalVotes() {
-    int total = 0;
-
-    for (int i = 0; i < votes.length; i++) {
-      if (votes[i].type == VoteType.up)
-        total++;
-      else
-        total--;
-    }
-
-    return total;
+    return votes;
   }
 
-  VotingComponent(this.votes, this.callback);
+  VotingComponent(this.votes , this.callback, this.upvote, this.downvote);
 
   @override
   _VotingComponentState createState() => new _VotingComponentState();
@@ -34,7 +28,7 @@ class _VotingComponentState extends State<VotingComponent> {
           iconSize: 30,
           onPressed: () => setState(
                 () {
-              this.widget.votes.add(new Vote(VoteType.up));
+              this.widget.upvote();
               this.widget.callback();
             },
           ),
@@ -50,7 +44,8 @@ class _VotingComponentState extends State<VotingComponent> {
           iconSize: 30,
           onPressed: () => setState(
                 () {
-              this.widget.votes.add(new Vote(VoteType.down));
+              this.widget.downvote();
+              print(this.widget.votes);
               this.widget.callback();
             },
           ),

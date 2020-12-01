@@ -20,7 +20,7 @@ class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
       FirebaseFirestore.instance
           .collection('Questions')
           .add({'text': question}).then((value) => setState(() {
-                questions.add(new Question(question, []));
+                questions.add(new Question(question,0));
               }));
     }
   }
@@ -45,7 +45,7 @@ class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
           .get()
           .then((QuerySnapshot querySnapshot) => {
                 querySnapshot.docs.forEach((doc) {
-                  questions.add(new Question(doc["text"], []));
+                  questions.add(new Question(doc["text"], 0));
                 }),
                 setState(() {})
               });

@@ -14,6 +14,14 @@ class QuestionCard extends StatefulWidget {
 }
 
 class QuestionCardState extends State<QuestionCard> {
+  void upvote()
+  {
+    this.widget._question.votes++;
+  }
+  void downvote()
+  {
+    this.widget._question.votes--;
+  }
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -56,7 +64,7 @@ class QuestionCardState extends State<QuestionCard> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                VotingComponent(widget._question.votes, widget._callback),
+                VotingComponent(widget._question.votes, widget._callback, this.upvote, this.downvote),
                 RichText(
                   text: TextSpan(
                     style: TextStyle(
