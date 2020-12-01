@@ -27,7 +27,7 @@ class UserProfileState extends State<UserProfile> {
           .snapshots()
           .first
           .then((value) => {
-        user = new User(value.data()["username"], value.data()["Reputation"]),
+        user = new User(value.data()["username"], value.data()["Reputation"], value.data()["votes"]),
         setState(() {})
       }
       );

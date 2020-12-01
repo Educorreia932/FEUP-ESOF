@@ -5,7 +5,7 @@ class User {
   String username;
   int reputation;
   List<Question> askedQuestions;
-  List<Vote> votes;
+  Map<dynamic, dynamic> votes;
 
-  User(this.username,this.reputation);
+  User(this.username,this.reputation, this.votes);
 }
