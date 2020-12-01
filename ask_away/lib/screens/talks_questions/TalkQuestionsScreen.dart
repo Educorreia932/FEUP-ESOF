@@ -107,14 +107,14 @@ class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
 }
 
 class SendQuestionField extends StatelessWidget {
-  @override
   TextEditingController questionController = new TextEditingController();
   TalkQuestionsScreenState talkQuestionsScreenState;
 
-  SendQuestionField(TalkQuestionsScreenState talkQuestionsScreenState) {
+  SendQuestionField(TalkQuestionsScreenState talkQuestionsScreenState){
     this.talkQuestionsScreenState = talkQuestionsScreenState;
   }
 
+  @override
   Widget build(BuildContext context) {
     return Row(
       children: [

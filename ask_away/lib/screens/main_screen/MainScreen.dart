@@ -9,6 +9,8 @@ import 'package:flutter/rendering.dart';
 import '../talks_screen/TalksScreen.dart';
 import 'components/SideMenu.dart';
 
+String currentUser;
+
 class MainScreenBuilder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -18,7 +20,7 @@ class MainScreenBuilder extends StatelessWidget {
       stream: auth.onAuthStateChanged,
       builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
         if (snapshot.connectionState == ConnectionState.active) {
-          String currentUser = snapshot.data;
+          currentUser = snapshot.data;
           print(currentUser);
           final bool isLoggedIn = currentUser != null;
 
