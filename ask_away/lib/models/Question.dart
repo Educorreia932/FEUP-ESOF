@@ -1,5 +1,4 @@
 import 'AppUser.dart';
-import 'Vote.dart';
 
 class Question {
   String id;
@@ -16,5 +15,4 @@ class Question {
   int getTotalVotes() {
     return votes;
   }
-
 }

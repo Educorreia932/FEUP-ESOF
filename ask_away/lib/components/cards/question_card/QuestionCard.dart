@@ -4,9 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ask_away/screens/main_screen/MainScreen.dart';
 import 'package:ask_away/models/AppUser.dart';
 
-
-
-
 import 'components/VotingComponent.dart';
 
 class QuestionCard extends StatefulWidget {
@@ -20,114 +17,6 @@ class QuestionCard extends StatefulWidget {
 }
 
 class QuestionCardState extends State<QuestionCard> {
-  void upvote()
-  {
-    User user;
-    String questionID = this.widget._question.id;
-    DocumentReference userRef = FirebaseFirestore.instance.collection('Users')
-        .doc(currentUser);
-    FirebaseFirestore.instance.runTransaction((transaction)  {
-      return
-      userRef.get()
-          .then((value) {
-        user = new User(value.data()["username"], value.data()["Reputation"],
-            value.data()["votes"]);
-        DocumentReference docRef = FirebaseFirestore.instance.collection(
-            "Questions").doc(questionID);
-
-        print("Antes");
-        print(user.votes);
-
-        if (!user.votes.containsKey(questionID)) {
-          docRef.update({"votes": FieldValue.increment(1)});
-          this.widget._question.votes++;
-
-          user.votes[questionID] = 1;
-          userRef.update(
-              {"votes": user.votes}
-          );
-        }
-        else {
-          if (user.votes[questionID] == 1) {
-            docRef.update({"votes": FieldValue.increment(-1)});
-            this.widget._question.votes--;
-
-            user.votes.remove(questionID);
-            userRef.update(
-                {"votes": user.votes}
-            );
-          }
-          else {
-            docRef.update({"votes": FieldValue.increment(2)});
-            this.widget._question.votes += 2;
-
-            user.votes[questionID] = 1;
-            userRef.update(
-                {"votes": user.votes}
-            );
-          }
-        }
-        print("Depois");
-        print(user.votes);
-        this.widget._callback();
-      });
-      // Get document reference
-    });
-  }
-  void downvote()
-  {
-    User user;
-    String questionID = this.widget._question.id;
-    DocumentReference userRef = FirebaseFirestore.instance.collection('Users')
-        .doc(currentUser);
-    FirebaseFirestore.instance.runTransaction((transaction)  {
-      return
-        userRef.get()
-            .then((value) {
-          user = new User(value.data()["username"], value.data()["Reputation"],
-              value.data()["votes"]);
-          DocumentReference docRef = FirebaseFirestore.instance.collection(
-              "Questions").doc(questionID);
-
-          print("Antes");
-          print(user.votes);
-
-          if (!user.votes.containsKey(questionID)) {
-            docRef.update({"votes": FieldValue.increment(-1)});
-            this.widget._question.votes--;
-
-            user.votes[questionID] = -1;
-            userRef.update(
-                {"votes": user.votes}
-            );
-          }
-          else {
-            if (user.votes[questionID] == -1) {
-              docRef.update({"votes": FieldValue.increment(1)});
-              this.widget._question.votes++;
-
-              user.votes.remove(questionID);
-              userRef.update(
-                  {"votes": user.votes}
-              );
-            }
-            else {
-              docRef.update({"votes": FieldValue.increment(-2)});
-              this.widget._question.votes -= 2;
-
-              user.votes[questionID] = -1;
-              userRef.update(
-                  {"votes": user.votes}
-              );
-            }
-          }
-          print("Depois");
-          print(user.votes);
-          this.widget._callback();
-        });
-      // Get document reference
-    });
-  }
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -170,7 +59,7 @@ class QuestionCardState extends State<QuestionCard> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                VotingComponent(widget._question.votes, widget._callback, this.upvote, this.downvote),
+                VotingComponent(widget._question.votes, widget._callback, widget._question),
                 RichText(
                   text: TextSpan(
                     style: TextStyle(
@@ -200,5 +89,3 @@ class QuestionCardState extends State<QuestionCard> {
     );
   }
 }
-
-
