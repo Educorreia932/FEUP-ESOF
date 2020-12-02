@@ -1,16 +1,40 @@
 import 'package:ask_away/components/UserIcon.dart';
+import 'package:ask_away/models/AppUser.dart';
 import 'package:ask_away/screens/main_screen/MainScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import '../main_screen/MainScreen.dart';
 
 class UserProfile extends StatefulWidget {
   @override
   UserProfileState createState() => new UserProfileState();
 }
 
+
+
 class UserProfileState extends State<UserProfile> {
+  User user;
+  bool loaded = false;
+
   @override
   Widget build(BuildContext context) {
+
+    if(!loaded) {
+      FirebaseFirestore.instance
+          .collection('Users')
+          .doc(currentUser)
+          .snapshots()
+          .first
+          .then((value) => {
+        user = new User(value.data()["username"], value.data()["Reputation"], value.data()["votes"]),
+        setState(() {})
+      }
+      );
+      loaded = true;
+    }
+    
+
     return Scaffold(
       appBar: UserProfileAppBar(context),
       body: Column(
@@ -50,7 +74,8 @@ class UserProfileState extends State<UserProfile> {
                             child: RichText(
                               overflow: TextOverflow.ellipsis,
                               text: TextSpan(
-                                text: "Eduardo Correia",
+
+                                text: user != null ? user.username : "",
 
                                 style: TextStyle(
                                   color: Colors.black,
@@ -89,7 +114,7 @@ class UserProfileState extends State<UserProfile> {
                             ),
                           ),
                           Text(
-                            "159",
+                            user != null ? user.reputation.toString() : "",
                             style: TextStyle(
                               fontSize: 30,
                             ),

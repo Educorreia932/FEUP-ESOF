@@ -19,7 +19,7 @@ class Talk {
     this.date = date;
     this.location = location;
     this.duration = new Duration(minutes: duration);
-    this.creator = new User("Mr. Padoru"); //change to receive in constructor
+    this.creator = new User("Mr. Padoru",0, Map()); //change to receive in constructor
     //TODO user list (speakers and moderators)
 
     this.isExpanded = false;
