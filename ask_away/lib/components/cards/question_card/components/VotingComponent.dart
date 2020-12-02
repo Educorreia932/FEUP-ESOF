@@ -3,9 +3,12 @@ import 'package:ask_away/models/Question.dart';
 import 'package:ask_away/screens/main_screen/MainScreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:mutex/mutex.dart';
 
 int previousTimeStamp;
 int currentTimeStamp;
+
+Mutex mutex = Mutex();
 
 enum VoteType { UP, DOWN }
 
@@ -34,7 +37,11 @@ class VotingComponent extends StatefulWidget {
 }
 
 class _VotingComponentState extends State<VotingComponent> {
-  void vote(VoteType voteType) {
+  Future<void> vote(VoteType voteType) async {
+    if (previousTimeStamp == null) previousTimeStamp = 0;
+
+    currentTimeStamp = DateTime.now().millisecondsSinceEpoch;
+
     int elapsedTime = currentTimeStamp - previousTimeStamp;
 
     User user;
@@ -46,7 +53,7 @@ class _VotingComponentState extends State<VotingComponent> {
     if (elapsedTime >= 2000) {
       FirebaseFirestore.instance.runTransaction(
         (transaction) {
-          return userRef.get().then(
+          return transaction.get(userRef).then(
             (value) {
               user = User.fromData(value.data());
               DocumentReference docRef = FirebaseFirestore.instance.collection("Questions").doc(questionID);
@@ -77,15 +84,13 @@ class _VotingComponentState extends State<VotingComponent> {
 
               userRef.update({"votes": user.votes});
               widget.callback();
-
             },
           );
         },
       );
+
       previousTimeStamp = currentTimeStamp;
     }
-
-    currentTimeStamp = DateTime.now().millisecondsSinceEpoch;
   }
 
   @override
