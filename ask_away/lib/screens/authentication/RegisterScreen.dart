@@ -4,7 +4,7 @@ import 'package:ask_away/services/Auth.dart';
 import 'package:ask_away/services/AuthProvider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'components/EntryField.dart';
+import 'EntryField.dart';
 import '../main_screen/MainScreen.dart';
 
 String _email;
@@ -49,13 +49,18 @@ class RegisterScreenState extends State<RegisterScreen> {
     final String userId = await auth.createUserWithEmailAndPassword(_email, _password);
 
     print('Registered user: $userId');
+
+    Navigator.pop(context);
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => MainScreenBuilder()),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-
         FocusScope.of(context).requestFocus(new FocusNode());
       },
       child: Scaffold(

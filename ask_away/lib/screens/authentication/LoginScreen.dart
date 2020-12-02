@@ -6,7 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../main_screen/MainScreen.dart';
 
-import 'components/EntryField.dart';
+import 'EntryField.dart';
 
 String _email;
 String _password;
@@ -42,10 +42,15 @@ class LoginScreenState extends State<LoginScreen> {
     validateAndSave();
 
     final BaseAuth auth = AuthProvider.of(context).auth;
-    print(_email);
     final String userId = await auth.signInWithEmailAndPassword(_email, _password);
 
     print('User logged in: $userId');
+    
+    Navigator.pop(context);
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => MainScreenBuilder()),
+    );
   }
 
   @override

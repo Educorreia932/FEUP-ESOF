@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 import '../talks_screen/TalksScreen.dart';
-import 'components/SideMenu.dart';
+import 'SideMenu.dart';
 
 String currentUser;
 

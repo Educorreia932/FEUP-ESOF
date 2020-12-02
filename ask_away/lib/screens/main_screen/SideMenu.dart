@@ -35,7 +35,7 @@ class DrawerComponent extends StatelessWidget {
             title: Text(
               'Settings',
               style: TextStyle(
-                fontWeight: FontWeight.normal ,
+                fontWeight: FontWeight.normal,
                 fontSize: 35,
               ),
             ),
@@ -53,6 +53,22 @@ class DrawerComponent extends StatelessWidget {
             ),
             onTap: () {
               Navigator.pop(context);
+            },
+          ),
+          ListTile(
+            title: Text(
+              'Log Out',
+              style: TextStyle(
+                fontWeight: FontWeight.normal,
+                fontSize: 35,
+              ),
+            ),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => RegisterScreen()),
+              );
             },
           ),
           ListTile(
@@ -85,4 +101,8 @@ class DrawerComponent extends StatelessWidget {
       ),
     );
   }
+}
+
+void logout() {
+
 }
