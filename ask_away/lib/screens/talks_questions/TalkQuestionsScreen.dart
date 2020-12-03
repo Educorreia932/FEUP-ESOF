@@ -20,7 +20,7 @@ class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
       FirebaseFirestore.instance
           .collection('Questions')
           .add({'text': question}).then((value) => setState(() {
-                questions.add(new Question(question, []));
+                questions.add(new Question(question, 0, value.id));
               }));
     }
   }
@@ -45,9 +45,9 @@ class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
           .get()
           .then((QuerySnapshot querySnapshot) => {
                 querySnapshot.docs.forEach((doc) {
-                  questions.add(new Question(doc["text"], []));
+                  questions.add(new Question(doc["text"], doc["votes"], doc.id));
                 }),
-                setState(() {})
+                this.callback()
               });
       loaded = true;
     }
@@ -107,14 +107,14 @@ class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
 }
 
 class SendQuestionField extends StatelessWidget {
-  @override
   TextEditingController questionController = new TextEditingController();
   TalkQuestionsScreenState talkQuestionsScreenState;
 
-  SendQuestionField(TalkQuestionsScreenState talkQuestionsScreenState) {
+  SendQuestionField(TalkQuestionsScreenState talkQuestionsScreenState){
     this.talkQuestionsScreenState = talkQuestionsScreenState;
   }
 
+  @override
   Widget build(BuildContext context) {
     return Row(
       children: [

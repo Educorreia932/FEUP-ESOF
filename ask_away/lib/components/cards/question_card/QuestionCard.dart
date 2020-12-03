@@ -1,5 +1,8 @@
 import 'package:ask_away/models/Question.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ask_away/screens/main_screen/MainScreen.dart';
+import 'package:ask_away/models/AppUser.dart';
 
 import 'components/VotingComponent.dart';
 
@@ -56,7 +59,7 @@ class QuestionCardState extends State<QuestionCard> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                VotingComponent(widget._question.votes, widget._callback),
+                VotingComponent(widget._question.votes, widget._callback, widget._question),
                 RichText(
                   text: TextSpan(
                     style: TextStyle(
@@ -86,5 +89,3 @@ class QuestionCardState extends State<QuestionCard> {
     );
   }
 }
-
-
