@@ -59,11 +59,11 @@ class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
               });
       loaded = true;
     }
-    return GestureDetector(
-        onTap: () {
 
-          FocusScope.of(context).requestFocus(new FocusNode());
-        },
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).requestFocus(new FocusNode());
+      },
       child: Scaffold(
         appBar: QuestionsScreenAppBar(context),
         body: Container(
@@ -93,8 +93,7 @@ class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
                           scrollDirection: Axis.vertical,
                           shrinkWrap: true,
                           children: questions
-                              .map<QuestionCard>((Question question) =>
-                                  QuestionCard(question, callback))
+                              .map<QuestionCard>((Question question) => QuestionCard(question, callback))
                               .toList(),
                         ),
                       ),
@@ -203,5 +202,3 @@ Widget QuestionsScreenAppBar(BuildContext context) {
     ],
   );
 }
-
-

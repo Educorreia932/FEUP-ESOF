@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 int previousTimeStamp;
 int currentTimeStamp;
 
-
 enum VoteType { UP, DOWN }
 
 extension VoteValue on VoteType {
@@ -48,7 +47,7 @@ class _VotingComponentState extends State<VotingComponent> {
 
     print(elapsedTime);
 
-    if (elapsedTime >= 2000) {
+    if (elapsedTime >= 1000) {
       FirebaseFirestore.instance.runTransaction(
         (transaction) {
           return transaction.get(userRef).then(

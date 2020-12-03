@@ -1,13 +1,14 @@
 import 'package:ask_away/components/SimpleButton.dart';
 import 'package:ask_away/components/UserIcon.dart';
 import 'package:ask_away/screens/BuildWaitingScreen.dart';
+import 'package:ask_away/screens/authentication/LoginScreen.dart';
 import 'package:ask_away/services/Auth.dart';
 import 'package:ask_away/services/AuthProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 import '../talks_screen/TalksScreen.dart';
-import 'components/SideMenu.dart';
+import 'SideMenu.dart';
 
 String currentUser;
 
@@ -21,7 +22,7 @@ class MainScreenBuilder extends StatelessWidget {
       builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
         if (snapshot.connectionState == ConnectionState.active) {
           currentUser = snapshot.data;
-          print(currentUser);
+
           final bool isLoggedIn = currentUser != null;
 
           return MainScreen(isLoggedIn);
@@ -35,8 +36,7 @@ class MainScreenBuilder extends StatelessWidget {
 
 class MyBehavior extends ScrollBehavior {
   @override
-  Widget buildViewportChrome(
-      BuildContext context, Widget child, AxisDirection axisDirection) {
+  Widget buildViewportChrome(BuildContext context, Widget child, AxisDirection axisDirection) {
     return child;
   }
 }
@@ -52,7 +52,7 @@ class MainScreen extends StatelessWidget {
     return Scaffold(
       key: _drawerKey,
       drawer: DrawerComponent(),
-      appBar: MainScreenAppBar(_drawerKey, _isLoggedIn),
+      appBar: MainScreenAppBar(_drawerKey, _isLoggedIn, context),
       body: Container(
         color: Color(0xFFE5E5E5),
         child: ScrollConfiguration(
@@ -60,7 +60,8 @@ class MainScreen extends StatelessWidget {
           child: ListView(
             children: [
               Padding(
-                padding: EdgeInsets.only(left: MediaQuery.of(context).size.width/15,right: MediaQuery.of(context).size.width/15),
+                padding: EdgeInsets.only(
+                    left: MediaQuery.of(context).size.width / 15, right: MediaQuery.of(context).size.width / 15),
                 child: Text(
                   "Ask Away",
                   style: TextStyle(
@@ -69,7 +70,7 @@ class MainScreen extends StatelessWidget {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.only(left: MediaQuery.of(context).size.width/15),
+                padding: EdgeInsets.only(left: MediaQuery.of(context).size.width / 15),
                 child: Text(
                   "Every great answer starts with a great question.",
                   style: TextStyle(
@@ -116,7 +117,7 @@ class MainScreen extends StatelessWidget {
   }
 }
 
-MainScreenAppBar(GlobalKey<ScaffoldState> _drawerKey, bool _isLoggedIn) {
+MainScreenAppBar(GlobalKey<ScaffoldState> _drawerKey, bool _isLoggedIn, BuildContext context) {
   return AppBar(
     toolbarHeight: 100,
     leading: Padding(
@@ -138,7 +139,23 @@ MainScreenAppBar(GlobalKey<ScaffoldState> _drawerKey, bool _isLoggedIn) {
           top: 20,
           right: 10,
         ),
-        child: _isLoggedIn ? UserIcon() : Text("Login"),
+        child: _isLoggedIn
+            ? UserIcon()
+            : InkWell(
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => LoginScreen(),
+                    ),
+                  );
+                },
+                child: Text(
+                  "Login",
+                  style: TextStyle(color: Colors.black, fontSize: 35),
+                ),
+              ),
       ),
     ],
   );
