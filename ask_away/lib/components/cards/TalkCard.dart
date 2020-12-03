@@ -86,7 +86,7 @@ class TalkCardState extends State<TalkCard> {
                                 color: Color(0xFFE11D1D),
                               ),
                               Text(
-                                this.widget.talk.creator.username,
+                                widget.talk.creator.username,
                                 style: TextStyle(
                                   fontSize: 16,
                                 ),

@@ -65,11 +65,6 @@ class CreateTalkScreenState extends State<CreateTalkScreen> {
     if(validateAndSave()) {
       addTalk(_title, _description, _startdate, _location, _duration);
     }
-
-    // final BaseAuth auth = AuthProvider.of(context).auth;
-    // final String userId = await auth.createUserWithEmailAndPassword(_email, _password);
-
-    //print('Registered user: $userId');
   }
 
   @override
@@ -156,7 +151,8 @@ class CreateTalkScreenState extends State<CreateTalkScreen> {
         'description': description,
         'date': date,
         'location': location,
-        'duration': duration
+        'duration': duration,
+        'creator' : currentUser,
       });
       //.then((value) => setState(() {
       //talks.add(new Talk(value.id, title, description, date, location, duration));
