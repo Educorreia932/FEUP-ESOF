@@ -46,6 +46,16 @@ class TalksScreenState extends State<TalksScreen> {
     }
   }
 
+  void updateScheduled(dynamic talkId) {
+    print("pressed add scheduled");
+    // FirebaseFirestore.instance
+    //     .collection('Users')
+    //     .doc(currentUser)
+    //     .update({
+    //     'scheduled': FieldValue.arrayUnion([talkId])
+    //   });
+  }
+
   @override
   Widget build(BuildContext context) {
     // if(!loaded)
@@ -72,7 +82,7 @@ class TalksScreenState extends State<TalksScreen> {
                 child: ListView(
                   padding: const EdgeInsets.only(left: 32, right: 32, top: 10),
                   children: talks
-                      .map<TalkCard>((Talk talk) => TalkCard(talk))
+                      .map<TalkCard>((Talk talk) => TalkCard(talk, updateScheduled))
                       .toList(),
                 ),
               ),
@@ -272,6 +282,14 @@ class TalkScheduleState extends State<TalkSchedule> {
     });
   }
 
+  void updateScheduled(dynamic talkId) {
+    print("pressed bruh");
+    // FirebaseFirestore.instance.collection('Users')
+    //     .doc(currentUser)
+    //     .update({
+    //   'scheduled': FieldValue.arrayRemove([talkId])});
+  }
+  
   @override
   Widget build(BuildContext context) {
     getScheduled();
@@ -325,7 +343,13 @@ class TalkScheduleState extends State<TalkSchedule> {
                       padding:
                           const EdgeInsets.only(left: 17, right: 17, top: 10),
                       children: scheduled
-                          .map<TalkCard>((Talk talk) => TalkCard(talk))
+                          .map<TalkCard>((Talk talk) {
+                            for(String t in user.scheduledTalks) {
+                              if (t == talk.id)
+                                return TalkCard(talk, updateScheduled);
+                            }
+                            return null;
+                          })
                           .toList(),
                     ),
                   );

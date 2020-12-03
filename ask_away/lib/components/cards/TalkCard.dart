@@ -6,11 +6,12 @@ import 'package:intl/intl.dart';
 
 class TalkCard extends StatefulWidget {
   Talk talk;
+  Function callback;
 
   @override
   State<TalkCard> createState() => TalkCardState();
 
-  TalkCard(this.talk);
+  TalkCard(this.talk, this.callback);
 }
 
 class TalkCardState extends State<TalkCard> {
@@ -48,10 +49,13 @@ class TalkCardState extends State<TalkCard> {
                           fontSize: 25,
                         ),
                       ),
-                      Icon(
-                        Icons.bookmark_border,
-                        size: 30,
-                        color: Color(0xFFFF5656),
+                      IconButton(
+                        icon: Icon(
+                          Icons.bookmark_border,
+                          size: 30,
+                          color: Color(0xFFFF5656),
+                        ),
+                        onPressed: this.widget.callback(this.widget.talk.id),
                       ),
                     ],
                   ),
@@ -107,7 +111,10 @@ class TalkCardState extends State<TalkCard> {
                               Icon(Icons.calendar_today),
                               Text(
                                 formatterDate.format(widget.talk.date),
-                                style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.045),
+                                style: TextStyle(
+                                    fontSize:
+                                        MediaQuery.of(context).size.width *
+                                            0.045),
                               )
                             ],
                           ),
@@ -119,11 +126,15 @@ class TalkCardState extends State<TalkCard> {
                               RichText(
                                 text: TextSpan(children: [
                                   TextSpan(
-                                    text:
-                                        durationFormat.format(widget.talk.date) +
-                                            ' - ' +
-                                            durationFormat.format(endTime),
-                                    style: TextStyle(color: Colors.black,fontSize: MediaQuery.of(context).size.width*0.045),
+                                    text: durationFormat
+                                            .format(widget.talk.date) +
+                                        ' - ' +
+                                        durationFormat.format(endTime),
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize:
+                                            MediaQuery.of(context).size.width *
+                                                0.045),
                                   ),
                                 ]),
                               )
