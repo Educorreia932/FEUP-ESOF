@@ -35,12 +35,11 @@ Thank you!
 ---
 
 ## Product Vision
-Let your voice be heard by focusing on the questions that matter. 
-Every great answer starts with a great question.
+Help attendees get the most out of conferences they attend by answering the best questions they have.
 
 ## Elevator Pitch
 
-For speakers who want to improve the speaker-participant interaction, Ask a Way is an app that guarentees that the questions asked are the ones that the atendees want to hear the most, by using a voting and moderating system that rewards the best questions.
+For speakers who want to improve the speaker-participant interaction, Ask a Way is an app that guarentees that the questions asked are the ones that the atendees want to hear the most, by using a voting and moderating system that rewards the best questions. Behind every great answer is a great question.
 
 ---
 ## Requirements
@@ -59,21 +58,114 @@ Give each use case a concise, results-oriented name. Use cases should reflect th
 
 Briefly describe each use case mentioning the following:
 
-* **Actor**. Name only the actor that will be initiating this use case, i.e. a person or other entity external to the software system being specified who interacts with the system and performs use cases to accomplish tasks. 
-* **Description**. Provide a brief description of the reason for and outcome of this use case, or a high-level description of the sequence of actions and the outcome of executing the use case. 
-* **Preconditions and Postconditions**. Include any activities that must take place, or any conditions that must be true, before the use case can be started (preconditions). Describe also the state of the system at the conclusion of the use case execution (postconditions). 
+**Ask questions**
 
-* **Normal Flow**. Provide a detailed description of the user actions and system responses that will take place during execution of the use case under normal, expected conditions. This dialog sequence will ultimately lead to accomplishing the goal stated in the use case name and description. This is best done as a numbered list of actions performed by the actor, alternating with responses provided by the system. 
-* **Alternative Flows and Exceptions**. Document other, legitimate usage scenarios that can take place within this use case, stating any differences in the sequence of steps that take place. In addition, describe any anticipated error conditions that could occur during execution of the use case, and define how the system is to respond to those conditions. 
+* **Actor**. Attendee. 
+* **Description**. Give the attendees the possibility to ask the questions they have in their mind to be cleared. 
+* **Preconditions**. User must be logged in to the app and on the correct talk page. 
+* **Postconditions**. Question is deleavered to a moderator to filter the useful questions.
 
+* **Normal Flow**. 
+  1. Attendee enters the correct talk page.
+  2. Click on the bar at the bottom of the screen.
+  3. A keyboard will pop up.
+  4. The user types the question they want to ask.
+  5. The user precess the submit button.
+  6. The qestion is fast-fowarded to a moderator to apreve of the question.
+* **Alternative Flows and Exceptions**. 
+  1. The user is not logged in.
+  2. The question wont be posted.
+
+**Vote questions**
+
+* **Actor**. Attendee. 
+* **Description**. Gives the attendees power to choose and vote on the questions they want to ear. 
+* **Preconditions**. User must be logged in to the app and on the correct talk page. 
+* **Postconditions**. A counter is incremented/decreased which represents the like to dislike ratio a question has.
+
+* **Normal Flow**. 
+  1. Attendee enters the correct talk page.
+  2. Search for the question they want to vote.
+  3. Press the upvote or downvote button.
+  4. The question like to dislike ratio is altered.
+  5. After refreshing the page the questions are sorted by decreasing like to dislike ratio.
+
+* **Alternative Flows and Exceptions**. 
+  1. Question already liked.
+  2. Attendee presses the upvote button again.
+  3. The user's like is removed from the question at hand.
+  4. The question like to dislike ratio is altered.
+  5. After refreshing the page the questions are sorted by decreasing like to dislike ratio.   
+  **OR**
+  1. Question already liked.
+  2. Attendee presses the downvote button.
+  3. The user's like is removed from the question at hand and a dislike is introduced.
+  4. The question like to dislike ratio is altered.
+  5. After refreshing the page the questions are sorted by decreasing like to dislike ratio. 
+
+**Moderate questions**
+
+* **Actor**. Moderator. 
+* **Description**. The moderators filter the questions they think are irrelevant or disruptive for the conference, which will not be displayed for the attendees. 
+* **Preconditions**. User must be logged in to the app and on the correct talk page and must be selected as a moderator for said talk. After that the user can see what questions the attendees are asking and vote on them. 
+* **Postconditions**. The question will be displayed publicly for the attendees if accepted or deleted if rejected.
+
+* **Normal Flow**. 
+  1. Moderators enter the talk they moderate.
+  2. They click a special button that is only available to them.
+  3. A list of question that are not yet displayed appears.
+  4. The moderators click a question.
+  5. A drop down appears.
+  6. The moderators accepts or refuses the question.
+
+* **Alternative Flows and Exceptions**. 
+  1. The moderator clicks a question.
+  2. The question has already been judged by another moderator.
+  3. The question disappears and nothing changes. 
+  
+ **Answer questions**
+
+* **Actor**. Speaker. 
+* **Description**. The speaker can select questions from the app and aswer them. 
+* **Preconditions**. Speaker must enter the talk they are presenting. 
+* **Postconditions**. The user selects a question and answers it.
+
+* **Normal Flow**. 
+  1. Speaker enters the talk.
+  2. Speaker selects the top rated question.
+  3. The quesiton is answered.
+  4. The question is sent to the end of the list so it is not answered again.
+  
+   
 ### User stories
 - As an atendee I want to have my questions answered however i do without breaking the flow of the lecture so that all atendees can focus and not lose their line of thought.
-- As a participant I want to be able to up/downvote other atendees' questions so the best questions are answered first.
-- As a moderator i want to be able to filter questions that the atendees have so that the speakers have time to answer the questions most people have.
-- As a speaker I would like to be able to have an admin filtering unwanted questions for me.
-- As a speaker I want to easily schedule a talk allowing people to book attendance early.
-- As a user I want to know a talk's occupation so I can know if I can still attend it.
+- As a participant I want to be able to up/downvote other atendees' questions so the best questions are answered first.  
+**Question Screen Mock Up**  
+<img src="/mockups/Talk%20Questions.png" alt="Question Screen" width="200"/>
 
+- As a moderator i want to be able to filter questions that the atendees have so that the speakers have time to answer the questions most people have.  
+- As a speaker I would like to be able to have an admin filtering unwanted questions for me.  
+- As a speaker I want to easily schedule a talk allowing people to book attendance early.  
+- As a user I want to know a talk's occupation so I can know if I can still attend it.  
+**Talk Screen Mock Up**  
+<img src="/mockups/Talks%20Screen.png" alt="Talks Screen" width="200"/>
+
+### Other Mock Ups
+**Login Screen Mock Up**  
+<img src="/mockups/Login%20Screen.png" alt="Login Screen" width="200"/>  
+<br/>
+**Register Screen Mock Up**  
+<img src="/mockups/Register%20Screen.png" alt="Register Screen" width="200"/>  
+<br/>
+**Main Screen Mock Up**  
+<img src="/mockups/Main%20Screen.png" alt="Main Screen" width="200"/>  
+<br/>
+**Splash Screen Mock Up**  
+<img src="/mockups/Splash%20Screen.png" alt="Splash Screen" width="200"/>  
+<br/>
+**User Profile Mock Up**  
+<img src="/mockups/User%Profile.png" alt="User Profile" width="200"/>  
+<br/>
 ### Domain model
 
 To better understand the context of the software system, it is very useful to have a simple UML class diagram with all the key concepts (names, attributes) and relationships involved of the problem domain addressed by your module.
