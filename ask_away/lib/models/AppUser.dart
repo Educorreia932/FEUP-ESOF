@@ -5,6 +5,7 @@ class User {
   int reputation;
   List<Question> askedQuestions;
   Map<dynamic, dynamic> votes;
+  List<dynamic> scheduledTalks;
 
   User(this.username,this.reputation, this.votes);
 
@@ -12,5 +13,8 @@ class User {
     username = data["username"];
     reputation = data["Reputation"];
     votes = data["votes"];
+    scheduledTalks = data["scheduled"];
+
+    if(scheduledTalks == null) scheduledTalks = [];
   }
 }

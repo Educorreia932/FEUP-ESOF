@@ -1,6 +1,8 @@
 import 'package:ask_away/components/cards/TalkCard.dart';
+import 'package:ask_away/models/AppUser.dart';
 import 'package:ask_away/models/Talk.dart';
 import 'package:ask_away/screens/main_screen/MainScreen.dart';
+import 'package:ask_away/screens/talks_screen/CreateTalkScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -16,15 +18,31 @@ class TalksScreenState extends State<TalksScreen> {
   bool loaded = false;
   List<Talk> talks = [];
 
-  void addTalk(String title, String description, DateTime date, String location, int duration) {
-    if (title != "" && description != "" && date != null && location != "" && duration != null) {
-      // Call the user's CollectionReference to add a new user
+  void addTalks() {
+    if (!loaded) {
       FirebaseFirestore.instance
           .collection('Talks')
-          .add({'title': title, 'description' : description, 'date' : date, 'location' : location, 'duration':duration})
-          .then((value) => setState(() {
-        talks.add(new Talk(value.id, title, description, date, location, duration));
-      }));
+          .get()
+          .then((QuerySnapshot querySnapshot) => {
+                querySnapshot.docs.forEach((doc) {
+                  FirebaseFirestore.instance
+                      .collection('Users')
+                      .doc(doc["creator"])
+                      .get()
+                      .then((value) {
+                    talks.add(new Talk(
+                        doc.id,
+                        doc["title"],
+                        doc["description"],
+                        doc["date"].toDate(),
+                        doc["location"],
+                        doc["duration"],
+                        User.fromData(value.data())));
+                    setState(() {});
+                  });
+                }),
+              });
+      loaded = true;
     }
   }
 
@@ -32,18 +50,7 @@ class TalksScreenState extends State<TalksScreen> {
   Widget build(BuildContext context) {
     // if(!loaded)
     // addTalk("Teste Talk", "wow isto é teste", new DateTime.utc(2020, 9, 11, 18, 30), "aqui", 70);
-    if (!loaded) {
-      FirebaseFirestore.instance
-          .collection('Talks')
-          .get()
-          .then((QuerySnapshot querySnapshot) => {
-        querySnapshot.docs.forEach((doc) {
-          talks.add(new Talk(doc.id, doc["title"], doc["description"], doc["date"].toDate(), doc["location"], doc["duration"]));
-        }),
-        setState(() {})
-      });
-      loaded = true;
-    }
+    addTalks();
 
     return Scaffold(
       appBar: TalksScreenAppBar(context),
@@ -60,9 +67,10 @@ class TalksScreenState extends State<TalksScreen> {
               ),
             ),
             Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(32),
+              child: Container(
+                margin: EdgeInsets.only(top: 10),
                 child: ListView(
+                  padding: const EdgeInsets.only(left: 32, right: 32, top: 10),
                   children: talks
                       .map<TalkCard>((Talk talk) => TalkCard(talk))
                       .toList(),
@@ -72,6 +80,16 @@ class TalksScreenState extends State<TalksScreen> {
           ],
         ),
       ),
+      floatingActionButton: FloatingActionButton.extended(
+          onPressed: () {
+            Navigator.pop(context);
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => CreateTalkScreen()),
+            );
+          },
+          icon: Icon(Icons.add),
+          label: Text('New Talk')),
     );
   }
 }
@@ -110,11 +128,12 @@ Widget TalksScreenAppBar(BuildContext context) {
             color: Colors.black,
           ),
           onPressed: () {
-            Navigator.pop(context);
+            //Navigator.pop(context);
             // Navigator.push(
             //   context,
             //   MaterialPageRoute(builder: (context) => MainScreen()),
             // );
+            Navigator.pop(context);
             Navigator.of(context).push(_createCalendarRoute());
           },
         ),
@@ -128,6 +147,24 @@ Route _createCalendarRoute() {
     pageBuilder: (context, animation, secondaryAnimation) => TalkSchedule(),
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
       var begin = Offset(1.0, 0.0);
+      var end = Offset.zero;
+      var curve = Curves.ease;
+
+      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+      return SlideTransition(
+        position: animation.drive(tween),
+        child: child,
+      );
+    },
+  );
+}
+
+Route _createTalksRoute() {
+  return PageRouteBuilder(
+    pageBuilder: (context, animation, secondaryAnimation) => TalksScreen(),
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      var begin = Offset(-1.0, 0);
       var end = Offset.zero;
       var curve = Curves.ease;
 
@@ -184,6 +221,8 @@ class TalkScheduleState extends State<TalkSchedule> {
   CalendarView _calendarView;
   DateTime _jumpToTime = DateTime.now();
   String _text = '';
+  bool loaded = false;
+  User user;
 
   @override
   void initState() {
@@ -192,42 +231,63 @@ class TalkScheduleState extends State<TalkSchedule> {
     super.initState();
   }
 
-  List<Talk> scheduled = [
-    //TODO : change to read from user scheduled (database)
-    new Talk("dafanasfnjkas",
-        "Padoru Artificial",
-        "Talk sobre emular o Padoru em software, com todos os detalhes necessários para um aprendiz desenvolver o"
-            "seu próprio Padoru pessoal",
-        new DateTime.utc(2020, 9, 11, 18, 30),
-        "Sitio1",
-        120),
-    new Talk("adsajfnasjfnajs",
-        "Nova talk",
-        "Esta talk é nova fyi",
-        new DateTime.utc(2020, 12, 1, 14),
-        "Sitio2",
-        90),
-  ];
+  List<Talk> scheduled = [];
 
-  void calendarTapped(CalendarTapDetails calendarTapDetails) {
-    if (_calendarView == CalendarView.month &&
-        calendarTapDetails.targetElement == CalendarElement.calendarCell) {
-      _calendarView = CalendarView.day;
-      _updateState(calendarTapDetails.date);
+  void getScheduled() {
+    if (!loaded) {
+      loaded = true;
+      FirebaseFirestore.instance
+          .collection('Users')
+          .doc(currentUser)
+          .get()
+          .then((value) {
+        user = User.fromData(value.data());
+
+        for (int i = 0; i < user.scheduledTalks.length; ++i) {
+          FirebaseFirestore.instance
+              .collection("Talks")
+              .doc(user.scheduledTalks[i])
+              .get()
+              .then((value) {
+            scheduled.add(new Talk(
+                value.id,
+                value.data()["title"],
+                value.data()["description"],
+                value.data()["date"].toDate(),
+                value.data()["location"],
+                value.data()["duration"],
+                user));
+            setState(() {});
+          });
+        }
+      });
     }
   }
 
-  void _updateState(DateTime date) {
+  int _selectedIndex = 0;
+
+  void _onItemTapped(int index) {
     setState(() {
-      _jumpToTime = date.add(const Duration(hours: 3, minutes: 30));
-      _text = DateFormat('MMMM yyyy').format(_jumpToTime).toString();
+      _selectedIndex = index;
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    getScheduled();
+
     return Scaffold(
       appBar: ScheduleAppBar(context),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+              icon: Icon(Icons.calendar_today), label: "Calendar"),
+          BottomNavigationBarItem(icon: Icon(Icons.list), label: "List"),
+        ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: Colors.blue,
+        onTap: _onItemTapped,
+      ),
       body: Container(
         padding: EdgeInsets.only(left: 15, right: 15, bottom: 10),
         color: Color(0xFFECECEC),
@@ -242,22 +302,36 @@ class TalkScheduleState extends State<TalkSchedule> {
                 ),
               ),
             ),
-            Container(
-              child: Expanded(
-                child: SfCalendar(
-                  backgroundColor: Color(0xFFECECEC),
-                  initialDisplayDate: _jumpToTime,
-                  //onTap: calendarTapped,
-                  view: _calendarView,
-                  dataSource: new ScheduledTalkSource(scheduled),
-                  //getDataSource
-                  monthViewSettings: MonthViewSettings(
-                      appointmentDisplayMode:
-                          MonthAppointmentDisplayMode.appointment),
-                  showNavigationArrow: true,
-                ),
-              ),
-            )
+            Container(child: Builder(
+              builder: (context) {
+                if (_selectedIndex == 0) {
+                  return Expanded(
+                      child: SfCalendar(
+                    allowedViews: [CalendarView.day, CalendarView.month],
+                    backgroundColor: Color(0xFFECECEC),
+                    initialDisplayDate: _jumpToTime,
+                    view: _calendarView,
+                    dataSource: new ScheduledTalkSource(scheduled),
+                    //getDataSource
+                    monthViewSettings: MonthViewSettings(
+                        appointmentDisplayMode:
+                            MonthAppointmentDisplayMode.appointment),
+                    showNavigationArrow: true,
+                    showDatePickerButton: true,
+                  ));
+                } else {
+                  return Expanded(
+                    child: ListView(
+                      padding:
+                          const EdgeInsets.only(left: 17, right: 17, top: 10),
+                      children: scheduled
+                          .map<TalkCard>((Talk talk) => TalkCard(talk))
+                          .toList(),
+                    ),
+                  );
+                }
+              },
+            ))
           ],
         ),
       ),
@@ -279,10 +353,7 @@ Widget ScheduleAppBar(BuildContext context) {
         ),
         onPressed: () {
           Navigator.pop(context);
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => TalksScreen()),
-          );
+          Navigator.of(context).push(_createTalksRoute());
         },
       ),
     ),

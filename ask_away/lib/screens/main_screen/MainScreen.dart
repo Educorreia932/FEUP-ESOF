@@ -61,7 +61,8 @@ class MainScreen extends StatelessWidget {
             children: [
               Padding(
                 padding: EdgeInsets.only(
-                    left: MediaQuery.of(context).size.width / 15, right: MediaQuery.of(context).size.width / 15),
+                    left: MediaQuery.of(context).size.width / 15,
+                    right: MediaQuery.of(context).size.width / 15),
                 child: Text(
                   "Ask Away",
                   style: TextStyle(
@@ -70,7 +71,8 @@ class MainScreen extends StatelessWidget {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.only(left: MediaQuery.of(context).size.width / 15),
+                padding: EdgeInsets.only(
+                    left: MediaQuery.of(context).size.width / 15),
                 child: Text(
                   "Every great answer starts with a great question.",
                   style: TextStyle(
@@ -92,19 +94,29 @@ class MainScreen extends StatelessWidget {
                     Image(
                       image: AssetImage('assets/images/logo.png'),
                     ),
-                    SimpleButton(
-                      "Find talk",
-                      () {
-                        Navigator.pop(context);
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => TalksScreen(),
-                          ),
-                        );
-                      },
-                      37,
-                      Color(0xFFE11D1D),
+                    Builder(
+                      builder: (context) => SimpleButton(
+                        "Find talk",
+                        () {
+                          if (currentUser != null) {
+                            Navigator.pop(context);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => TalksScreen(),
+                              ),
+                            );
+                          } else {
+                            Scaffold.of(context).showSnackBar(SnackBar(
+                                content: Text(
+                                    "You have to be logged in to access talks!"),
+                            backgroundColor: Colors.red,
+                            ));
+                          }
+                        },
+                        37,
+                        Color(0xFFE11D1D),
+                      ),
                     )
                   ],
                 ),
