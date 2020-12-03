@@ -3,12 +3,10 @@ import 'package:ask_away/models/Question.dart';
 import 'package:ask_away/screens/main_screen/MainScreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:mutex/mutex.dart';
 
 int previousTimeStamp;
 int currentTimeStamp;
 
-Mutex mutex = Mutex();
 
 enum VoteType { UP, DOWN }
 
@@ -83,7 +81,7 @@ class _VotingComponentState extends State<VotingComponent> {
               }
 
               userRef.update({"votes": user.votes});
-              widget.callback();
+              widget.callback("none");
             },
           );
         },
@@ -103,7 +101,7 @@ class _VotingComponentState extends State<VotingComponent> {
           onPressed: () => setState(
             () {
               vote(VoteType.UP);
-              widget.callback();
+              widget.callback("none");
             },
           ),
         ),
@@ -119,7 +117,7 @@ class _VotingComponentState extends State<VotingComponent> {
           onPressed: () => setState(
             () {
               vote(VoteType.DOWN);
-              widget.callback();
+              widget.callback("none");
             },
           ),
         ),

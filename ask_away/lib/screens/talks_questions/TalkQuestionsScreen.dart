@@ -19,13 +19,21 @@ class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
       // Call the user's CollectionReference to add a new user
       FirebaseFirestore.instance
           .collection('Questions')
-          .add({'text': question}).then((value) => setState(() {
-                questions.add(new Question(question, 0, value.id));
+          .add({'text': question,'votes': 0,'author':currentUser}).then((value) => setState(() {
+                questions.add(new Question(question, 0, value.id, currentUser));
               }));
     }
   }
 
-  void callback() {
+  void callback(String id) {
+    if(id != "none"){
+      for(Question q in questions){
+        if(q.id == id) {
+          questions.remove(q);
+          break;
+        }
+      }
+    }
     setState(
       () {
         questions.sort(
@@ -45,9 +53,9 @@ class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
           .get()
           .then((QuerySnapshot querySnapshot) => {
                 querySnapshot.docs.forEach((doc) {
-                  questions.add(new Question(doc["text"], doc["votes"], doc.id));
+                  questions.add(new Question(doc["text"], doc["votes"], doc.id,doc["author"]));
                 }),
-                this.callback()
+                this.callback("none")
               });
       loaded = true;
     }

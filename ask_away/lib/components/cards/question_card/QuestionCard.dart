@@ -6,9 +6,12 @@ import 'package:ask_away/models/AppUser.dart';
 
 import 'components/VotingComponent.dart';
 
+
+
 class QuestionCard extends StatefulWidget {
   Question _question;
   Function _callback;
+
 
   QuestionCard(this._question, this._callback);
 
@@ -16,7 +19,17 @@ class QuestionCard extends StatefulWidget {
   State<StatefulWidget> createState() => QuestionCardState();
 }
 
+
+
 class QuestionCardState extends State<QuestionCard> {
+
+  void deleteQuestion(){
+    print("Deleting question: ");
+    print(this.widget._question.id);
+    String questionToRemove = this.widget._question.id;
+    FirebaseFirestore.instance.collection('Questions').doc(questionToRemove).delete().then((value) => this.widget._callback(questionToRemove));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -38,10 +51,22 @@ class QuestionCardState extends State<QuestionCard> {
                     fontSize: 21,
                   ),
                 ),
-                Icon(
-                  Icons.bookmark_border,
-                  size: 27,
-                  color: Color(0xFFFF5656),
+                if(currentUser == this.widget._question.user)
+                  IconButton(
+                    icon: Icon(
+                      Icons.delete_forever,
+                      size: 28,
+                      color: Color(0xFFFF5656),
+                    ),
+                    onPressed: () => this.deleteQuestion(),
+                  )
+                ,
+                IconButton(
+                    icon: Icon(
+                      Icons.bookmark_border,
+                      size: 27,
+                      color: Color(0xFFFF5656),
+                    )
                 ),
               ],
             ),
