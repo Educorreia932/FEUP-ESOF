@@ -1,9 +1,16 @@
 import 'package:ask_away/screens/authentication/LoginScreen.dart';
 import 'package:ask_away/screens/authentication/RegisterScreen.dart';
+import 'package:ask_away/services/Auth.dart';
+import 'package:ask_away/services/AuthProvider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class DrawerComponent extends StatelessWidget {
+  Future<void> logout(BuildContext context) async {
+    final BaseAuth auth = AuthProvider.of(context).auth;
+    await auth.signOut();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -64,45 +71,11 @@ class DrawerComponent extends StatelessWidget {
               ),
             ),
             onTap: () {
-              Navigator.pop(context);
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => RegisterScreen()),
-              );
-            },
-          ),
-          ListTile(
-            title: Text(
-              'Login',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-            ),
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => LoginScreen()),
-              );
-            },
-          ),
-          ListTile(
-            title: Text(
-              'Register',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-            ),
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => RegisterScreen()),
-              );
+              logout(context);
             },
           ),
         ],
       ),
     );
   }
-}
-
-void logout() {
-
 }

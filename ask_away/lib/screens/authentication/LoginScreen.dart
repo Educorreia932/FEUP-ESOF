@@ -1,8 +1,10 @@
 import 'package:ask_away/components/SimpleAppBar.dart';
 import 'package:ask_away/components/SimpleButton.dart';
+import 'package:ask_away/screens/authentication/RegisterScreen.dart';
 import 'package:ask_away/services/Auth.dart';
 import 'package:ask_away/services/AuthProvider.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import '../main_screen/MainScreen.dart';
 
@@ -45,7 +47,7 @@ class LoginScreenState extends State<LoginScreen> {
     final String userId = await auth.signInWithEmailAndPassword(_email, _password);
 
     print('User logged in: $userId');
-    
+
     Navigator.pop(context);
     Navigator.push(
       context,
@@ -59,7 +61,6 @@ class LoginScreenState extends State<LoginScreen> {
       appBar: SimpleAppBar(context),
       body: GestureDetector(
         onTap: () {
-
           FocusScope.of(context).requestFocus(new FocusNode());
         },
         child: ScrollConfiguration(
@@ -111,6 +112,7 @@ class LoginScreenState extends State<LoginScreen> {
                 ),
               ),
               RichText(
+                textAlign: TextAlign.center,
                 text: TextSpan(
                   style: TextStyle(
                     fontSize: 20,
@@ -127,6 +129,16 @@ class LoginScreenState extends State<LoginScreen> {
                       style: TextStyle(
                         color: Color(0xFFFF5656),
                       ),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          Navigator.pop(context);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => RegisterScreen(),
+                            ),
+                          );
+                        },
                     ),
                   ],
                 ),
@@ -138,7 +150,3 @@ class LoginScreenState extends State<LoginScreen> {
     );
   }
 }
-
-
-
-
