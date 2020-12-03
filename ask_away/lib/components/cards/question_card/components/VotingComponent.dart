@@ -3,12 +3,9 @@ import 'package:ask_away/models/Question.dart';
 import 'package:ask_away/screens/main_screen/MainScreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:mutex/mutex.dart';
 
 int previousTimeStamp;
 int currentTimeStamp;
-
-Mutex mutex = Mutex();
 
 enum VoteType { UP, DOWN }
 
@@ -50,7 +47,7 @@ class _VotingComponentState extends State<VotingComponent> {
 
     print(elapsedTime);
 
-    if (elapsedTime >= 2000) {
+    if (elapsedTime >= 1000) {
       FirebaseFirestore.instance.runTransaction(
         (transaction) {
           return transaction.get(userRef).then(
