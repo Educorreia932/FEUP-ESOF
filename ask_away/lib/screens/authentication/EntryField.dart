@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../LoginScreen.dart';
-import '../RegisterScreen.dart';
+import 'LoginScreen.dart';
+import 'RegisterScreen.dart';
 
 String validateEmail(String value) {
   return value.isEmpty ? 'Email can\'t be empty' : null;
