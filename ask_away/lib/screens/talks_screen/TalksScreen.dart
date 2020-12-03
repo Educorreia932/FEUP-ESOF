@@ -256,44 +256,19 @@ class TalkScheduleState extends State<TalkSchedule> {
                 value.data()["date"].toDate(),
                 value.data()["location"],
                 value.data()["duration"],
-                User.fromData(value.data())));
-                setState(() {});
+                user));
+            setState(() {});
           });
         }
-
       });
     }
   }
 
-  //= [
-  //TODO : change to read from user scheduled (database)
-  // new Talk("dafanasfnjkas",
-  //     "Padoru Artificial",
-  //     "Talk sobre emular o Padoru em software, com todos os detalhes necessários para um aprendiz desenvolver o"
-  //         "seu próprio Padoru pessoal",
-  //     new DateTime.utc(2020, 9, 11, 18, 30),
-  //     "Sitio1",
-  //     120),
-  // new Talk("adsajfnasjfnajs",
-  //     "Nova talk",
-  //     "Esta talk é nova fyi",
-  //     new DateTime.utc(2020, 12, 1, 14),
-  //     "Sitio2",
-  //     90),
-  //];
+  int _selectedIndex = 0;
 
-  void calendarTapped(CalendarTapDetails calendarTapDetails) {
-    if (_calendarView == CalendarView.month &&
-        calendarTapDetails.targetElement == CalendarElement.calendarCell) {
-      _calendarView = CalendarView.day;
-      _updateState(calendarTapDetails.date);
-    }
-  }
-
-  void _updateState(DateTime date) {
+  void _onItemTapped(int index) {
     setState(() {
-      _jumpToTime = date.add(const Duration(hours: 3, minutes: 30));
-      _text = DateFormat('MMMM yyyy').format(_jumpToTime).toString();
+      _selectedIndex = index;
     });
   }
 
@@ -303,6 +278,16 @@ class TalkScheduleState extends State<TalkSchedule> {
 
     return Scaffold(
       appBar: ScheduleAppBar(context),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+              icon: Icon(Icons.calendar_today), label: "Calendar"),
+          BottomNavigationBarItem(icon: Icon(Icons.list), label: "List"),
+        ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: Colors.blue,
+        onTap: _onItemTapped,
+      ),
       body: Container(
         padding: EdgeInsets.only(left: 15, right: 15, bottom: 10),
         color: Color(0xFFECECEC),
@@ -317,22 +302,36 @@ class TalkScheduleState extends State<TalkSchedule> {
                 ),
               ),
             ),
-            Container(
-              child: Expanded(
-                child: SfCalendar(
-                  backgroundColor: Color(0xFFECECEC),
-                  initialDisplayDate: _jumpToTime,
-                  //onTap: calendarTapped,
-                  view: _calendarView,
-                  dataSource: new ScheduledTalkSource(scheduled),
-                  //getDataSource
-                  monthViewSettings: MonthViewSettings(
-                      appointmentDisplayMode:
-                          MonthAppointmentDisplayMode.appointment),
-                  showNavigationArrow: true,
-                ),
-              ),
-            )
+            Container(child: Builder(
+              builder: (context) {
+                if (_selectedIndex == 0) {
+                  return Expanded(
+                      child: SfCalendar(
+                    allowedViews: [CalendarView.day, CalendarView.month],
+                    backgroundColor: Color(0xFFECECEC),
+                    initialDisplayDate: _jumpToTime,
+                    view: _calendarView,
+                    dataSource: new ScheduledTalkSource(scheduled),
+                    //getDataSource
+                    monthViewSettings: MonthViewSettings(
+                        appointmentDisplayMode:
+                            MonthAppointmentDisplayMode.appointment),
+                    showNavigationArrow: true,
+                    showDatePickerButton: true,
+                  ));
+                } else {
+                  return Expanded(
+                    child: ListView(
+                      padding:
+                          const EdgeInsets.only(left: 17, right: 17, top: 10),
+                      children: scheduled
+                          .map<TalkCard>((Talk talk) => TalkCard(talk))
+                          .toList(),
+                    ),
+                  );
+                }
+              },
+            ))
           ],
         ),
       ),
