@@ -2,9 +2,11 @@ import 'package:ask_away/components/SimpleAppBar.dart';
 import 'package:ask_away/components/SimpleButton.dart';
 import 'package:ask_away/services/Auth.dart';
 import 'package:ask_away/services/AuthProvider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'EntryField.dart';
 import 'EntryField.dart';
 import '../main_screen/MainScreen.dart';
 import 'LoginScreen.dart';
@@ -49,6 +51,9 @@ class RegisterScreenState extends State<RegisterScreen> {
 
     final BaseAuth auth = AuthProvider.of(context).auth;
     final String userId = await auth.createUserWithEmailAndPassword(_email, _password);
+    FirebaseFirestore.instance
+        .collection('Users').doc(userId)
+        .set({'Reputation': 0,'scheduled': [],'votes':[],'username':_username});
 
     print('Registered user: $userId');
 
