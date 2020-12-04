@@ -1,39 +1,21 @@
-import 'Vote.dart';
+import 'AppUser.dart';
 
 class Question {
-  int id;
+  String id;
   String text;
-  List<Vote> votes;
+  int votes;
+  String user;
 
-  Question(String text) {
+  Question(String text, int votes, String id, String user) {
     this.text = text;
-    this.votes = new List<Vote>();
+    this.votes = votes;
+    this.id = id;
+    this.user = user;
   }
 
   int getTotalVotes() {
-    int total = 0;
-    for (int i = 0; i < votes.length; i++) {
-      if (votes[i].type == VoteType.up)
-        total++;
-      else
-        total--;
-    }
-    return total;
+    return votes;
   }
 
-  int getPosVotes() {
-    int total = 0;
-    for (int i = 0; i < votes.length; i++) {
-      if (votes[i].type == VoteType.up) total++;
-    }
-    return total;
-  }
 
-  int getNegVotes() {
-    int total = 0;
-    for (int i = 0; i < votes.length; i++) {
-      if (votes[i].type == VoteType.up) total++;
-    }
-    return total;
-  }
 }
