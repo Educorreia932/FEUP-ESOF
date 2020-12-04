@@ -51,9 +51,14 @@ class RegisterScreenState extends State<RegisterScreen> {
 
     final BaseAuth auth = AuthProvider.of(context).auth;
     final String userId = await auth.createUserWithEmailAndPassword(_email, _password);
-    FirebaseFirestore.instance
-        .collection('Users').doc(userId)
-        .set({'Reputation': 0,'scheduled': [],'votes':[],'username':_username});
+    FirebaseFirestore.instance.collection('Users').doc(userId).set(
+      {
+        'Reputation': 0,
+        'scheduled': [],
+        'votes': {},
+        'username': _username,
+      },
+    );
 
     print('Registered user: $userId');
 
