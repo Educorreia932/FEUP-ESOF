@@ -50,7 +50,7 @@ Start by contextualizing your module, describing the main concepts, terms, roles
 
 ### Use case diagram 
 
-![Use Cases](https://imgur.com/ro7wCoT.png)
+![Use Cases](Use%20Cases.png)
 
 Create a use-case diagram in UML with all high-level use cases possibly addressed by your module.
 
@@ -141,30 +141,30 @@ Briefly describe each use case mentioning the following:
 - As an atendee I want to have my questions answered however i do without breaking the flow of the lecture so that all atendees can focus and not lose their line of thought.
 - As a participant I want to be able to up/downvote other atendees' questions so the best questions are answered first.  
 **Question Screen Mock Up**  
-<img src="/mockups/Talk%20Questions.png" alt="Question Screen" width="200"/>
+<img src="mockups/Talk%20Questions.png" alt="Question Screen" width="200"/>
 
 - As a moderator i want to be able to filter questions that the atendees have so that the speakers have time to answer the questions most people have.  
 - As a speaker I would like to be able to have an admin filtering unwanted questions for me.  
 - As a speaker I want to easily schedule a talk allowing people to book attendance early.  
 - As a user I want to know a talk's occupation so I can know if I can still attend it.  
 **Talk Screen Mock Up**  
-<img src="/mockups/Talks%20Screen.png" alt="Talks Screen" width="200"/>
+<img src="mockups/Talks%20Screen.png" alt="Talks Screen" width="200"/>
 
 ### Other Mock Ups
 **Login Screen Mock Up**  
-<img src="/mockups/Login%20Screen.png" alt="Login Screen" width="200"/>  
+<img src="mockups/Login%20Screen.png" alt="Login Screen" width="200"/>  
 <br/>
 **Register Screen Mock Up**  
-<img src="/mockups/Register%20Screen.png" alt="Register Screen" width="200"/>  
+<img src="mockups/Register%20Screen.png" alt="Register Screen" width="200"/>  
 <br/>
 **Main Screen Mock Up**  
-<img src="/mockups/Main%20Screen.png" alt="Main Screen" width="200"/>  
+<img src="mockups/Main%20Screen.png" alt="Main Screen" width="200"/>  
 <br/>
 **Splash Screen Mock Up**  
-<img src="/mockups/Splash%20Screen.png" alt="Splash Screen" width="200"/>  
+<img src="mockups/Splash%20Screen.png" alt="Splash Screen" width="200"/>  
 <br/>
 **User Profile Mock Up**  
-<img src="/mockups/User%Profile.png" alt="User Profile" width="200"/>  
+<img src="mockups/User%20Profile.png" alt="User Profile" width="200"/>  
 <br/>
 ### Domain model
 
