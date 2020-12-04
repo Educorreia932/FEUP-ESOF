@@ -17,43 +17,57 @@ class TalksScreen extends StatefulWidget {
 class TalksScreenState extends State<TalksScreen> {
   bool loaded = false;
   List<Talk> talks = [];
+  List<dynamic> scheduledIds = [];
 
   void addTalks() {
     if (!loaded) {
       FirebaseFirestore.instance
-          .collection('Talks')
+          .collection('Users')
+          .doc(currentUser)
           .get()
-          .then((QuerySnapshot querySnapshot) => {
-                querySnapshot.docs.forEach((doc) {
-                  FirebaseFirestore.instance
-                      .collection('Users')
-                      .doc(doc["creator"])
-                      .get()
-                      .then((value) {
-                    talks.add(new Talk(
-                        doc.id,
-                        doc["title"],
-                        doc["description"],
-                        doc["date"].toDate(),
-                        doc["location"],
-                        doc["duration"],
-                        User.fromData(value.data())));
-                    setState(() {});
-                  });
-                }),
-              });
-      loaded = true;
+          .then((valueUser) {
+        scheduledIds = valueUser.data()["scheduled"];
+        FirebaseFirestore.instance
+            .collection('Talks')
+            .get()
+            .then((QuerySnapshot querySnapshot) => {
+                  querySnapshot.docs.forEach((doc) {
+                    FirebaseFirestore.instance
+                        .collection('Users')
+                        .doc(doc["creator"])
+                        .get()
+                        .then((value) {
+                      talks.add(new Talk(
+                          doc.id,
+                          doc["title"],
+                          doc["description"],
+                          doc["date"].toDate(),
+                          doc["location"],
+                          doc["duration"],
+                          User.fromData(value.data())));
+                      setState(() {});
+                    });
+                  }),
+                });
+        loaded = true;
+      });
     }
   }
 
-  void updateScheduled(dynamic talkId) {
-    print("pressed add scheduled");
-    // FirebaseFirestore.instance
-    //     .collection('Users')
-    //     .doc(currentUser)
-    //     .update({
-    //     'scheduled': FieldValue.arrayUnion([talkId])
-    //   });
+  void updateScheduled(String talkId, bool scheduled) {
+    //print("pressed add scheduled");
+    if (!scheduled) {
+      print("addscjedule");
+      FirebaseFirestore.instance.collection('Users').doc(currentUser).update({
+        'scheduled': FieldValue.arrayUnion([talkId])
+      });
+    } else {
+      print("remove scheduled");
+      FirebaseFirestore.instance.collection('Users').doc(currentUser).update({
+        'scheduled': FieldValue.arrayRemove([talkId])
+      });
+    }
+    //setState(() {});
   }
 
   @override
@@ -61,7 +75,7 @@ class TalksScreenState extends State<TalksScreen> {
     // if(!loaded)
     // addTalk("Teste Talk", "wow isto é teste", new DateTime.utc(2020, 9, 11, 18, 30), "aqui", 70);
     addTalks();
-
+    print(scheduledIds);
     return Scaffold(
       appBar: TalksScreenAppBar(context),
       body: Container(
@@ -81,9 +95,13 @@ class TalksScreenState extends State<TalksScreen> {
                 margin: EdgeInsets.only(top: 10),
                 child: ListView(
                   padding: const EdgeInsets.only(left: 32, right: 32, top: 10),
-                  children: talks
-                      .map<TalkCard>((Talk talk) => TalkCard(talk, updateScheduled))
-                      .toList(),
+                  children: talks.map<TalkCard>((Talk talk) {
+                    bool scheduled = false;
+                    if (scheduledIds.contains(talk.id)) {
+                      scheduled = true;
+                    }
+                    return TalkCard(talk, updateScheduled, scheduled);
+                  }).toList(),
                 ),
               ),
             )
@@ -245,6 +263,7 @@ class TalkScheduleState extends State<TalkSchedule> {
 
   void getScheduled() {
     if (!loaded) {
+      scheduled = [];
       loaded = true;
       FirebaseFirestore.instance
           .collection('Users')
@@ -282,14 +301,16 @@ class TalkScheduleState extends State<TalkSchedule> {
     });
   }
 
-  void updateScheduled(dynamic talkId) {
+  void updateScheduled(dynamic talkId, bool scheduled) {
     print("pressed bruh");
-    // FirebaseFirestore.instance.collection('Users')
-    //     .doc(currentUser)
-    //     .update({
-    //   'scheduled': FieldValue.arrayRemove([talkId])});
+    FirebaseFirestore.instance.collection('Users').doc(currentUser).update({
+      'scheduled': FieldValue.arrayRemove([talkId])
+    }).then((value) {
+      setState(() { loaded = false;
+      });
+    } );
   }
-  
+
   @override
   Widget build(BuildContext context) {
     getScheduled();
@@ -342,15 +363,15 @@ class TalkScheduleState extends State<TalkSchedule> {
                     child: ListView(
                       padding:
                           const EdgeInsets.only(left: 17, right: 17, top: 10),
-                      children: scheduled
-                          .map<TalkCard>((Talk talk) {
-                            for(String t in user.scheduledTalks) {
-                              if (t == talk.id)
-                                return TalkCard(talk, updateScheduled);
-                            }
-                            return null;
-                          })
-                          .toList(),
+                      children: scheduled.map<TalkCard>((Talk talk) {
+                        for (String t in user.scheduledTalks) {
+                          if (t == talk.id) {
+                            print(talk.title);
+                            return TalkCard(talk, updateScheduled, true);
+                          }
+                        }
+                        return null;
+                      }).toList(),
                     ),
                   );
                 }
