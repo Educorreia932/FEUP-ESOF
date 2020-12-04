@@ -55,14 +55,11 @@ class TalksScreenState extends State<TalksScreen> {
   }
 
   void updateScheduled(String talkId, bool scheduled) {
-    //print("pressed add scheduled");
     if (!scheduled) {
-      print("addscjedule");
       FirebaseFirestore.instance.collection('Users').doc(currentUser).update({
         'scheduled': FieldValue.arrayUnion([talkId])
       });
     } else {
-      print("remove scheduled");
       FirebaseFirestore.instance.collection('Users').doc(currentUser).update({
         'scheduled': FieldValue.arrayRemove([talkId])
       });
@@ -75,7 +72,6 @@ class TalksScreenState extends State<TalksScreen> {
     // if(!loaded)
     // addTalk("Teste Talk", "wow isto é teste", new DateTime.utc(2020, 9, 11, 18, 30), "aqui", 70);
     addTalks();
-    print(scheduledIds);
     return Scaffold(
       appBar: TalksScreenAppBar(context),
       body: Container(
@@ -256,6 +252,7 @@ class TalkScheduleState extends State<TalkSchedule> {
   void initState() {
     _calendarView = CalendarView.month;
     _text = DateFormat('MMMM yyyy').format(_jumpToTime).toString();
+    getScheduled();
     super.initState();
   }
 
@@ -272,23 +269,26 @@ class TalkScheduleState extends State<TalkSchedule> {
           .then((value) {
         user = User.fromData(value.data());
 
-        for (int i = 0; i < user.scheduledTalks.length; ++i) {
-          FirebaseFirestore.instance
-              .collection("Talks")
-              .doc(user.scheduledTalks[i])
-              .get()
-              .then((value) {
-            scheduled.add(new Talk(
-                value.id,
-                value.data()["title"],
-                value.data()["description"],
-                value.data()["date"].toDate(),
-                value.data()["location"],
-                value.data()["duration"],
-                user));
-            setState(() {});
-          });
-        }
+        if(user.scheduledTalks.length > 0) {
+          for (int i = 0; i < user.scheduledTalks.length; ++i) {
+            FirebaseFirestore.instance
+                .collection("Talks")
+                .doc(user.scheduledTalks[i])
+                .get()
+                .then((value) {
+              scheduled.add(new Talk(
+                  value.id,
+                  value.data()["title"],
+                  value.data()["description"],
+                  value.data()["date"].toDate(),
+                  value.data()["location"],
+                  value.data()["duration"],
+                  user));
+              setState(() {
+              });
+            });
+          }
+        } else setState(() {});
       });
     }
   }
@@ -302,18 +302,16 @@ class TalkScheduleState extends State<TalkSchedule> {
   }
 
   void updateScheduled(dynamic talkId, bool scheduled) {
-    print("pressed bruh");
     FirebaseFirestore.instance.collection('Users').doc(currentUser).update({
       'scheduled': FieldValue.arrayRemove([talkId])
     }).then((value) {
-      setState(() { loaded = false;
-      });
+      loaded = false;
+      getScheduled();
     } );
   }
 
   @override
   Widget build(BuildContext context) {
-    getScheduled();
 
     return Scaffold(
       appBar: ScheduleAppBar(context),
@@ -366,7 +364,6 @@ class TalkScheduleState extends State<TalkSchedule> {
                       children: scheduled.map<TalkCard>((Talk talk) {
                         for (String t in user.scheduledTalks) {
                           if (t == talk.id) {
-                            print(talk.title);
                             return TalkCard(talk, updateScheduled, true);
                           }
                         }
