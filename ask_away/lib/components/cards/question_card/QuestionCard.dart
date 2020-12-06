@@ -2,16 +2,12 @@ import 'package:ask_away/models/Question.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ask_away/screens/main_screen/MainScreen.dart';
-import 'package:ask_away/models/AppUser.dart';
 
 import 'components/VotingComponent.dart';
-
-
 
 class QuestionCard extends StatefulWidget {
   Question _question;
   Function _callback;
-
 
   QuestionCard(this._question, this._callback);
 
@@ -62,6 +58,7 @@ class QuestionCardState extends State<QuestionCard> {
                   )
                 ,
                 IconButton(
+                    onPressed: null,
                     icon: Icon(
                       Icons.bookmark_border,
                       size: 27,

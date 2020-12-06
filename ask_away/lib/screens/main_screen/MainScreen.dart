@@ -99,14 +99,10 @@ class MainScreen extends StatelessWidget {
                         "Find talk",
                         () {
                           if (currentUser != null) {
-                            Navigator.pop(context);
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => TalksScreen(),
-                              ),
-                            );
-                          } else {
+                            Navigator.pushNamed(context, '/talks');
+                          }
+
+                          else {
                             Scaffold.of(context).showSnackBar(SnackBar(
                                 content: Text(
                                     "You have to be logged in to access talks!"),
@@ -155,13 +151,7 @@ MainScreenAppBar(GlobalKey<ScaffoldState> _drawerKey, bool _isLoggedIn, BuildCon
             ? UserIcon()
             : InkWell(
                 onTap: () {
-                  Navigator.pop(context);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => LoginScreen(),
-                    ),
-                  );
+                  Navigator.pushNamed(context, '/talks');
                 },
                 child: Text(
                   "Login",

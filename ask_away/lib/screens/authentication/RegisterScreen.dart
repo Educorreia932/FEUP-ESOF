@@ -7,7 +7,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'EntryField.dart';
-import 'EntryField.dart';
 import '../main_screen/MainScreen.dart';
 import 'LoginScreen.dart';
 
@@ -63,10 +62,6 @@ class RegisterScreenState extends State<RegisterScreen> {
     print('Registered user: $userId');
 
     Navigator.pop(context);
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => MainScreenBuilder()),
-    );
   }
 
   @override
@@ -146,13 +141,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                       ),
                       recognizer: TapGestureRecognizer()
                         ..onTap = () {
-                          Navigator.pop(context);
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => LoginScreen(),
-                            ),
-                          );
+                          Navigator.pushNamed(context, '/login');
                         },
                     ),
                   ],

@@ -1,12 +1,9 @@
 import 'package:ask_away/components/SimpleButton.dart';
-import 'package:ask_away/components/cards/TalkCard.dart';
-import 'package:ask_away/screens/authentication/EntryField.dart';
 import 'package:ask_away/screens/main_screen/MainScreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:ask_away/screens/talks_screen/TalksScreen.dart';
 import 'package:ask_away/models/Talk.dart';
-import 'package:flutter/services.dart';
 
 import 'components/TalkEntryField.dart';
 

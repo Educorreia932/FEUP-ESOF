@@ -49,10 +49,6 @@ class LoginScreenState extends State<LoginScreen> {
     print('User logged in: $userId');
 
     Navigator.pop(context);
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => MainScreenBuilder()),
-    );
   }
 
   @override
@@ -131,13 +127,7 @@ class LoginScreenState extends State<LoginScreen> {
                       ),
                       recognizer: TapGestureRecognizer()
                         ..onTap = () {
-                          Navigator.pop(context);
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => RegisterScreen(),
-                            ),
-                          );
+                          Navigator.pushNamed(context, '/register');
                         },
                     ),
                   ],

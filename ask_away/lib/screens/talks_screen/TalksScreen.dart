@@ -106,11 +106,7 @@ class TalksScreenState extends State<TalksScreen> {
       ),
       floatingActionButton: FloatingActionButton.extended(
           onPressed: () {
-            Navigator.pop(context);
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => CreateTalkScreen()),
-            );
+            Navigator.pushNamed(context, "/talk_creation");
           },
           icon: Icon(Icons.add),
           label: Text('New Talk')),
@@ -132,10 +128,6 @@ Widget TalksScreenAppBar(BuildContext context) {
         ),
         onPressed: () {
           Navigator.pop(context);
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => MainScreenBuilder()),
-          );
         },
       ),
     ),
@@ -152,12 +144,6 @@ Widget TalksScreenAppBar(BuildContext context) {
             color: Colors.black,
           ),
           onPressed: () {
-            //Navigator.pop(context);
-            // Navigator.push(
-            //   context,
-            //   MaterialPageRoute(builder: (context) => MainScreen()),
-            // );
-            Navigator.pop(context);
             Navigator.of(context).push(_createCalendarRoute());
           },
         ),
@@ -395,7 +381,6 @@ Widget ScheduleAppBar(BuildContext context) {
         ),
         onPressed: () {
           Navigator.pop(context);
-          Navigator.of(context).push(_createTalksRoute());
         },
       ),
     ),

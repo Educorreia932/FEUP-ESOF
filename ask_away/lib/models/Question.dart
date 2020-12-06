@@ -1,5 +1,3 @@
-import 'AppUser.dart';
-
 class Question {
   String id;
   String text;

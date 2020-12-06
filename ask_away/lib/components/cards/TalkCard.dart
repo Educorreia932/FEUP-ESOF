@@ -1,6 +1,6 @@
 import 'package:ask_away/components/SimpleButton.dart';
 import 'package:ask_away/models/Talk.dart';
-import 'package:ask_away/screens/talks_questions/TalkQuestionsScreen.dart';
+import 'file:///C:/Users/skelo/OneDrive/Ambiente%20de%20Trabalho/open-cx-t1g2-escama/ask_away/lib/screens/talks_screen/TalkQuestionsScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 

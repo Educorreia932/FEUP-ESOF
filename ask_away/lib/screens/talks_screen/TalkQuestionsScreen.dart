@@ -170,11 +170,7 @@ Widget QuestionsScreenAppBar(BuildContext context) {
           color: Colors.black,
         ),
         onPressed: () {
-          Navigator.pop(context);
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => TalksScreen()),
-          );
+          Navigator.pushNamed(context, "/talks");
         },
       ),
     ),
@@ -192,10 +188,6 @@ Widget QuestionsScreenAppBar(BuildContext context) {
           ),
           onPressed: () {
             Navigator.pop(context);
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => MainScreenBuilder()),
-            );
           },
         ),
       ),
