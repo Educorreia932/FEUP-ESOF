@@ -49,9 +49,9 @@ class MyApp extends StatelessWidget {
     return FutureBuilder(
       future:  initialize(),
       builder: (context, AsyncSnapshot snapshot) {
-        print(stopwatch.elapsed.inSeconds);
+        
         if (snapshot.hasData ) {
-          print("got data");
+
           return AuthProvider(
             auth: Auth(),
             child: MaterialApp(
@@ -77,7 +77,7 @@ class MyApp extends StatelessWidget {
           return Container();
         }
         else {
-          print("loading");
+
           return MaterialApp(
               home: new Scaffold(
                 body: new InkWell(
