@@ -1,7 +1,7 @@
 import 'package:ask_away/screens/authentication/LoginScreen.dart';
 import 'package:ask_away/screens/authentication/RegisterScreen.dart';
 import 'package:ask_away/screens/main_screen/MainScreen.dart';
-import 'file:///C:/Users/skelo/OneDrive/Ambiente%20de%20Trabalho/open-cx-t1g2-escama/ask_away/lib/screens/talks_screen/TalkQuestionsScreen.dart';
+import 'package:ask_away/screens/talks_screen/TalkQuestionsScreen.dart';
 import 'package:ask_away/screens/talks_screen/CreateTalkScreen.dart';
 import 'package:ask_away/screens/talks_screen/TalksScreen.dart';
 import 'package:ask_away/services/Auth.dart';
