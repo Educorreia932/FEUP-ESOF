@@ -16,7 +16,7 @@ class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
   bool loaded = false;
   String talkTitle = "";
 
-  void addQuestion(String question) {
+  void addQuestion(String question, String talkId) {
     if (question != "") {
       // Call the user's CollectionReference to add a new user
       FirebaseFirestore.instance.collection('Questions').add({
@@ -25,6 +25,10 @@ class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
         'author': currentUser
       }).then((value) => setState(() {
             questions.add(new Question(question, 0, value.id, currentUser));
+            FirebaseFirestore.instance.collection('Talks').doc(talkId)
+            .update({
+              "questions": FieldValue.arrayUnion([value.id])
+            });
           }));
     }
   }
@@ -124,7 +128,7 @@ class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
                       SizedBox(
                         height: 20,
                       ),
-                      SendQuestionField(this),
+                      SendQuestionField(this, talkId),
                     ],
                   ),
                 ),
@@ -140,9 +144,11 @@ class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
 class SendQuestionField extends StatelessWidget {
   TextEditingController questionController = new TextEditingController();
   TalkQuestionsScreenState talkQuestionsScreenState;
+  String talkId;
 
-  SendQuestionField(TalkQuestionsScreenState talkQuestionsScreenState) {
+  SendQuestionField(TalkQuestionsScreenState talkQuestionsScreenState, String talkId) {
     this.talkQuestionsScreenState = talkQuestionsScreenState;
+    this.talkId = talkId;
   }
 
   @override
@@ -172,7 +178,7 @@ class SendQuestionField extends StatelessWidget {
           color: Color(0xFFE11D1D),
           iconSize: 37,
           onPressed: () {
-            this.talkQuestionsScreenState.addQuestion(questionController.text);
+            this.talkQuestionsScreenState.addQuestion(questionController.text, talkId);
             questionController.clear();
           },
         ),
