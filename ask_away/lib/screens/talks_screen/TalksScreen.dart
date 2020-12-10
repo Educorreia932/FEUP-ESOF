@@ -44,6 +44,7 @@ class TalksScreenState extends State<TalksScreen> {
                           doc["date"].toDate(),
                           doc["location"],
                           doc["duration"],
+                          doc["ocupation"],
                           User.fromData(value.data())));
                       setState(() {});
                     });
@@ -59,9 +60,15 @@ class TalksScreenState extends State<TalksScreen> {
       FirebaseFirestore.instance.collection('Users').doc(currentUser).update({
         'scheduled': FieldValue.arrayUnion([talkId])
       });
+      FirebaseFirestore.instance.collection('Talks').doc(talkId).update({
+        'ocupation': FieldValue.increment(1)
+      });
     } else {
       FirebaseFirestore.instance.collection('Users').doc(currentUser).update({
         'scheduled': FieldValue.arrayRemove([talkId])
+      });
+      FirebaseFirestore.instance.collection('Talks').doc(talkId).update({
+        'ocupation':FieldValue.increment(-1)
       });
     }
     //setState(() {});
@@ -269,6 +276,7 @@ class TalkScheduleState extends State<TalkSchedule> {
                   value.data()["date"].toDate(),
                   value.data()["location"],
                   value.data()["duration"],
+                  value.data()["ocupation"],
                   user));
               setState(() {
               });

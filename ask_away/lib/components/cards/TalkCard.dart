@@ -124,6 +124,17 @@ class TalkCardState extends State<TalkCard> {
                           ],
                         ),
                       ),
+                      Expanded(
+                        child: Row(
+                          children: [
+                            Text(widget.talk.ocupation.toString()),
+                            Icon(
+                              Icons.person,
+                              color: Color(0xFFE11D1D),
+                            ),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                 ),

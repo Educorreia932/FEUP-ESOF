@@ -11,8 +11,9 @@ class Talk {
   User creator;
   String location;
   Duration duration;
+  int ocupation;
 
-  Talk(String id, String title, String description, DateTime date, String location, int duration, User creator) {
+  Talk(String id, String title, String description, DateTime date, String location, int duration, int ocupation, User creator) {
     this.id = id;
     this.title = title;
     this.description = description;
@@ -20,7 +21,9 @@ class Talk {
     this.location = location;
     this.duration = new Duration(minutes: duration);
     this.creator = creator;
+    this.ocupation = ocupation;
     //TODO user list (moderators)
+
 
     this.isExpanded = false;
   }
