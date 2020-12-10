@@ -47,13 +47,16 @@ class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    String talkId = ModalRoute.of(context).settings.arguments;
+
     if (!loaded) {
       FirebaseFirestore.instance
           .collection('Questions')
           .get()
           .then((QuerySnapshot querySnapshot) => {
                 querySnapshot.docs.forEach((doc) {
-                  questions.add(new Question(doc["text"], doc["votes"], doc.id,doc["author"]));
+                  if(doc['talk'] == talkId)
+                    questions.add(new Question(doc["text"], doc["votes"], doc.id,doc["author"]));
                 }),
                 this.callback("none")
               });

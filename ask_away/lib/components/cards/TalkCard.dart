@@ -170,7 +170,9 @@ class TalkCardState extends State<TalkCard> {
                   ),
                 ),
                 SimpleButton("Enter Talk", () {
-                  Navigator.pushNamed(context, '/talk_questions');
+                  Navigator.pushNamed(context,
+                      '/talk_questions',
+                    arguments: widget.talk.id);
                 }, 20, Colors.blue),
               ],
             ),
