@@ -13,6 +13,9 @@ import 'SideMenu.dart';
 String currentUser;
 
 class MainScreenBuilder extends StatelessWidget {
+  MainScreenBuilder({Key key}) : super(key: key);
+
+
   @override
   Widget build(BuildContext context) {
     final BaseAuth auth = AuthProvider.of(context).auth;
