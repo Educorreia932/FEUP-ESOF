@@ -71,10 +71,13 @@ class TalkCardState extends State<TalkCard> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     IconButton(icon: arrow, onPressed: updateContainer),
-                    Text(
-                      this.widget.talk.title,
-                      style: TextStyle(
-                        fontSize: 25,
+                    Flexible(
+                      child: Text(
+                        this.widget.talk.title,
+                        style: TextStyle(
+                          fontSize: 25,
+                        ),
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
                     IconButton(
@@ -170,9 +173,8 @@ class TalkCardState extends State<TalkCard> {
                   ),
                 ),
                 SimpleButton("Enter Talk", () {
-                  Navigator.pushNamed(context,
-                      '/talk_questions',
-                    arguments: widget.talk.id);
+                  Navigator.pushNamed(context, '/talk_questions',
+                      arguments: widget.talk.id);
                 }, 20, Colors.blue),
               ],
             ),

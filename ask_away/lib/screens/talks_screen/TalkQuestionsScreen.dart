@@ -1,5 +1,6 @@
 import 'package:ask_away/components/cards/question_card/QuestionCard.dart';
 import 'package:ask_away/models/Question.dart';
+import 'package:ask_away/models/Talk.dart';
 import 'package:ask_away/screens/main_screen/MainScreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ask_away/screens/talks_screen/TalksScreen.dart';
@@ -13,22 +14,25 @@ class TalkQuestionsScreen extends StatefulWidget {
 class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
   List<Question> questions = [];
   bool loaded = false;
+  String talkTitle = "";
 
   void addQuestion(String question) {
     if (question != "") {
       // Call the user's CollectionReference to add a new user
-      FirebaseFirestore.instance
-          .collection('Questions')
-          .add({'text': question,'votes': 0,'author':currentUser}).then((value) => setState(() {
-                questions.add(new Question(question, 0, value.id, currentUser));
-              }));
+      FirebaseFirestore.instance.collection('Questions').add({
+        'text': question,
+        'votes': 0,
+        'author': currentUser
+      }).then((value) => setState(() {
+            questions.add(new Question(question, 0, value.id, currentUser));
+          }));
     }
   }
 
   void callback(String id) {
-    if(id != "none"){
-      for(Question q in questions){
-        if(q.id == id) {
+    if (id != "none") {
+      for (Question q in questions) {
+        if (q.id == id) {
           questions.remove(q);
           break;
         }
@@ -50,17 +54,32 @@ class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
     String talkId = ModalRoute.of(context).settings.arguments;
 
     if (!loaded) {
+      List<String> questionsIds;
       FirebaseFirestore.instance
-          .collection('Questions')
+          .collection('Talks')
+          .doc(talkId)
           .get()
-          .then((QuerySnapshot querySnapshot) => {
-                querySnapshot.docs.forEach((doc) {
-                  if(doc['talk'] == talkId)
-                    questions.add(new Question(doc["text"], doc["votes"], doc.id,doc["author"]));
-                }),
-                this.callback("none")
-              });
-      loaded = true;
+          .then((talk) {
+        talkTitle = talk.data()["title"];
+        questionsIds = List.from(talk.data()['questions']);
+
+        if(questionsIds.isNotEmpty) {
+          questions = [];
+          FirebaseFirestore.instance
+              .collection('Questions')
+              .where(FieldPath.documentId, whereIn: questionsIds)
+              .get()
+              .then((questionsQuery) {
+            questionsQuery.docs.forEach((element) {
+              questions.add(new Question(element["text"], element["votes"],
+                  element.id, element["author"]));
+            });
+            this.callback("none");
+          });
+        }
+        this.callback("none");
+        loaded = true;
+      });
     }
 
     return GestureDetector(
@@ -75,7 +94,8 @@ class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
             children: [
               Container(
                 child: Text(
-                  "Talk #1",
+                  talkTitle,
+                  textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 38,
                   ),
@@ -96,7 +116,8 @@ class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
                           scrollDirection: Axis.vertical,
                           shrinkWrap: true,
                           children: questions
-                              .map<QuestionCard>((Question question) => QuestionCard(question, callback))
+                              .map<QuestionCard>((Question question) =>
+                                  QuestionCard(question, callback))
                               .toList(),
                         ),
                       ),
@@ -120,7 +141,7 @@ class SendQuestionField extends StatelessWidget {
   TextEditingController questionController = new TextEditingController();
   TalkQuestionsScreenState talkQuestionsScreenState;
 
-  SendQuestionField(TalkQuestionsScreenState talkQuestionsScreenState){
+  SendQuestionField(TalkQuestionsScreenState talkQuestionsScreenState) {
     this.talkQuestionsScreenState = talkQuestionsScreenState;
   }
 
