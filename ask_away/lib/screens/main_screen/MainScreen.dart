@@ -151,7 +151,7 @@ MainScreenAppBar(GlobalKey<ScaffoldState> _drawerKey, bool _isLoggedIn, BuildCon
             ? UserIcon()
             : InkWell(
                 onTap: () {
-                  Navigator.pushNamed(context, '/talks');
+                  Navigator.pushNamed(context, '/login');
                 },
                 child: Text(
                   "Login",

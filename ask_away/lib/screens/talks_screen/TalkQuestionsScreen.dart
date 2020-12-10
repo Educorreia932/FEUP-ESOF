@@ -170,7 +170,7 @@ Widget QuestionsScreenAppBar(BuildContext context) {
           color: Colors.black,
         ),
         onPressed: () {
-          Navigator.pushNamed(context, "/talks");
+          Navigator.pop(context);
         },
       ),
     ),

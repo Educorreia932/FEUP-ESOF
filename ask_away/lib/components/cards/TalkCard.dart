@@ -170,13 +170,7 @@ class TalkCardState extends State<TalkCard> {
                   ),
                 ),
                 SimpleButton("Enter Talk", () {
-                  Navigator.pop(context);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => TalkQuestionsScreen(),
-                    ),
-                  );
+                  Navigator.pushNamed(context, '/talk_questions');
                 }, 20, Colors.blue),
               ],
             ),
