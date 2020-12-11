@@ -17,8 +17,7 @@ class Talk {
     this.duration = new Duration(minutes: duration);
 
     for (String userRole in participants.keys) {
-      for (String userID in participants[userRole])
-        print(userID);
+      print(userRole);
     }
 
     this.isExpanded = false;

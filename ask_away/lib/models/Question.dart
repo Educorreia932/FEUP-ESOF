@@ -14,6 +14,4 @@ class Question {
   int getTotalVotes() {
     return votes;
   }
-
-
 }
