@@ -84,7 +84,6 @@ class TalkCardState extends State<TalkCard> {
                         icon: savedButton(),
                         onPressed: () {
                           this.widget.callCallback(this.widget.talk.id);
-                          setState(() {});
                         }),
                   ],
                 ),
