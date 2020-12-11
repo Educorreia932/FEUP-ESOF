@@ -1,3 +1,4 @@
+import 'package:ask_away/components/cards/RoleCard.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -14,8 +15,13 @@ class TalkRolesScreenState extends State<TalkRolesScreen> {
     return Scaffold(
       appBar: QuestionsScreenAppBar(context),
       body: Container(
-        child: Text("teste"),
+        child: Column(
+          children: [
+            RoleCard()
+          ],
+        ),
       ),
     );
   }
 }
+
