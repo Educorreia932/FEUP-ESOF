@@ -39,8 +39,8 @@ class MyApp extends StatelessWidget {
               ),
               initialRoute: "/",
               routes: {
-                '/': (context) => MainScreenBuilder(),
-                '/login': (context) => LoginScreen(),
+                '/': (context) => MainScreenBuilder(key : Key("mainScreen")),
+                '/login': (context) => LoginScreen(key : Key("login")),
                 '/register': (context) => RegisterScreen(),
                 '/talks': (context) => TalksScreen(),
                 '/talk_questions': (context) => TalkQuestionsScreen(),

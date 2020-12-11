@@ -22,6 +22,8 @@ void loginSetPassword(String password) {
 }
 
 class LoginScreen extends StatefulWidget {
+  LoginScreen({Key key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() => LoginScreenState();
 }
@@ -100,11 +102,11 @@ class LoginScreenState extends State<LoginScreen> {
                   right: 40,
                   bottom: 40,
                 ),
-                child: SimpleButton(
-                  "Login",
-                  validateAndSubmit,
-                  37,
-                  Color(0xFFE11D1D),
+                child: TextButton(
+                  key: Key("loginbutton"),
+                  child : Text("Login"),
+                  onPressed: validateAndSubmit,
+
                 ),
               ),
               RichText(
