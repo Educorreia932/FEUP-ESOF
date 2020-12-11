@@ -150,6 +150,7 @@ class CreateTalkScreenState extends State<CreateTalkScreen> {
         'location': location,
         'duration': duration,
         'creator' : currentUser,
+        'participants': null,
       });
       //.then((value) => setState(() {
       //talks.add(new Talk(value.id, title, description, date, location, duration));
