@@ -1,11 +1,11 @@
-import '../lib/main.dart' as app;
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_driver/driver_extension.dart';
+import 'package:ask_away/main.dart' as app;
 
-void main() {
-  // This line enables the extension
+Future<void> main() async {
+// This line enables the extension.
   enableFlutterDriverExtension();
-
-  // Call the `main()` function of your app or call `runApp` with any widget you
-  // are interested in testing.
-  app.main();
+  await Firebase.initializeApp();
+  runApp(app.MyApp());
 }
