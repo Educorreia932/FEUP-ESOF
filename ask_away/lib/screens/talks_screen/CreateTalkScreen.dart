@@ -48,7 +48,7 @@ class CreateTalkScreenState extends State<CreateTalkScreen> {
 
     if (form.validate()) {
       form.save();
-      if(_startdate.isBefore(_enddate)) {
+      if (_startdate.isBefore(_enddate)) {
         _duration = _enddate.difference(_startdate).inMinutes;
         return true;
       }
@@ -58,10 +58,11 @@ class CreateTalkScreenState extends State<CreateTalkScreen> {
     return false;
   }
 
-  Future<void> validateAndSubmit() async {
-    if(validateAndSave()) {
-      addTalk(_title, _description, _startdate, _location, _duration);
+  bool validateAndSubmit() {
+    if (validateAndSave()) {
+      return addTalk(_title, _description, _startdate, _location, _duration);
     }
+    return false;
   }
 
   @override
@@ -69,73 +70,86 @@ class CreateTalkScreenState extends State<CreateTalkScreen> {
     return Scaffold(
       appBar: ScheduleAppBar(context),
       body: Container(
-        color: Color(0xFFECECEC),
-        //child: ScrollConfiguration(
-        // behavior: MyBehavior(),
-        child:
-        Form(
-          key: formKey,
-          child: ListView(children: [
-            Container(
-              alignment: Alignment.center,
-              child: Text(
-                "Schedule new Talk",
-                style: TextStyle(
-                  fontSize: 35,
+          color: Color(0xFFECECEC),
+          //child: ScrollConfiguration(
+          // behavior: MyBehavior(),
+          child: Form(
+            key: formKey,
+            child: ListView(children: [
+              Container(
+                alignment: Alignment.center,
+                child: Text(
+                  "Schedule new Talk",
+                  style: TextStyle(
+                    fontSize: 35,
+                  ),
                 ),
               ),
-            ),
-            Container(
-              margin: EdgeInsets.only(
-                  left: MediaQuery.of(context).size.width / 15,
-                  right: MediaQuery.of(context).size.width / 15),
-              child: TalkEntryField(TalkEntryFieldType.TITLE),
-            ),
-            Container(
-              margin: EdgeInsets.only(
-                  left: MediaQuery.of(context).size.width / 15,
-                  right: MediaQuery.of(context).size.width / 15),
-              child: TalkEntryField(TalkEntryFieldType.DESCRIPTION),
-            ),
-            Container(
-              margin: EdgeInsets.only(
-                  left: MediaQuery.of(context).size.width / 15,
-                  right: MediaQuery.of(context).size.width / 15),
-              child: TalkEntryField(TalkEntryFieldType.LOCATION),
-            ),
-            Container(
-              margin: EdgeInsets.only(
-                  left: MediaQuery.of(context).size.width / 15,
-                  right: MediaQuery.of(context).size.width / 15),
-              child: TalkEntryField(TalkEntryFieldType.STARTDATE),
-            ),
-            Container(
-              margin: EdgeInsets.only(
-                  left: MediaQuery.of(context).size.width / 15,
-                  right: MediaQuery.of(context).size.width / 15),
-              child: TalkEntryField(TalkEntryFieldType.ENDDATE),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(
-                left: 40,
-                right: 40,
-                bottom: 40,
-                top: 40,
+              Container(
+                margin: EdgeInsets.only(
+                    left: MediaQuery.of(context).size.width / 15,
+                    right: MediaQuery.of(context).size.width / 15),
+                child: TalkEntryField(TalkEntryFieldType.TITLE),
               ),
-              child: SimpleButton(
-                "Submit talk",
-                validateAndSubmit,
-                37,
-                Color(0xFFE11D1D),
+              Container(
+                margin: EdgeInsets.only(
+                    left: MediaQuery.of(context).size.width / 15,
+                    right: MediaQuery.of(context).size.width / 15),
+                child: TalkEntryField(TalkEntryFieldType.DESCRIPTION),
               ),
-            ),
-          ]),
-        )
-      ),
+              Container(
+                margin: EdgeInsets.only(
+                    left: MediaQuery.of(context).size.width / 15,
+                    right: MediaQuery.of(context).size.width / 15),
+                child: TalkEntryField(TalkEntryFieldType.LOCATION),
+              ),
+              Container(
+                margin: EdgeInsets.only(
+                    left: MediaQuery.of(context).size.width / 15,
+                    right: MediaQuery.of(context).size.width / 15),
+                child: TalkEntryField(TalkEntryFieldType.STARTDATE),
+              ),
+              Container(
+                margin: EdgeInsets.only(
+                    left: MediaQuery.of(context).size.width / 15,
+                    right: MediaQuery.of(context).size.width / 15),
+                child: TalkEntryField(TalkEntryFieldType.ENDDATE),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(
+                  left: 40,
+                  right: 40,
+                  bottom: 40,
+                  top: 40,
+                ),
+                child: Builder(
+                  builder: (context1) {
+                    return SimpleButton(
+                      "Submit talk",
+                          () {
+                        if (validateAndSubmit()) {
+                          Scaffold.of(context1)
+                              .showSnackBar(SnackBar(
+                              backgroundColor: Colors.green,
+                              content: Text("Talk submitted successfuly")));
+                        } else {
+                          Scaffold.of(context1)
+                              .showSnackBar(SnackBar(backgroundColor: Colors.red,
+                                content: Text("Invalid talk info")));
+                        }
+                      },
+                      37,
+                      Color(0xFFE11D1D),
+                    );
+                  },
+                )
+              ),
+            ]),
+          )),
     );
   }
 
-  void addTalk(String title, String description, DateTime date, String location,
+  bool addTalk(String title, String description, DateTime date, String location,
       int duration) {
     if (title != "" &&
         description != "" &&
@@ -149,9 +163,11 @@ class CreateTalkScreenState extends State<CreateTalkScreen> {
         'date': date,
         'location': location,
         'duration': duration,
-        'creator' : currentUser,
-        'ocupation' : 0,
+        'creator': currentUser,
+        'ocupation': 0,
       });
+      return true;
     }
+    return false;
   }
 }
