@@ -13,7 +13,8 @@ Future<void> main() {
     ..stepDefinitions = [
       CheckGivenWidgets(),
       FillFormField(),
-      ClickLoginButton()
+      ClickLoginButton(),
+      ClickLoginScreen()
     ]
     ..restartAppBetweenScenarios = true
     ..targetAppPath = "test/app.dart"

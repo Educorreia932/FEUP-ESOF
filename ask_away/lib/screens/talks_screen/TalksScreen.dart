@@ -330,7 +330,7 @@ class TalkScheduleState extends State<TalkSchedule> {
                 if (_selectedIndex == 0) {
                   return Expanded(
                       child: SfCalendar(
-                    allowedViews: [CalendarView.day, CalendarView.month],
+                    // allowedViews: [CalendarView.day, CalendarView.month],
                     backgroundColor: Color(0xFFECECEC),
                     initialDisplayDate: _jumpToTime,
                     view: _calendarView,
@@ -340,7 +340,7 @@ class TalkScheduleState extends State<TalkSchedule> {
                         appointmentDisplayMode:
                             MonthAppointmentDisplayMode.appointment),
                     showNavigationArrow: true,
-                    showDatePickerButton: true,
+                    // showDatePickerButton: true,
                   ));
                 } else {
                   return Expanded(
