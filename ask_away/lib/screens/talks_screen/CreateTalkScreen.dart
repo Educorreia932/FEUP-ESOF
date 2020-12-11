@@ -61,6 +61,7 @@ class CreateTalkScreenState extends State<CreateTalkScreen> {
   Future<void> validateAndSubmit() async {
     if(validateAndSave()) {
       addTalk(_title, _description, _startdate, _location, _duration);
+      Navigator.pop(context);
     }
   }
 
@@ -150,6 +151,7 @@ class CreateTalkScreenState extends State<CreateTalkScreen> {
         'location': location,
         'duration': duration,
         'creator' : currentUser,
+        'ocupation' : 0,
       });
       //.then((value) => setState(() {
       //talks.add(new Talk(value.id, title, description, date, location, duration));
