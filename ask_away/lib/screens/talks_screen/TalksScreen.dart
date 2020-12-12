@@ -13,13 +13,13 @@ class TalksScreen extends StatefulWidget {
   @override
   State<TalksScreen> createState() => TalksScreenState();
 }
-enum SortingOptions{MostOcupants, LeastOcupants, NameA_Z,NameZ_A, Shortest, Longest, DateDesc, DateAsc}
+enum SortingOptions{MostOccupants, LeastOccupants, NameA_Z,NameZ_A, Shortest, Longest, DateDesc, DateAsc}
 
 class TalksScreenState extends State<TalksScreen> {
   bool loaded = false;
   List<Talk> talks = [];
   List<dynamic> scheduledIds = [];
-  SortingOptions sorter=SortingOptions.MostOcupants;
+  SortingOptions sorter=SortingOptions.MostOccupants;
 
   void addTalks() {
     if (!loaded) {
@@ -62,13 +62,13 @@ class TalksScreenState extends State<TalksScreen> {
     setState(
             () {
           switch(sorter) {
-            case SortingOptions.MostOcupants:
+            case SortingOptions.MostOccupants:
               talks.sort(
                     (a, b) {
                   return b.ocupation.compareTo(a.ocupation);
                 },);
               break;
-            case SortingOptions.LeastOcupants:
+            case SortingOptions.LeastOccupants:
               talks.sort(
                     (a, b) {
                   return a.ocupation.compareTo(b.ocupation);
