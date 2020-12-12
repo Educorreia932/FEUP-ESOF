@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
 import 'package:ask_away/components/cards/question_card/QuestionCard.dart';
 import 'package:ask_away/models/Question.dart';
 import 'package:ask_away/models/Talk.dart';
@@ -5,6 +8,26 @@ import 'package:ask_away/screens/main_screen/MainScreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ask_away/screens/talks_screen/TalksScreen.dart';
 import 'package:flutter/material.dart';
+
+
+List<String> censoredWords;
+
+void loadCensoredWords(){
+  final file = new File('./assets/censoredWords.txt');
+  Stream<List<int>> inputStream = file.openRead();
+  List<String> words=[];
+  inputStream
+      .transform(utf8.decoder)       // Decode bytes to UTF-8.
+      .transform(new LineSplitter()) // Convert stream to individual lines.
+      .listen((String line) {        // Process results.
+      words.add(line);
+  },
+      onDone: () {
+        censoredWords=words;
+        print('Reading done.'); },
+      onError: (e) { print(e.toString()); });
+}
+
 
 class TalkQuestionsScreen extends StatefulWidget {
   @override
@@ -16,7 +39,41 @@ class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
   bool loaded = false;
   String talkTitle = "";
 
-  void addQuestion(String question, String talkId) {
+
+  bool verifyQuestion(String question){
+    List<String> questionLines = question.split("\n");
+    List<String> questionWords = [];
+    for(int i =0;i <questionLines.length;i++){
+      List<String> l1 = questionLines[i].split(" ");
+      questionWords.addAll(l1);
+  }
+    print(questionWords);
+    print(censoredWords);
+    for (int i=0; i < questionWords.length;i++)
+      if(censoredWords.contains(questionWords[i]))
+        return false;
+
+    return true;
+  }
+
+
+
+  void addQuestion(String question, String talkId,BuildContext context) {
+
+    if(!verifyQuestion(question)){
+      Scaffold.of(context).showSnackBar(SnackBar(
+        content: Text(
+            "Invalid words are present in the question submitted, "
+                "please rewrite your question!"),
+        backgroundColor: Colors.red,
+      ));
+      return;
+    }
+    else {
+      print("question allowed");
+      return;
+    }
+
     if (question != "") {
       // Call the user's CollectionReference to add a new user
       FirebaseFirestore.instance.collection('Questions').add({
@@ -178,7 +235,7 @@ class SendQuestionField extends StatelessWidget {
           color: Color(0xFFE11D1D),
           iconSize: 37,
           onPressed: () {
-            this.talkQuestionsScreenState.addQuestion(questionController.text, talkId);
+            this.talkQuestionsScreenState.addQuestion(questionController.text, talkId,context);
             questionController.clear();
           },
         ),
