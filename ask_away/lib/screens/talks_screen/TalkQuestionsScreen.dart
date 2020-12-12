@@ -63,13 +63,13 @@ class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
           case SortingOptions.NameA_Z:
             questions.sort(
                   (a, b) {
-                return b.text.compareTo(a.text);
+                return a.text.toLowerCase().compareTo(b.text.toLowerCase());
               },);
             break;
           case SortingOptions.NameZ_A:
             questions.sort(
                   (a, b) {
-                return a.text.compareTo(b.text);
+                return b.text.toLowerCase().compareTo(a.text.toLowerCase());
               },);
             break;
           case SortingOptions.Newest:
