@@ -2,6 +2,8 @@ import 'dart:async' show Future;
 import 'dart:convert';
 import 'dart:io';
 import 'package:ask_away/components/cards/question_card/QuestionCard.dart';
+import 'package:ask_away/components/cards/question_card/components/VotingComponent.dart';
+import 'package:ask_away/models/AppUser.dart';
 import 'package:ask_away/models/Question.dart';
 import 'package:ask_away/models/Talk.dart';
 import 'package:ask_away/screens/main_screen/MainScreen.dart';
@@ -35,39 +37,128 @@ class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
   String talkTitle = "";
 
 
-  bool verifyQuestion(String question){
+
+
+  void voteForQuestion(Question question){
+    DocumentReference userRef = FirebaseFirestore.instance.collection('Users').doc(currentUser);
+    String questionID = question.id;
+    User user;
+    FirebaseFirestore.instance.runTransaction(
+          (transaction) {
+        return transaction.get(userRef).then(
+              (value) {
+            user = User.fromData(value.data());
+            DocumentReference docRef = FirebaseFirestore.instance.collection("Questions").doc(questionID);
+
+            // User didn't have a vote in this question
+            if (!user.votes.containsKey(questionID)) {
+              docRef.update({"votes": FieldValue.increment(1)});
+              question.votes += 1;
+
+              user.votes[questionID] = 1;
+            }
+
+            // User already had a vote of the same type
+            else if (user.votes[questionID] == 1) {
+              docRef.update({"votes": FieldValue.increment(-1)});
+              question.votes -= 1;
+
+              user.votes.remove(questionID);
+            }
+
+            // User already had a vote of the opposite type
+            else {
+              docRef.update({"votes": FieldValue.increment(2 * 1)});
+              question.votes += 2 * 1;
+
+              user.votes[questionID] = 1;
+            }
+
+            userRef.update({"votes": user.votes});
+            callback("none");
+          },
+        );
+      },
+    );
+
+  }
+  bool verifyQuestionWords(String question){
     List<String> questionLines = question.split("\n");
     List<String> questionWords = [];
     for(int i =0;i <questionLines.length;i++){
       List<String> l1 = questionLines[i].split(" ");
       questionWords.addAll(l1);
-  }
-    print(questionWords);
-    print(censoredWords);
+    }
+
     for (int i=0; i < questionWords.length;i++)
-      if(censoredWords.contains(questionWords[i]))
+      if(censoredWords.contains(questionWords[i].toLowerCase()))
         return false;
 
     return true;
   }
 
+  bool verifyEqualQuestions(String question,BuildContext context){
 
+    for (int i=0; i < questions.length;i++)
+      if(compareQuestions(questions[i].text,question)){
+        Scaffold.of(context).showSnackBar(SnackBar(
+          duration: Duration(seconds: 8),
+          content: Text(
+              "There is already an identical question in this talk! Do you wish to upvote it? "),
+          backgroundColor: Colors.grey[400],
+          action: SnackBarAction(
+            label: "Vote",
+            textColor: Colors.red,
+            onPressed: (){voteForQuestion(questions[i]);},
+          ),
+        ));
+        return false;
+      }
+
+    return true;
+  }
+
+  bool compareQuestions(String question1, String question2){
+    List<String> question1Lines = question1.split("\n");
+    List<String> question1Words = [];
+    for(int i =0;i <question1Lines.length;i++){
+      List<String> l1 = question1Lines[i].split(" ");
+      question1Words.addAll(l1);
+    }
+    while(question1Words.remove(""));
+    List<String> question2Lines = question2.split("\n");
+    List<String> question2Words = [];
+    for(int i =0;i <question2Lines.length;i++){
+      List<String> l1 = question2Lines[i].split(" ");
+      question2Words.addAll(l1);
+    }
+    while(question2Words.remove(""));
+    if(question1Words.length!=question2Words.length)
+      return false;
+
+    for(int i=0; i< question2Words.length;i++){
+      if(question2Words[i]!=question1Words[i])
+        return false;
+    }
+    return true;
+  }
 
   void addQuestion(String question, String talkId,BuildContext context) {
 
-    if(!verifyQuestion(question)){
+    if(!verifyQuestionWords(question)){
       Scaffold.of(context).showSnackBar(SnackBar(
         content: Text(
             "Invalid words are present in the question submitted, "
                 "please rewrite your question!"),
-        backgroundColor: Colors.red,
+        backgroundColor: Color(0xFFE11D1D),
       ));
       return;
     }
-    else {
-      print("question allowed");
+
+    if(!verifyEqualQuestions(question,context))
       return;
-    }
+
+
 
     if (question != "") {
       // Call the user's CollectionReference to add a new user
