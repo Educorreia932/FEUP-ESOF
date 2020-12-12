@@ -10,11 +10,13 @@ class TalkQuestionsScreen extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => TalkQuestionsScreenState();
 }
+enum SortingOptions{MostVotes, LeastVotes, NameA_Z,NameZ_A, Newest, Oldest}
 
 class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
   List<Question> questions = [];
   bool loaded = false;
   String talkTitle = "";
+  SortingOptions sorter=SortingOptions.MostVotes;
 
   void addQuestion(String question, String talkId) {
     if (question != "") {
@@ -44,11 +46,51 @@ class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
     }
     setState(
       () {
-        questions.sort(
-          (a, b) {
-            return b.getTotalVotes().compareTo(a.getTotalVotes());
-          },
-        );
+        switch(sorter) {
+          case SortingOptions.MostVotes:
+              questions.sort(
+                    (a, b) {
+                  return b.getTotalVotes().compareTo(a.getTotalVotes());
+                },);
+              break;
+          case SortingOptions.LeastVotes:
+              questions.sort(
+                    (a, b) {
+                  return a.getTotalVotes().compareTo(b.getTotalVotes());
+                },);
+              break;
+
+          case SortingOptions.NameA_Z:
+            questions.sort(
+                  (a, b) {
+                return b.text.compareTo(a.text);
+              },);
+            break;
+          case SortingOptions.NameZ_A:
+            questions.sort(
+                  (a, b) {
+                return a.text.compareTo(b.text);
+              },);
+            break;
+          case SortingOptions.Newest:
+            questions.sort(
+                  (a, b) {
+                return b.id.compareTo(a.id);
+              },);
+            break;
+          case SortingOptions.Oldest:
+            questions.sort(
+                  (a, b) {
+                return a.id.compareTo(b.id);
+              },);
+            break;
+          default:
+            questions.sort(
+                  (a, b) {
+                return b.getTotalVotes().compareTo(a.getTotalVotes());
+              },);
+            break;
+      }
       },
     );
   }
@@ -96,6 +138,7 @@ class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
           color: Color(0xFFECECEC),
           child: Column(
             children: [
+
               Container(
                 child: Text(
                   talkTitle,
@@ -105,12 +148,47 @@ class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
                   ),
                 ),
               ),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                padding: const EdgeInsets.only(
+                  left: 230.0,
+                ),),
+
+                DropdownButton(
+                  hint: Text('Sort Options'),
+                  value: sorter,
+                  onChanged: (newValue) {
+                    setState(() {
+                      sorter = newValue;
+                      callback("");
+                    });
+                  },
+
+                  iconEnabledColor: Colors.grey[600],
+                  underline: Container(
+                    height:1,
+                    color: Colors.grey[400],
+                  ),
+                  items: SortingOptions.values.map((sortValue) {
+                    return DropdownMenuItem(
+                           child:new Text(sortValue.toString().split('.').last,
+                                textAlign: TextAlign.left,
+                            ),
+                            value: sortValue,
+                           );
+                  }).toList(),
+                ),
+
+              ],
+          ),
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.only(
                     left: 32,
                     right: 32,
-                    top: 32,
+                    top: 5,
                     bottom: 20,
                   ),
                   child: Column(
@@ -133,7 +211,8 @@ class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
                   ),
                 ),
               ),
-            ],
+
+              ],
           ),
         ),
       ),
