@@ -7,7 +7,7 @@ class User {
   Map<dynamic, dynamic> votes;
   List<dynamic> scheduledTalks;
 
-  User(this.username,this.reputation, this.votes);
+  User(this.username, this.reputation, this.votes);
 
   User.fromData(Map<String, dynamic> data) {
     username = data["username"];

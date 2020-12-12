@@ -1,6 +1,5 @@
 import 'package:ask_away/components/cards/RoleCard.dart';
 import 'package:ask_away/models/AppUser.dart';
-import 'package:ask_away/models/Talk.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -13,28 +12,33 @@ class TalkRolesScreen extends StatefulWidget {
 }
 
 class TalkRolesScreenState extends State<TalkRolesScreen> {
-
   @override
   Widget build(BuildContext context) {
-    List<User> users = [];
+    return FutureBuilder<QuerySnapshot>(
+      future: FirebaseFirestore.instance.collection('Users').get(),
+      builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        if (snapshot.hasData) {
+          List<User> users = [];
 
-    FirebaseFirestore.instance
-        .collection('Users')
-        .get()
-        .then((value) {
-          value.docs.forEach((document) {
-            print(document.data());
-          });
-        });
+          snapshot.data.docs.forEach(
+            (document) {
+              List<dynamic> userScheduledTalks = document.data()["scheduled"];
 
-    return Scaffold(
-      appBar: QuestionsScreenAppBar(context),
-      body: Container(
-        child: Column(
-          children: users.map<RoleCard>((User user) => RoleCard(user)).toList(),
-        ),
-      ),
+              if (userScheduledTalks.contains("XWvNTQsEilhhKYhZfm25")) users.add(User.fromData(document.data()));
+            },
+          );
+
+          return Scaffold(
+            appBar: QuestionsScreenAppBar(context),
+            body: Container(
+              child: Column(
+                children: users.map<RoleCard>((User user) => RoleCard(user)).toList(),
+              ),
+            ),
+          );
+        } else
+          return CircularProgressIndicator();
+      },
     );
   }
 }
-

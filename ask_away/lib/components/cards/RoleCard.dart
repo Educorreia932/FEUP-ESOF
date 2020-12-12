@@ -20,7 +20,7 @@ class RoleCardState extends State<RoleCard> {
       color: Colors.white,
       child: Column(
         children: [
-          Text("Educorreia932"),
+          Text(widget.user.username),
           RadioListTile(
             title: Text("Atendee"),
             value: "atendee",
