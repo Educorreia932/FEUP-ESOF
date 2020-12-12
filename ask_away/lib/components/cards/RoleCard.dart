@@ -1,8 +1,12 @@
-import 'package:ask_away/components/SimpleButton.dart';
+import 'package:ask_away/models/AppUser.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class RoleCard extends StatefulWidget {
+  User user;
+
+  RoleCard(this.user);
+
   @override
   State<StatefulWidget> createState() => RoleCardState();
 }
