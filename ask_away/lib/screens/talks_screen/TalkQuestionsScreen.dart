@@ -1,4 +1,4 @@
-import 'dart:async';
+import 'dart:async' show Future;
 import 'dart:convert';
 import 'dart:io';
 import 'package:ask_away/components/cards/question_card/QuestionCard.dart';
@@ -8,24 +8,19 @@ import 'package:ask_away/screens/main_screen/MainScreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ask_away/screens/talks_screen/TalksScreen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show rootBundle;
 
 
 List<String> censoredWords;
 
+
+
+Future<String> loadAsset() async {
+  return await rootBundle.loadString('assets/censoredWords.txt');
+}
+
 void loadCensoredWords(){
-  final file = new File('./assets/censoredWords.txt');
-  Stream<List<int>> inputStream = file.openRead();
-  List<String> words=[];
-  inputStream
-      .transform(utf8.decoder)       // Decode bytes to UTF-8.
-      .transform(new LineSplitter()) // Convert stream to individual lines.
-      .listen((String line) {        // Process results.
-      words.add(line);
-  },
-      onDone: () {
-        censoredWords=words;
-        print('Reading done.'); },
-      onError: (e) { print(e.toString()); });
+  loadAsset().then((value) {LineSplitter ls = new LineSplitter(); censoredWords = ls.convert(value);});
 }
 
 
