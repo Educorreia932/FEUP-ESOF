@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'AppUser.dart';
 
 class Talk {
@@ -19,8 +21,11 @@ class Talk {
     this.isExpanded = false;
   }
 
-  Talk.fromData(Map<String, dynamic> data) {
-    this.id = data["id"];
+  Talk.fromData(DocumentSnapshot value) {
+    id = value.id;
+
+    Map<String, dynamic> data = value.data();
+
     this.title = data["title"];
     this.description = data["description"];
     this.date = data["date"].toDate();

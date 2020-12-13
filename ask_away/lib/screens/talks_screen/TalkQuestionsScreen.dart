@@ -65,7 +65,7 @@ class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
     if (!loaded) {
       List<String> questionsIds;
       FirebaseFirestore.instance.collection('Talks').doc(talkId).get().then((value) {
-        talk = Talk.fromData(value.data());
+        talk = Talk.fromData(value);
         talkTitle = value.data()["title"];
         questionsIds = List.from(value.data()['questions']);
 

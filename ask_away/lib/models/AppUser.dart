@@ -16,6 +16,7 @@ class User {
     id = value.id;
 
     Map<String, dynamic> data = value.data();
+
     username = data["username"];
     reputation = data["Reputation"];
     votes = data["votes"];

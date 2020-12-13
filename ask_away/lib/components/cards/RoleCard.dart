@@ -17,10 +17,15 @@ class RoleCard extends StatefulWidget {
 class RoleCardState extends State<RoleCard> {
   String role;
 
-  void changeRole(String role, Talk talk) {
+  void changeRole(String role) {
+    if (!widget.talk.participants.containsKey(role))
+      widget.talk.participants[role] = List();
+
+    widget.talk.participants[role]?.add(widget.user.id);
+
     FirebaseFirestore.instance
         .collection("Talks")
-        .doc("XWvNTQsEilhhKYhZfm25")
+        .doc(widget.talk.id)
         .update({"participants": widget.talk.participants});
   }
 
@@ -33,6 +38,7 @@ class RoleCardState extends State<RoleCard> {
 
       if (users.contains(userID)) {
         role = userRole;
+
         break;
       }
     }
@@ -58,51 +64,35 @@ class RoleCardState extends State<RoleCard> {
               ),
             ),
             Container(
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.all(Radius.circular(20))
-              ),
+              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.all(Radius.circular(20))),
               child: Column(
                 children: [
-                  RadioListTile(
-                    title: Text("Atendee"),
-                    activeColor: Colors.red,
-                    value: "atendees",
-                    groupValue: role,
-                    onChanged: (String value) {
-                      setState(() {
-                        role = value;
-                      });
-                    },
-                  ),
-                  RadioListTile(
-                    title: Text("Moderator"),
-                    activeColor: Colors.red,
-                    value: "moderators",
-                    groupValue: role,
-                    onChanged: (String value) {
-                      setState(() {
-                        role = value;
-                      });
-                    },
-                  ),
-                  RadioListTile(
-                    title: Text("Speaker"),
-                    activeColor: Colors.red,
-                    value: "speakers",
-                    groupValue: role,
-                    onChanged: (String value) {
-                      setState(() {
-                        role = value;
-                      });
-                    },
-                  ),
+                  roleOption("Attendee", "atendees"),
+                  roleOption("Moderator", "moderators"),
+                  roleOption("Speaker", "speaker")
                 ],
               ),
             ),
           ],
         ),
       ),
+    );
+  }
+
+  Widget roleOption(String title, String roleValue) {
+    return RadioListTile(
+      title: Text(title),
+      activeColor: Colors.red,
+      value: roleValue,
+      groupValue: role,
+      onChanged: (String value) {
+        changeRole(value);
+        setState(
+          () {
+            role = value;
+          },
+        );
+      },
     );
   }
 }
