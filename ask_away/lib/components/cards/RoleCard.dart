@@ -17,11 +17,23 @@ class RoleCard extends StatefulWidget {
 class RoleCardState extends State<RoleCard> {
   String role;
 
+  void removePreviousRole() {
+    String userID = widget.user.id;
+
+    for (String userRole in widget.talk.participants.keys) {
+      List<dynamic> users = widget.talk.participants[userRole];
+
+      if (users.contains(userID))
+        widget.talk.participants[role].removeWhere((id) => id == userID);
+    }
+  }
+
   void changeRole(String role) {
     if (!widget.talk.participants.containsKey(role))
       widget.talk.participants[role] = List();
 
-    widget.talk.participants[role]?.add(widget.user.id);
+    removePreviousRole();
+    widget.talk.participants[role].add(widget.user.id);
 
     FirebaseFirestore.instance
         .collection("Talks")
@@ -32,16 +44,17 @@ class RoleCardState extends State<RoleCard> {
   @override
   Widget build(BuildContext context) {
     String userID = widget.user.id;
+    print(widget.talk.participants);
 
-    for (String userRole in widget.talk.participants.keys) {
-      List<dynamic> users = widget.talk.participants[userRole];
-
-      if (users.contains(userID)) {
-        role = userRole;
-
-        break;
-      }
-    }
+    // for (String userRole in widget.talk.participants.keys) {
+    //   List<dynamic> users = widget.talk.participants[userRole];
+    //
+    //   if (users.contains(userID)) {
+    //     role = userRole;
+    //
+    //     break;
+    //   }
+    // }
 
     return Padding(
       padding: const EdgeInsets.only(
