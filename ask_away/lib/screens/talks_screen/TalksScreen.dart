@@ -65,9 +65,8 @@ class TalksScreenState extends State<TalksScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // if(!loaded)
-    // addTalk("Teste Talk", "wow isto é teste", new DateTime.utc(2020, 9, 11, 18, 30), "aqui", 70);
     addTalks();
+
     return Scaffold(
       appBar: TalksScreenAppBar(context),
       body: Container(

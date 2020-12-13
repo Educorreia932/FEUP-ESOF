@@ -1,8 +1,12 @@
 import 'package:ask_away/components/cards/question_card/QuestionCard.dart';
 import 'package:ask_away/models/Question.dart';
+import 'package:ask_away/models/Talk.dart';
 import 'package:ask_away/screens/main_screen/MainScreen.dart';
+import 'package:ask_away/screens/talks_screen/TalkRolesScreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+
+Talk talk;
 
 class TalkQuestionsScreen extends StatefulWidget {
   @override
@@ -20,12 +24,16 @@ class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
       FirebaseFirestore.instance
           .collection('Questions')
           .add({'text': question, 'votes': 0, 'author': currentUser}).then(
-        (value) => setState(() {
-          questions.add(new Question(question, 0, value.id, currentUser));
-          FirebaseFirestore.instance.collection('Talks').doc(talkId).update({
-            "questions": FieldValue.arrayUnion([value.id])
-          });
-        }),
+        (value) => setState(
+          () {
+            questions.add(new Question(question, 0, value.id, currentUser));
+            FirebaseFirestore.instance.collection('Talks').doc(talkId).update(
+              {
+                "questions": FieldValue.arrayUnion([value.id])
+              },
+            );
+          },
+        ),
       );
     }
   }
@@ -56,9 +64,10 @@ class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
 
     if (!loaded) {
       List<String> questionsIds;
-      FirebaseFirestore.instance.collection('Talks').doc(talkId).get().then((talk) {
-        talkTitle = talk.data()["title"];
-        questionsIds = List.from(talk.data()['questions']);
+      FirebaseFirestore.instance.collection('Talks').doc(talkId).get().then((value) {
+        talk = Talk.fromData(value.data());
+        talkTitle = value.data()["title"];
+        questionsIds = List.from(value.data()['questions']);
 
         if (questionsIds.isNotEmpty) {
           questions = [];
@@ -208,7 +217,7 @@ Widget QuestionsScreenAppBar(BuildContext context) {
             color: Colors.black,
           ),
           onPressed: () {
-            Navigator.pushNamed(context, "/talk_roles");
+            Navigator.pushNamed(context, "/talk_roles", arguments: talk);
           },
         ),
       ),

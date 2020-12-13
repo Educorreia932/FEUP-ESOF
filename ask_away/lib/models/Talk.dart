@@ -16,9 +16,18 @@ class Talk {
   Talk(this.id, this.title, this.description, this.date, this.location, int duration, this.ocupation, this.creator, Map<String, dynamic> participants) {
     this.duration = new Duration(minutes: duration);
 
-    for (String userRole in participants.keys) {
-      print(userRole);
-    }
+    this.isExpanded = false;
+  }
+
+  Talk.fromData(Map<String, dynamic> data) {
+    this.id = data["id"];
+    this.title = data["title"];
+    this.description = data["description"];
+    this.date = data["date"].toDate();
+    this.location = data["location"];
+    this.duration = new Duration(minutes: data["duration"]);
+    this.ocupation = data["ocupation"];
+    this.participants = data["participants"];
 
     this.isExpanded = false;
   }

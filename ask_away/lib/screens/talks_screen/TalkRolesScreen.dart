@@ -1,10 +1,11 @@
 import 'package:ask_away/components/cards/RoleCard.dart';
 import 'package:ask_away/models/AppUser.dart';
+import 'package:ask_away/models/Talk.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 import 'TalkQuestionsScreen.dart';
+
 
 class TalkRolesScreen extends StatefulWidget {
   @override
@@ -14,6 +15,8 @@ class TalkRolesScreen extends StatefulWidget {
 class TalkRolesScreenState extends State<TalkRolesScreen> {
   @override
   Widget build(BuildContext context) {
+    Talk talk = ModalRoute.of(context).settings.arguments;
+
     return FutureBuilder<QuerySnapshot>(
       future: FirebaseFirestore.instance.collection('Users').get(),
       builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -33,7 +36,7 @@ class TalkRolesScreenState extends State<TalkRolesScreen> {
             body: Container(
               color: Color(0xFFECECEC),
               child: ListView(
-                children: users.map<RoleCard>((User user) => RoleCard(user)).toList(),
+                children: users.map<RoleCard>((User user) => RoleCard(user, talk)).toList(),
               ),
             ),
           );

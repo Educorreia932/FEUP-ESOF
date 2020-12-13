@@ -45,8 +45,6 @@ class _VotingComponentState extends State<VotingComponent> {
     String questionID = widget.question.id;
     DocumentReference userRef = FirebaseFirestore.instance.collection('Users').doc(currentUser);
 
-    print(elapsedTime);
-
     if (elapsedTime >= 1000) {
       FirebaseFirestore.instance.runTransaction(
         (transaction) {

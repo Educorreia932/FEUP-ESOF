@@ -15,10 +15,7 @@ class QuestionCard extends StatefulWidget {
   State<StatefulWidget> createState() => QuestionCardState();
 }
 
-
-
 class QuestionCardState extends State<QuestionCard> {
-
   void deleteQuestion(){
     print("Deleting question: ");
     print(this.widget._question.id);
