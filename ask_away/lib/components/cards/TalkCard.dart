@@ -71,17 +71,19 @@ class TalkCardState extends State<TalkCard> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     IconButton(icon: arrow, onPressed: updateContainer),
-                    Text(
-                      this.widget.talk.title,
-                      style: TextStyle(
-                        fontSize: 25,
+                    Flexible(
+                      child: Text(
+                        this.widget.talk.title,
+                        style: TextStyle(
+                          fontSize: 25,
+                        ),
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
                     IconButton(
                         icon: savedButton(),
                         onPressed: () {
                           this.widget.callCallback(this.widget.talk.id);
-                          setState(() {});
                         }),
                   ],
                 ),
@@ -121,6 +123,17 @@ class TalkCardState extends State<TalkCard> {
                                 fontSize: 16,
                               ),
                             )
+                          ],
+                        ),
+                      ),
+                      Expanded(
+                        child: Row(
+                          children: [
+                            Text(widget.talk.ocupation.toString()),
+                            Icon(
+                              Icons.person,
+                              color: Color(0xFFE11D1D),
+                            ),
                           ],
                         ),
                       ),
@@ -170,7 +183,8 @@ class TalkCardState extends State<TalkCard> {
                   ),
                 ),
                 SimpleButton("Enter Talk", () {
-                  Navigator.pushNamed(context, '/talk_questions');
+                  Navigator.pushNamed(context, '/talk_questions',
+                      arguments: widget.talk.id);
                 }, 20, Colors.blue),
               ],
             ),

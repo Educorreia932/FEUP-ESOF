@@ -30,26 +30,28 @@ class TalksScreenState extends State<TalksScreen> {
         FirebaseFirestore.instance
             .collection('Talks')
             .get()
-            .then((QuerySnapshot querySnapshot) => {
-                  querySnapshot.docs.forEach((doc) {
-                    FirebaseFirestore.instance
-                        .collection('Users')
-                        .doc(doc["creator"])
-                        .get()
-                        .then((value) {
-                      talks.add(new Talk(
-                          doc.id,
-                          doc["title"],
-                          doc["description"],
-                          doc["date"].toDate(),
-                          doc["location"],
-                          doc["duration"],
-                          User.fromData(value.data())));
-                      setState(() {});
-                    });
-                  }),
-                });
-        loaded = true;
+            .then((QuerySnapshot querySnapshot) {
+          talks = [];
+          querySnapshot.docs.forEach((doc) {
+            FirebaseFirestore.instance
+                .collection('Users')
+                .doc(doc["creator"])
+                .get()
+                .then((value) {
+              talks.add(new Talk(
+                  doc.id,
+                  doc["title"],
+                  doc["description"],
+                  doc["date"].toDate(),
+                  doc["location"],
+                  doc["duration"],
+                  doc["ocupation"],
+                  User.fromData(value.data())));
+              setState(() {});
+            });
+          });
+          loaded = true;
+        });
       });
     }
   }
@@ -58,13 +60,33 @@ class TalksScreenState extends State<TalksScreen> {
     if (!scheduled) {
       FirebaseFirestore.instance.collection('Users').doc(currentUser).update({
         'scheduled': FieldValue.arrayUnion([talkId])
+      }).then((value) {
+        FirebaseFirestore.instance.collection('Talks').doc(talkId).update({
+          'ocupation': FieldValue.increment(1)
+        }).then((value1) => setState(() {
+              scheduledIds.add(talkId);
+              talks
+                  .elementAt(
+                      talks.indexWhere((element) => element.id == talkId))
+                  .ocupation++;
+            }));
       });
     } else {
       FirebaseFirestore.instance.collection('Users').doc(currentUser).update({
         'scheduled': FieldValue.arrayRemove([talkId])
+      }).then((value) {
+        FirebaseFirestore.instance.collection('Talks').doc(talkId).update({
+          'ocupation': FieldValue.increment(-1)
+        }).then((value1) => setState(() {
+              scheduledIds.remove(talkId);
+              talks
+                  .elementAt(
+                      talks.indexWhere((element) => element.id == talkId))
+                  .ocupation--;
+            }));
       });
     }
-    //setState(() {});
+    // setState(() {});
   }
 
   @override
@@ -255,7 +277,7 @@ class TalkScheduleState extends State<TalkSchedule> {
           .then((value) {
         user = User.fromData(value.data());
 
-        if(user.scheduledTalks.length > 0) {
+        if (user.scheduledTalks.length > 0) {
           for (int i = 0; i < user.scheduledTalks.length; ++i) {
             FirebaseFirestore.instance
                 .collection("Talks")
@@ -269,12 +291,13 @@ class TalkScheduleState extends State<TalkSchedule> {
                   value.data()["date"].toDate(),
                   value.data()["location"],
                   value.data()["duration"],
+                  value.data()["ocupation"],
                   user));
-              setState(() {
-              });
+              setState(() {});
             });
           }
-        } else setState(() {});
+        } else
+          setState(() {});
       });
     }
   }
@@ -293,12 +316,11 @@ class TalkScheduleState extends State<TalkSchedule> {
     }).then((value) {
       loaded = false;
       getScheduled();
-    } );
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: ScheduleAppBar(context),
       bottomNavigationBar: BottomNavigationBar(
