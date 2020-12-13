@@ -35,7 +35,7 @@ class TalksScreenState extends State<TalksScreen> {
                       doc["location"],
                       doc["duration"],
                       doc["ocupation"],
-                      User.fromData(value.data()),
+                      User.fromData(value),
                       doc["participants"],
                     ),
                   );
@@ -241,7 +241,7 @@ class TalkScheduleState extends State<TalkSchedule> {
       scheduled = [];
       loaded = true;
       FirebaseFirestore.instance.collection('Users').doc(currentUser).get().then((value) {
-        user = User.fromData(value.data());
+        user = User.fromData(value);
 
         if (user.scheduledTalks.length > 0) {
           for (int i = 0; i < user.scheduledTalks.length; ++i) {

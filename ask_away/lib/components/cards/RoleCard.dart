@@ -17,7 +17,7 @@ class RoleCard extends StatefulWidget {
 class RoleCardState extends State<RoleCard> {
   String role;
 
-  void changeRole(User user, String role, Talk talk) {
+  void changeRole(String role, Talk talk) {
     FirebaseFirestore.instance
         .collection("Talks")
         .doc("XWvNTQsEilhhKYhZfm25")
@@ -26,6 +26,16 @@ class RoleCardState extends State<RoleCard> {
 
   @override
   Widget build(BuildContext context) {
+    String userID = widget.user.id;
+
+    for (String role in widget.talk.participants.keys) {
+      List<dynamic> users = widget.talk.participants[role];
+
+      if (users.contains(userID)) {
+        print("Da pint");
+      }
+    }
+
     return Padding(
       padding: const EdgeInsets.only(
         left: 20,

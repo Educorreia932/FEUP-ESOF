@@ -4,8 +4,6 @@ import 'package:ask_away/models/Talk.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'TalkQuestionsScreen.dart';
-
 
 class TalkRolesScreen extends StatefulWidget {
   @override
@@ -27,12 +25,13 @@ class TalkRolesScreenState extends State<TalkRolesScreen> {
             (document) {
               List<dynamic> userScheduledTalks = document.data()["scheduled"];
 
-              if (userScheduledTalks.contains("XWvNTQsEilhhKYhZfm25")) users.add(User.fromData(document.data()));
+              if (userScheduledTalks.contains("XWvNTQsEilhhKYhZfm25"))
+                users.add(User.fromData(document));
             },
           );
 
           return Scaffold(
-            appBar: QuestionsScreenAppBar(context),
+            appBar: SimpleAppBar(context),
             body: Container(
               color: Color(0xFFECECEC),
               child: ListView(
@@ -45,4 +44,25 @@ class TalkRolesScreenState extends State<TalkRolesScreen> {
       },
     );
   }
+}
+
+Widget SimpleAppBar(BuildContext context) {
+  return AppBar(
+    toolbarHeight: 80,
+    backgroundColor: Color(0xFFECECEC),
+    leading: Padding(
+      padding: const EdgeInsets.only(left: 10),
+      child: new IconButton(
+        icon: new Icon(
+          Icons.arrow_back,
+          size: 40,
+          color: Colors.black,
+        ),
+        onPressed: () {
+          Navigator.pop(context);
+        },
+      ),
+    ),
+    elevation: 0.0,
+  );
 }
