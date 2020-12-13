@@ -2,11 +2,11 @@ import 'package:ask_away/components/cards/question_card/QuestionCard.dart';
 import 'package:ask_away/models/Question.dart';
 import 'package:ask_away/models/Talk.dart';
 import 'package:ask_away/screens/main_screen/MainScreen.dart';
-import 'package:ask_away/screens/talks_screen/TalkRolesScreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 Talk talk;
+final _scaffoldKey = GlobalKey<ScaffoldState>();
 
 class TalkQuestionsScreen extends StatefulWidget {
   @override
@@ -79,9 +79,11 @@ class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
             questionsQuery.docs.forEach((element) {
               questions.add(new Question(element["text"], element["votes"], element.id, element["author"]));
             });
+
             this.callback("none");
           });
         }
+
         this.callback("none");
         loaded = true;
       });
@@ -92,6 +94,7 @@ class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
         FocusScope.of(context).requestFocus(new FocusNode());
       },
       child: Scaffold(
+        key: _scaffoldKey,
         appBar: QuestionsScreenAppBar(context),
         body: Container(
           color: Color(0xFFECECEC),
@@ -217,7 +220,15 @@ Widget QuestionsScreenAppBar(BuildContext context) {
             color: Colors.black,
           ),
           onPressed: () {
-            Navigator.pushNamed(context, "/talk_roles", arguments: talk);
+            if (currentUser != talk.creator.id)
+              _scaffoldKey.currentState.showSnackBar(
+                SnackBar(
+                  content: Text("You must be the creator of the talk to assign roles"),
+                ),
+              );
+
+            else
+              Navigator.pushNamed(context, "/talk_roles", arguments: talk);
           },
         ),
       ),

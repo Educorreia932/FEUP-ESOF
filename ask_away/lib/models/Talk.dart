@@ -15,7 +15,8 @@ class Talk {
   int ocupation;
   Map<String, dynamic> participants;
 
-  Talk(this.id, this.title, this.description, this.date, this.location, int duration, this.ocupation, this.creator, Map<String, dynamic> participants) {
+  Talk(this.id, this.title, this.description, this.date, this.location, int duration, this.ocupation, this.creator,
+      Map<String, dynamic> participants) {
     this.duration = new Duration(minutes: duration);
 
     this.isExpanded = false;
@@ -33,6 +34,12 @@ class Talk {
     this.duration = new Duration(minutes: data["duration"]);
     this.ocupation = data["ocupation"];
     this.participants = data["participants"];
+
+    FirebaseFirestore.instance
+        .collection('Users')
+        .doc(data["creator"])
+        .get()
+        .then((value) => this.creator = User.fromData(value));
 
     this.isExpanded = false;
   }

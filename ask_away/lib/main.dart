@@ -1,3 +1,4 @@
+import 'package:ask_away/screens/BuildWaitingScreen.dart';
 import 'package:ask_away/screens/authentication/LoginScreen.dart';
 import 'package:ask_away/screens/authentication/RegisterScreen.dart';
 import 'package:ask_away/screens/main_screen/MainScreen.dart';
@@ -54,12 +55,12 @@ class MyApp extends StatelessWidget {
 
         else if (snapshot.hasError) {
           print("Error");
-          return Container();
+          return BuildWaitingScreen();
         }
 
         else {
           print("Loading...");
-          return Container();
+          return BuildWaitingScreen();
         }
       },
     );
