@@ -28,11 +28,12 @@ class RoleCardState extends State<RoleCard> {
   Widget build(BuildContext context) {
     String userID = widget.user.id;
 
-    for (String role in widget.talk.participants.keys) {
-      List<dynamic> users = widget.talk.participants[role];
+    for (String userRole in widget.talk.participants.keys) {
+      List<dynamic> users = widget.talk.participants[userRole];
 
       if (users.contains(userID)) {
-        print("Da pint");
+        role = userRole;
+        break;
       }
     }
 
@@ -66,7 +67,7 @@ class RoleCardState extends State<RoleCard> {
                   RadioListTile(
                     title: Text("Atendee"),
                     activeColor: Colors.red,
-                    value: "atendee",
+                    value: "atendees",
                     groupValue: role,
                     onChanged: (String value) {
                       setState(() {
@@ -77,7 +78,7 @@ class RoleCardState extends State<RoleCard> {
                   RadioListTile(
                     title: Text("Moderator"),
                     activeColor: Colors.red,
-                    value: "moderator",
+                    value: "moderators",
                     groupValue: role,
                     onChanged: (String value) {
                       setState(() {
@@ -88,7 +89,7 @@ class RoleCardState extends State<RoleCard> {
                   RadioListTile(
                     title: Text("Speaker"),
                     activeColor: Colors.red,
-                    value: "speaker",
+                    value: "speakers",
                     groupValue: role,
                     onChanged: (String value) {
                       setState(() {
