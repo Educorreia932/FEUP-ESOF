@@ -31,7 +31,8 @@ class TalkRolesScreenState extends State<TalkRolesScreen> {
           return Scaffold(
             appBar: QuestionsScreenAppBar(context),
             body: Container(
-              child: Column(
+              color: Color(0xFFECECEC),
+              child: ListView(
                 children: users.map<RoleCard>((User user) => RoleCard(user)).toList(),
               ),
             ),

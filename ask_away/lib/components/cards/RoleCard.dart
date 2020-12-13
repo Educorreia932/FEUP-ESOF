@@ -16,42 +16,71 @@ class RoleCardState extends State<RoleCard> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.white,
-      child: Column(
-        children: [
-          Text(widget.user.username),
-          RadioListTile(
-            title: Text("Atendee"),
-            value: "atendee",
-            groupValue: role,
-            onChanged: (String value) {
-              setState(() {
-                role = value;
-              });
-            },
-          ),
-          RadioListTile(
-            title: Text("Moderator"),
-            value: "moderator",
-            groupValue: role,
-            onChanged: (String value) {
-              setState(() {
-                role = value;
-              });
-            },
-          ),
-          RadioListTile(
-            title: Text("Speaker"),
-            value: "speaker",
-            groupValue: role,
-            onChanged: (String value) {
-              setState(() {
-                role = value;
-              });
-            },
-          )
-        ],
+    return Padding(
+      padding: const EdgeInsets.only(
+        left: 20,
+        right: 20,
+      ),
+      child: Container(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(
+                bottom: 10,
+                top: 15,
+              ),
+              child: Text(
+                widget.user.username,
+                style: TextStyle(
+                  fontSize: 25,
+                ),
+              ),
+            ),
+            Container(
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.all(Radius.circular(20))
+              ),
+              child: Column(
+                children: [
+                  RadioListTile(
+                    title: Text("Atendee"),
+                    activeColor: Colors.red,
+                    value: "atendee",
+                    groupValue: role,
+                    onChanged: (String value) {
+                      setState(() {
+                        role = value;
+                      });
+                    },
+                  ),
+                  RadioListTile(
+                    title: Text("Moderator"),
+                    activeColor: Colors.red,
+                    value: "moderator",
+                    groupValue: role,
+                    onChanged: (String value) {
+                      setState(() {
+                        role = value;
+                      });
+                    },
+                  ),
+                  RadioListTile(
+                    title: Text("Speaker"),
+                    activeColor: Colors.red,
+                    value: "speaker",
+                    groupValue: role,
+                    onChanged: (String value) {
+                      setState(() {
+                        role = value;
+                      });
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
