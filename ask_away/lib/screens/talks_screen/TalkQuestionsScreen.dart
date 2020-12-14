@@ -9,10 +9,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
-
 List<String> censoredWords;
-
-
 
 Future<String> loadAsset() async {
   return await rootBundle.loadString('assets/censoredWords.txt');
@@ -21,7 +18,6 @@ Future<String> loadAsset() async {
 void loadCensoredWords(){
   loadAsset().then((value) {LineSplitter ls = new LineSplitter(); censoredWords = ls.convert(value);});
 }
-
 
 Talk talk;
 final _scaffoldKey = GlobalKey<ScaffoldState>();
