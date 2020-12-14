@@ -13,11 +13,13 @@ class TalksScreen extends StatefulWidget {
   @override
   State<TalksScreen> createState() => TalksScreenState();
 }
+enum SortingOptions{MostOccupants, LeastOccupants, NameA_Z,NameZ_A, Shortest, Longest, DateDesc, DateAsc}
 
 class TalksScreenState extends State<TalksScreen> {
   bool loaded = false;
   List<Talk> talks = [];
   List<dynamic> scheduledIds = [];
+  SortingOptions sorter=SortingOptions.MostOccupants;
 
   void addTalks() {
     if (!loaded) {
@@ -46,6 +48,70 @@ class TalksScreenState extends State<TalksScreen> {
         loaded = true;
       });
     }
+  }
+
+  void sortTalks(){
+    setState(
+            () {
+          switch(sorter) {
+            case SortingOptions.MostOccupants:
+              talks.sort(
+                    (a, b) {
+                  return b.ocupation.compareTo(a.ocupation);
+                },);
+              break;
+            case SortingOptions.LeastOccupants:
+              talks.sort(
+                    (a, b) {
+                  return a.ocupation.compareTo(b.ocupation);
+                },);
+              break;
+
+            case SortingOptions.NameA_Z:
+              talks.sort(
+                    (a, b) {
+                  return a.title.toLowerCase().compareTo(b.title.toLowerCase());
+                },);
+              break;
+            case SortingOptions.NameZ_A:
+              talks.sort(
+                    (a, b) {
+                  return b.title.toLowerCase().compareTo(a.title.toLowerCase());
+                },);
+              break;
+            case SortingOptions.Shortest:
+              talks.sort(
+                    (a, b) {
+                  return a.duration.compareTo(b.duration);
+                },);
+              break;
+            case SortingOptions.Longest:
+              talks.sort(
+                    (a, b) {
+                  return b.duration.compareTo(a.duration);
+                },);
+              break;
+            case SortingOptions.DateDesc:
+              talks.sort(
+                    (a, b) {
+                  return a.date.compareTo(b.date);
+                },);
+              break;
+            case SortingOptions.DateAsc:
+              talks.sort(
+                    (a, b) {
+                  return b.date.compareTo(a.date);
+                },);
+              break;
+            default:
+              talks.sort(
+                    (a, b) {
+                  return b.ocupation.compareTo(a.ocupation);
+                },);
+              break;
+          }
+        },
+    );
   }
 
   void updateScheduled(String talkId, bool scheduled) {
@@ -100,6 +166,41 @@ class TalksScreenState extends State<TalksScreen> {
                   fontSize: 38,
                 ),
               ),
+            ),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(
+                    left: 230.0,
+                  ),),
+
+                DropdownButton(
+                  hint: Text('Sort Options'),
+                  value: sorter,
+                  onChanged: (newValue) {
+                    setState(() {
+                      sorter = newValue;
+                      sortTalks();
+                    });
+                  },
+
+                  iconEnabledColor: Colors.grey[600],
+                  underline: Container(
+                    height:1,
+                    color: Colors.grey[400],
+                  ),
+                  items: SortingOptions.values.map((sortValue) {
+                    return DropdownMenuItem(
+                      child:new Text(sortValue.toString().split('.').last,
+                        textAlign: TextAlign.left,
+                      ),
+                      value: sortValue,
+                    );
+                  }).toList(),
+                ),
+
+              ],
             ),
             Expanded(
               child: Container(
