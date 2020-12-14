@@ -32,10 +32,7 @@ class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
   List<Question> questions = [];
   bool loaded = false;
   String talkTitle = "";
-  SortingOptions sorter=SortingOptions.MostVotes;
-
-
-
+  SortingOptions sorter = SortingOptions.MostVotes;
 
   void voteForQuestion(Question question){
     DocumentReference userRef = FirebaseFirestore.instance.collection('Users').doc(currentUser);
@@ -142,21 +139,31 @@ class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
   }
 
   void addQuestion(String question, String talkId,BuildContext context) {
+    String userRole = talk.getUserRole(currentUser);
 
-    if(!verifyQuestionWords(question)){
+    if (userRole == "" || userRole == "speakers") {
+      Scaffold.of(context).showSnackBar(SnackBar(
+        content: Text(
+            "You're not authorized to submit questions"),
+        backgroundColor: Color(0xFFE11D1D),
+      ));
+
+      return;
+    }
+
+    else if(!verifyQuestionWords(question)){
       Scaffold.of(context).showSnackBar(SnackBar(
         content: Text(
             "Invalid words are present in the question submitted, "
                 "please rewrite your question!"),
         backgroundColor: Color(0xFFE11D1D),
       ));
+
       return;
     }
 
-    if(!verifyEqualQuestions(question,context))
+    else if(!verifyEqualQuestions(question,context))
       return;
-
-
 
     if (question != "") {
       // Call the user's CollectionReference to add a new user

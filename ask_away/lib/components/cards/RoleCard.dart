@@ -18,7 +18,7 @@ class RoleCardState extends State<RoleCard> {
   String role;
 
   RoleCardState(User user, Talk talk) {
-    role = talk.getUserRole(user);
+    role = talk.getUserRole(user.id);
   }
 
   void removePreviousRole() {
