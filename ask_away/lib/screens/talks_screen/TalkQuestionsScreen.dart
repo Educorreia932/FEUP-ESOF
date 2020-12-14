@@ -166,10 +166,10 @@ class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
       // Call the user's CollectionReference to add a new user
       FirebaseFirestore.instance
           .collection('Questions')
-          .add({'text': question, 'votes': 0, 'author': currentUser}).then(
+          .add({'text': question, 'votes': 0, 'author': currentUser, 'accepted': false}).then(
         (value) => setState(
           () {
-            questions.add(new Question(question, 0, value.id, currentUser));
+            questions.add(new Question(question, 0, value.id, currentUser, false));
             FirebaseFirestore.instance.collection('Talks').doc(talkId).update(
               {
                 "questions": FieldValue.arrayUnion([value.id])
@@ -244,6 +244,7 @@ class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
   @override
   Widget build(BuildContext context) {
     String talkId = ModalRoute.of(context).settings.arguments;
+    bool isModerator = false;
 
     if (!loaded) {
       List<String> questionsIds;
@@ -251,8 +252,11 @@ class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
         talk = Talk.fromData(value);
         talkTitle = value.data()["title"];
         questionsIds = List.from(value.data()['questions']);
+        List<dynamic> attendees = talk.participants["atendees"];
 
-        if (questionsIds.isNotEmpty) {
+        isModerator = attendees.contains(currentUser);
+
+        if(questionsIds.isNotEmpty && isModerator){
           questions = [];
           FirebaseFirestore.instance
               .collection('Questions')
@@ -260,7 +264,22 @@ class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
               .get()
               .then((questionsQuery) {
             questionsQuery.docs.forEach((element) {
-              questions.add(new Question(element["text"], element["votes"], element.id, element["author"]));
+              questions.add(new Question(element["text"], element["votes"], element.id, element["author"], element["accepted"]));
+            });
+
+            this.callback("none");
+          });
+        }
+        else if (questionsIds.isNotEmpty) {
+          questions = [];
+          FirebaseFirestore.instance
+              .collection('Questions')
+              .where('accepted',isEqualTo: true)
+              .where(FieldPath.documentId, whereIn: questionsIds)
+              .get()
+              .then((questionsQuery) {
+            questionsQuery.docs.forEach((element) {
+              questions.add(new Question(element["text"], element["votes"], element.id, element["author"], element["accepted"]));
             });
 
             this.callback("none");
