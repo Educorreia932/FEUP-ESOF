@@ -25,7 +25,7 @@ class TalkRolesScreenState extends State<TalkRolesScreen> {
             (document) {
               List<dynamic> userScheduledTalks = document.data()["scheduled"];
 
-              if (userScheduledTalks.contains("XWvNTQsEilhhKYhZfm25"))
+              if (userScheduledTalks.contains(talk.id))
                 users.add(User.fromData(document));
             },
           );
