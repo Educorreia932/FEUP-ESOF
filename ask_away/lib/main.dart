@@ -53,13 +53,13 @@ class MyApp extends StatelessWidget {
             ),
           );
         }
-
         else if (snapshot.hasError) {
           print("Error");
+          return Container();
         }
-
         else {
           print("Loading...");
+          return Container();
         }
       },
     );
