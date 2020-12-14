@@ -443,10 +443,10 @@ Widget QuestionsScreenAppBar(BuildContext context) {
             color: Colors.black,
           ),
           onPressed: () {
-            if (currentUser != talk.creator.id)
+            if (currentUser != talk.creator.id && talk.getUserRole(currentUser) != "moderators")
               _scaffoldKey.currentState.showSnackBar(
                 SnackBar(
-                  content: Text("You must be the creator of the talk to assign roles"),
+                  content: Text("You don't have the authorization to assign roles"),
                 ),
               );
 
