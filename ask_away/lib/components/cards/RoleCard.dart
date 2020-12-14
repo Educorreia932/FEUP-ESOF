@@ -11,11 +11,15 @@ class RoleCard extends StatefulWidget {
   RoleCard(this.user, this.talk);
 
   @override
-  State<StatefulWidget> createState() => RoleCardState();
+  State<StatefulWidget> createState() => RoleCardState(this.user, this.talk);
 }
 
 class RoleCardState extends State<RoleCard> {
   String role;
+
+  RoleCardState(User user, Talk talk) {
+    role = talk.getUserRole(user);
+  }
 
   void removePreviousRole() {
     String userID = widget.user.id;
@@ -43,19 +47,6 @@ class RoleCardState extends State<RoleCard> {
 
   @override
   Widget build(BuildContext context) {
-    String userID = widget.user.id;
-    print(widget.talk.participants);
-
-    // for (String userRole in widget.talk.participants.keys) {
-    //   List<dynamic> users = widget.talk.participants[userRole];
-    //
-    //   if (users.contains(userID)) {
-    //     role = userRole;
-    //
-    //     break;
-    //   }
-    // }
-
     return Padding(
       padding: const EdgeInsets.only(
         left: 20,

@@ -43,4 +43,15 @@ class Talk {
 
     this.isExpanded = false;
   }
+
+  String getUserRole(User user) {
+    for (String userRole in participants.keys) {
+      List<dynamic> users = participants[userRole];
+
+      if (users.contains(user.id))
+        return userRole;
+    }
+
+    return "";
+  }
 }
