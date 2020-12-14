@@ -25,8 +25,7 @@ class TalkRolesScreenState extends State<TalkRolesScreen> {
             (document) {
               List<dynamic> userScheduledTalks = document.data()["scheduled"];
 
-              if (userScheduledTalks.contains(talk.id))
-                users.add(User.fromData(document));
+              if (userScheduledTalks.contains(talk.id)) users.add(User.fromData(document));
             },
           );
 
@@ -34,9 +33,18 @@ class TalkRolesScreenState extends State<TalkRolesScreen> {
             appBar: SimpleAppBar(context),
             body: Container(
               color: Color(0xFFECECEC),
-              child: ListView(
-                children: users.map<RoleCard>((User user) => RoleCard(user, talk)).toList(),
-              ),
+              child: users.isEmpty
+                  ? Center(
+                      child: Text(
+                      "There are no participants for this talk.",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                      ),
+                    ))
+                  : ListView(
+                      children: users.map<RoleCard>((User user) => RoleCard(user, talk)).toList(),
+                    ),
             ),
           );
         } else

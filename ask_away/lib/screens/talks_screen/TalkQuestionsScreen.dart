@@ -9,10 +9,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
-
 List<String> censoredWords;
-
-
 
 Future<String> loadAsset() async {
   return await rootBundle.loadString('assets/censoredWords.txt');
@@ -21,7 +18,6 @@ Future<String> loadAsset() async {
 void loadCensoredWords(){
   loadAsset().then((value) {LineSplitter ls = new LineSplitter(); censoredWords = ls.convert(value);});
 }
-
 
 Talk talk;
 final _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -36,10 +32,7 @@ class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
   List<Question> questions = [];
   bool loaded = false;
   String talkTitle = "";
-  SortingOptions sorter=SortingOptions.MostVotes;
-
-
-
+  SortingOptions sorter = SortingOptions.MostVotes;
 
   void voteForQuestion(Question question){
     DocumentReference userRef = FirebaseFirestore.instance.collection('Users').doc(currentUser);
@@ -146,30 +139,40 @@ class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
   }
 
   void addQuestion(String question, String talkId,BuildContext context) {
+    String userRole = talk.getUserRole(currentUser);
 
-    if(!verifyQuestionWords(question)){
+    if (userRole == "" || userRole == "speakers") {
+      Scaffold.of(context).showSnackBar(SnackBar(
+        content: Text(
+            "You're not authorized to submit questions"),
+        backgroundColor: Color(0xFFE11D1D),
+      ));
+
+      return;
+    }
+
+    else if(!verifyQuestionWords(question)){
       Scaffold.of(context).showSnackBar(SnackBar(
         content: Text(
             "Invalid words are present in the question submitted, "
                 "please rewrite your question!"),
         backgroundColor: Color(0xFFE11D1D),
       ));
+
       return;
     }
 
-    if(!verifyEqualQuestions(question,context))
+    else if(!verifyEqualQuestions(question,context))
       return;
-
-
 
     if (question != "") {
       // Call the user's CollectionReference to add a new user
       FirebaseFirestore.instance
           .collection('Questions')
-          .add({'text': question, 'votes': 0, 'author': currentUser}).then(
+          .add({'text': question, 'votes': 0, 'author': currentUser, 'accepted': false}).then(
         (value) => setState(
           () {
-            questions.add(new Question(question, 0, value.id, currentUser));
+            questions.add(new Question(question, 0, value.id, currentUser, false));
             FirebaseFirestore.instance.collection('Talks').doc(talkId).update(
               {
                 "questions": FieldValue.arrayUnion([value.id])
@@ -244,6 +247,7 @@ class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
   @override
   Widget build(BuildContext context) {
     String talkId = ModalRoute.of(context).settings.arguments;
+    bool isModerator = false;
 
     if (!loaded) {
       List<String> questionsIds;
@@ -251,8 +255,11 @@ class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
         talk = Talk.fromData(value);
         talkTitle = value.data()["title"];
         questionsIds = List.from(value.data()['questions']);
+        List<dynamic> attendees = talk.participants["atendees"];
 
-        if (questionsIds.isNotEmpty) {
+        isModerator = attendees.contains(currentUser);
+
+        if(questionsIds.isNotEmpty && isModerator){
           questions = [];
           FirebaseFirestore.instance
               .collection('Questions')
@@ -260,7 +267,22 @@ class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
               .get()
               .then((questionsQuery) {
             questionsQuery.docs.forEach((element) {
-              questions.add(new Question(element["text"], element["votes"], element.id, element["author"]));
+              questions.add(new Question(element["text"], element["votes"], element.id, element["author"], element["accepted"]));
+            });
+
+            this.callback("none");
+          });
+        }
+        else if (questionsIds.isNotEmpty) {
+          questions = [];
+          FirebaseFirestore.instance
+              .collection('Questions')
+              .where('accepted',isEqualTo: true)
+              .where(FieldPath.documentId, whereIn: questionsIds)
+              .get()
+              .then((questionsQuery) {
+            questionsQuery.docs.forEach((element) {
+              questions.add(new Question(element["text"], element["votes"], element.id, element["author"], element["accepted"]));
             });
 
             this.callback("none");
@@ -440,10 +462,10 @@ Widget QuestionsScreenAppBar(BuildContext context) {
             color: Colors.black,
           ),
           onPressed: () {
-            if (currentUser != talk.creator.id)
+            if (currentUser != talk.creator.id && talk.getUserRole(currentUser) != "moderators")
               _scaffoldKey.currentState.showSnackBar(
                 SnackBar(
-                  content: Text("You must be the creator of the talk to assign roles"),
+                  content: Text("You don't have the authorization to assign roles"),
                 ),
               );
 

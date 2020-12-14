@@ -23,6 +23,14 @@ class QuestionCardState extends State<QuestionCard> {
     FirebaseFirestore.instance.collection('Questions').doc(questionToRemove).delete().then((value) => this.widget._callback(questionToRemove));
   }
 
+  void acceptQuestion(){
+    print("Accept question: ");
+    print(this.widget._question.id);
+    String questionToRemove = this.widget._question.id;
+    FirebaseFirestore.instance.collection('Questions').doc(questionToRemove).update({"accepted": true}).then((value) {this.widget._callback("none"); this.widget._question.accepted = true;setState(() {
+    });});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -44,7 +52,28 @@ class QuestionCardState extends State<QuestionCard> {
                     fontSize: 21,
                   ),
                 ),
-                if(currentUser == this.widget._question.user)
+                if(!this.widget._question.accepted)
+                  Row(
+                      children: [
+                        IconButton(
+                          icon: Icon(
+                            Icons.check_circle,
+                            size: 28,
+                            color: Color(0xFFFF5656),
+                          ),
+                          onPressed: () => this.acceptQuestion(),
+                        ),
+                        IconButton(
+                          icon: Icon(
+                            Icons.cancel_sharp,
+                            size: 28,
+                            color: Color(0xFFFF5656),
+                          ),
+                          onPressed: () => this.deleteQuestion(),
+                        )
+                      ]
+                  )
+                else if(currentUser == this.widget._question.user)
                   IconButton(
                     icon: Icon(
                       Icons.delete_forever,
