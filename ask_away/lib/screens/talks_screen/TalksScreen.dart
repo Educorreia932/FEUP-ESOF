@@ -21,37 +21,29 @@ class TalksScreenState extends State<TalksScreen> {
 
   void addTalks() {
     if (!loaded) {
-      FirebaseFirestore.instance
-          .collection('Users')
-          .doc(currentUser)
-          .get()
-          .then((valueUser) {
+      FirebaseFirestore.instance.collection('Users').doc(currentUser).get().then((valueUser) {
         scheduledIds = valueUser.data()["scheduled"];
-        FirebaseFirestore.instance
-            .collection('Talks')
-            .get()
-            .then((QuerySnapshot querySnapshot) {
-          talks = [];
-          querySnapshot.docs.forEach((doc) {
-            FirebaseFirestore.instance
-                .collection('Users')
-                .doc(doc["creator"])
-                .get()
-                .then((value) {
-              talks.add(new Talk(
-                  doc.id,
-                  doc["title"],
-                  doc["description"],
-                  doc["date"].toDate(),
-                  doc["location"],
-                  doc["duration"],
-                  doc["ocupation"],
-                  User.fromData(value.data())));
-              setState(() {});
+        FirebaseFirestore.instance.collection('Talks').get().then((QuerySnapshot querySnapshot) => {
+              querySnapshot.docs.forEach((doc) {
+                FirebaseFirestore.instance.collection('Users').doc(doc["creator"]).get().then((value) {
+                  talks.add(
+                    new Talk(
+                      doc.id,
+                      doc["title"],
+                      doc["description"],
+                      doc["date"].toDate(),
+                      doc["location"],
+                      doc["duration"],
+                      doc["ocupation"],
+                      User.fromData(value),
+                      doc["participants"],
+                    ),
+                  );
+                  setState(() {});
+                });
+              }),
             });
-          });
-          loaded = true;
-        });
+        loaded = true;
       });
     }
   }
@@ -71,6 +63,7 @@ class TalksScreenState extends State<TalksScreen> {
                   .ocupation++;
             }));
       });
+      FirebaseFirestore.instance.collection('Talks').doc(talkId).update({'ocupation': FieldValue.increment(1)});
     } else {
       FirebaseFirestore.instance.collection('Users').doc(currentUser).update({
         'scheduled': FieldValue.arrayRemove([talkId])
@@ -85,15 +78,15 @@ class TalksScreenState extends State<TalksScreen> {
                   .ocupation--;
             }));
       });
+      FirebaseFirestore.instance.collection('Talks').doc(talkId).update({'ocupation': FieldValue.increment(-1)});
     }
     // setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
-    // if(!loaded)
-    // addTalk("Teste Talk", "wow isto é teste", new DateTime.utc(2020, 9, 11, 18, 30), "aqui", 70);
     addTalks();
+
     return Scaffold(
       appBar: TalksScreenAppBar(context),
       body: Container(
@@ -222,10 +215,7 @@ class ScheduledTalkSource extends CalendarDataSource {
 
   @override
   DateTime getEndTime(int index) {
-    return appointments
-        .elementAt(index)
-        .date
-        .add(appointments.elementAt(index).duration);
+    return appointments.elementAt(index).date.add(appointments.elementAt(index).duration);
   }
 
   @override
@@ -270,29 +260,23 @@ class TalkScheduleState extends State<TalkSchedule> {
     if (!loaded) {
       scheduled = [];
       loaded = true;
-      FirebaseFirestore.instance
-          .collection('Users')
-          .doc(currentUser)
-          .get()
-          .then((value) {
-        user = User.fromData(value.data());
+      FirebaseFirestore.instance.collection('Users').doc(currentUser).get().then((value) {
+        user = User.fromData(value);
 
         if (user.scheduledTalks.length > 0) {
           for (int i = 0; i < user.scheduledTalks.length; ++i) {
-            FirebaseFirestore.instance
-                .collection("Talks")
-                .doc(user.scheduledTalks[i])
-                .get()
-                .then((value) {
+            FirebaseFirestore.instance.collection("Talks").doc(user.scheduledTalks[i]).get().then((value) {
               scheduled.add(new Talk(
-                  value.id,
-                  value.data()["title"],
-                  value.data()["description"],
-                  value.data()["date"].toDate(),
-                  value.data()["location"],
-                  value.data()["duration"],
-                  value.data()["ocupation"],
-                  user));
+                value.id,
+                value.data()["title"],
+                value.data()["description"],
+                value.data()["date"].toDate(),
+                value.data()["location"],
+                value.data()["duration"],
+                value.data()["ocupation"],
+                user,
+                null,
+              ));
               setState(() {});
             });
           }
@@ -325,8 +309,7 @@ class TalkScheduleState extends State<TalkSchedule> {
       appBar: ScheduleAppBar(context),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-              icon: Icon(Icons.calendar_today), label: "Calendar"),
+          BottomNavigationBarItem(icon: Icon(Icons.calendar_today), label: "Calendar"),
           BottomNavigationBarItem(icon: Icon(Icons.list), label: "List"),
         ],
         currentIndex: _selectedIndex,
@@ -358,17 +341,15 @@ class TalkScheduleState extends State<TalkSchedule> {
                     view: _calendarView,
                     dataSource: new ScheduledTalkSource(scheduled),
                     //getDataSource
-                    monthViewSettings: MonthViewSettings(
-                        appointmentDisplayMode:
-                            MonthAppointmentDisplayMode.appointment),
+                    monthViewSettings:
+                        MonthViewSettings(appointmentDisplayMode: MonthAppointmentDisplayMode.appointment),
                     showNavigationArrow: true,
                     // showDatePickerButton: true,
                   ));
                 } else {
                   return Expanded(
                     child: ListView(
-                      padding:
-                          const EdgeInsets.only(left: 17, right: 17, top: 10),
+                      padding: const EdgeInsets.only(left: 17, right: 17, top: 10),
                       children: scheduled.map<TalkCard>((Talk talk) {
                         for (String t in user.scheduledTalks) {
                           if (t == talk.id) {

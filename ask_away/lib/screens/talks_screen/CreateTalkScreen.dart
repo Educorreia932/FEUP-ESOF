@@ -58,9 +58,9 @@ class CreateTalkScreenState extends State<CreateTalkScreen> {
     return false;
   }
 
-  bool validateAndSubmit() {
+  Future<void> validateAndSubmit() async {
     if (validateAndSave()) {
-      return addTalk(_title, _description, _startdate, _location, _duration);
+      addTalk(_title, _description, _startdate, _location, _duration);
     }
     return false;
   }
@@ -87,32 +87,27 @@ class CreateTalkScreenState extends State<CreateTalkScreen> {
               ),
               Container(
                 margin: EdgeInsets.only(
-                    left: MediaQuery.of(context).size.width / 15,
-                    right: MediaQuery.of(context).size.width / 15),
+                    left: MediaQuery.of(context).size.width / 15, right: MediaQuery.of(context).size.width / 15),
                 child: TalkEntryField(TalkEntryFieldType.TITLE),
               ),
               Container(
                 margin: EdgeInsets.only(
-                    left: MediaQuery.of(context).size.width / 15,
-                    right: MediaQuery.of(context).size.width / 15),
+                    left: MediaQuery.of(context).size.width / 15, right: MediaQuery.of(context).size.width / 15),
                 child: TalkEntryField(TalkEntryFieldType.DESCRIPTION),
               ),
               Container(
                 margin: EdgeInsets.only(
-                    left: MediaQuery.of(context).size.width / 15,
-                    right: MediaQuery.of(context).size.width / 15),
+                    left: MediaQuery.of(context).size.width / 15, right: MediaQuery.of(context).size.width / 15),
                 child: TalkEntryField(TalkEntryFieldType.LOCATION),
               ),
               Container(
                 margin: EdgeInsets.only(
-                    left: MediaQuery.of(context).size.width / 15,
-                    right: MediaQuery.of(context).size.width / 15),
+                    left: MediaQuery.of(context).size.width / 15, right: MediaQuery.of(context).size.width / 15),
                 child: TalkEntryField(TalkEntryFieldType.STARTDATE),
               ),
               Container(
                 margin: EdgeInsets.only(
-                    left: MediaQuery.of(context).size.width / 15,
-                    right: MediaQuery.of(context).size.width / 15),
+                    left: MediaQuery.of(context).size.width / 15, right: MediaQuery.of(context).size.width / 15),
                 child: TalkEntryField(TalkEntryFieldType.ENDDATE),
               ),
               Padding(
@@ -122,40 +117,20 @@ class CreateTalkScreenState extends State<CreateTalkScreen> {
                   bottom: 40,
                   top: 40,
                 ),
-                child: Builder(
-                  builder: (context1) {
-                    return SimpleButton(
-                      "Submit talk",
-                          () {
-                        if (validateAndSubmit()) {
-                          Scaffold.of(context1)
-                              .showSnackBar(SnackBar(
-                              backgroundColor: Colors.green,
-                              content: Text("Talk submitted successfuly")));
-                        } else {
-                          Scaffold.of(context1)
-                              .showSnackBar(SnackBar(backgroundColor: Colors.red,
-                                content: Text("Invalid talk info")));
-                        }
-                      },
-                      37,
-                      Color(0xFFE11D1D),
-                    );
-                  },
-                )
+                child: SimpleButton(
+                  "Submit talk",
+                  validateAndSubmit,
+                  37,
+                  Color(0xFFE11D1D),
+                ),
               ),
             ]),
           )),
     );
   }
 
-  bool addTalk(String title, String description, DateTime date, String location,
-      int duration) {
-    if (title != "" &&
-        description != "" &&
-        date != null &&
-        location != "" &&
-        duration != null) {
+  bool addTalk(String title, String description, DateTime date, String location, int duration) {
+    if (title != "" && description != "" && date != null && location != "" && duration != null) {
       // Call the user's CollectionReference to add a new user
       FirebaseFirestore.instance.collection('Talks').add({
         'title': title,
@@ -163,12 +138,11 @@ class CreateTalkScreenState extends State<CreateTalkScreen> {
         'date': date,
         'location': location,
         'duration': duration,
-        'creator' : currentUser,
-        'ocupation' : 0,
-
+        'creator': currentUser,
+        'participants': null,
       });
-      return true;
     }
-    return false;
+
+    return  false;
   }
 }

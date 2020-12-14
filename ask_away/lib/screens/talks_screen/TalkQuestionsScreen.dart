@@ -3,8 +3,10 @@ import 'package:ask_away/models/Question.dart';
 import 'package:ask_away/models/Talk.dart';
 import 'package:ask_away/screens/main_screen/MainScreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:ask_away/screens/talks_screen/TalksScreen.dart';
 import 'package:flutter/material.dart';
+
+Talk talk;
+final _scaffoldKey = GlobalKey<ScaffoldState>();
 
 class TalkQuestionsScreen extends StatefulWidget {
   @override
@@ -19,17 +21,20 @@ class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
   void addQuestion(String question, String talkId) {
     if (question != "") {
       // Call the user's CollectionReference to add a new user
-      FirebaseFirestore.instance.collection('Questions').add({
-        'text': question,
-        'votes': 0,
-        'author': currentUser
-      }).then((value) => setState(() {
+      FirebaseFirestore.instance
+          .collection('Questions')
+          .add({'text': question, 'votes': 0, 'author': currentUser}).then(
+        (value) => setState(
+          () {
             questions.add(new Question(question, 0, value.id, currentUser));
-            FirebaseFirestore.instance.collection('Talks').doc(talkId)
-            .update({
-              "questions": FieldValue.arrayUnion([value.id])
-            });
-          }));
+            FirebaseFirestore.instance.collection('Talks').doc(talkId).update(
+              {
+                "questions": FieldValue.arrayUnion([value.id])
+              },
+            );
+          },
+        ),
+      );
     }
   }
 
@@ -59,15 +64,12 @@ class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
 
     if (!loaded) {
       List<String> questionsIds;
-      FirebaseFirestore.instance
-          .collection('Talks')
-          .doc(talkId)
-          .get()
-          .then((talk) {
-        talkTitle = talk.data()["title"];
-        questionsIds = List.from(talk.data()['questions']);
+      FirebaseFirestore.instance.collection('Talks').doc(talkId).get().then((value) {
+        talk = Talk.fromData(value);
+        talkTitle = value.data()["title"];
+        questionsIds = List.from(value.data()['questions']);
 
-        if(questionsIds.isNotEmpty) {
+        if (questionsIds.isNotEmpty) {
           questions = [];
           FirebaseFirestore.instance
               .collection('Questions')
@@ -75,12 +77,13 @@ class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
               .get()
               .then((questionsQuery) {
             questionsQuery.docs.forEach((element) {
-              questions.add(new Question(element["text"], element["votes"],
-                  element.id, element["author"]));
+              questions.add(new Question(element["text"], element["votes"], element.id, element["author"]));
             });
+
             this.callback("none");
           });
         }
+
         this.callback("none");
         loaded = true;
       });
@@ -91,6 +94,7 @@ class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
         FocusScope.of(context).requestFocus(new FocusNode());
       },
       child: Scaffold(
+        key: _scaffoldKey,
         appBar: QuestionsScreenAppBar(context),
         body: Container(
           color: Color(0xFFECECEC),
@@ -120,8 +124,7 @@ class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
                           scrollDirection: Axis.vertical,
                           shrinkWrap: true,
                           children: questions
-                              .map<QuestionCard>((Question question) =>
-                                  QuestionCard(question, callback))
+                              .map<QuestionCard>((Question question) => QuestionCard(question, callback))
                               .toList(),
                         ),
                       ),
@@ -212,12 +215,20 @@ Widget QuestionsScreenAppBar(BuildContext context) {
         ),
         child: new IconButton(
           icon: new Icon(
-            Icons.sort,
+            Icons.people_alt_rounded,
             size: 40,
             color: Colors.black,
           ),
           onPressed: () {
-            Navigator.pop(context);
+            if (currentUser != talk.creator.id)
+              _scaffoldKey.currentState.showSnackBar(
+                SnackBar(
+                  content: Text("You must be the creator of the talk to assign roles"),
+                ),
+              );
+
+            else
+              Navigator.pushNamed(context, "/talk_roles", arguments: talk);
           },
         ),
       ),

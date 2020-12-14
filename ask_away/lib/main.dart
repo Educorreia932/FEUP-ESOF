@@ -1,8 +1,10 @@
+import 'package:ask_away/screens/BuildWaitingScreen.dart';
 import 'package:ask_away/screens/authentication/LoginScreen.dart';
 import 'package:ask_away/screens/authentication/RegisterScreen.dart';
 import 'package:ask_away/screens/main_screen/MainScreen.dart';
 import 'package:ask_away/screens/talks_screen/TalkQuestionsScreen.dart';
 import 'package:ask_away/screens/talks_screen/CreateTalkScreen.dart';
+import 'package:ask_away/screens/talks_screen/TalkRolesScreen.dart';
 import 'package:ask_away/screens/talks_screen/TalksScreen.dart';
 import 'package:ask_away/services/Auth.dart';
 import 'package:ask_away/services/AuthProvider.dart';
@@ -45,6 +47,7 @@ class MyApp extends StatelessWidget {
                 '/talks': (context) => TalksScreen(),
                 '/talk_questions': (context) => TalkQuestionsScreen(),
                 '/talk_creation': (context) => CreateTalkScreen(),
+                '/talk_roles': (context) => TalkRolesScreen(),
               },
             ),
           );
@@ -52,12 +55,10 @@ class MyApp extends StatelessWidget {
 
         else if (snapshot.hasError) {
           print("Error");
-          return Container();
         }
 
         else {
           print("Loading...");
-          return Container();
         }
       },
     );
