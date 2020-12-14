@@ -13,72 +13,146 @@ class TalksScreen extends StatefulWidget {
   @override
   State<TalksScreen> createState() => TalksScreenState();
 }
+enum SortingOptions{MostOccupants, LeastOccupants, NameA_Z,NameZ_A, Shortest, Longest, DateDesc, DateAsc}
 
 class TalksScreenState extends State<TalksScreen> {
   bool loaded = false;
   List<Talk> talks = [];
   List<dynamic> scheduledIds = [];
+  SortingOptions sorter=SortingOptions.MostOccupants;
 
   void addTalks() {
     if (!loaded) {
-      FirebaseFirestore.instance
-          .collection('Users')
-          .doc(currentUser)
-          .get()
-          .then((valueUser) {
+      FirebaseFirestore.instance.collection('Users').doc(currentUser).get().then((valueUser) {
         scheduledIds = valueUser.data()["scheduled"];
-        FirebaseFirestore.instance
-            .collection('Talks')
-            .get()
-            .then((QuerySnapshot querySnapshot) => {
-                  querySnapshot.docs.forEach((doc) {
-                    FirebaseFirestore.instance
-                        .collection('Users')
-                        .doc(doc["creator"])
-                        .get()
-                        .then((value) {
-                      talks.add(new Talk(
-                          doc.id,
-                          doc["title"],
-                          doc["description"],
-                          doc["date"].toDate(),
-                          doc["location"],
-                          doc["duration"],
-                          doc["ocupation"],
-                          User.fromData(value.data())));
-                      setState(() {});
-                    });
-                  }),
+        FirebaseFirestore.instance.collection('Talks').get().then((QuerySnapshot querySnapshot) => {
+              querySnapshot.docs.forEach((doc) {
+                FirebaseFirestore.instance.collection('Users').doc(doc["creator"]).get().then((value) {
+                  talks.add(
+                    new Talk(
+                      doc.id,
+                      doc["title"],
+                      doc["description"],
+                      doc["date"].toDate(),
+                      doc["location"],
+                      doc["duration"],
+                      doc["ocupation"],
+                      User.fromData(value),
+                      doc["participants"],
+                    ),
+                  );
+                  setState(() {});
                 });
+              }),
+            });
         loaded = true;
       });
     }
+  }
+
+  void sortTalks(){
+    setState(
+            () {
+          switch(sorter) {
+            case SortingOptions.MostOccupants:
+              talks.sort(
+                    (a, b) {
+                  return b.ocupation.compareTo(a.ocupation);
+                },);
+              break;
+            case SortingOptions.LeastOccupants:
+              talks.sort(
+                    (a, b) {
+                  return a.ocupation.compareTo(b.ocupation);
+                },);
+              break;
+
+            case SortingOptions.NameA_Z:
+              talks.sort(
+                    (a, b) {
+                  return a.title.toLowerCase().compareTo(b.title.toLowerCase());
+                },);
+              break;
+            case SortingOptions.NameZ_A:
+              talks.sort(
+                    (a, b) {
+                  return b.title.toLowerCase().compareTo(a.title.toLowerCase());
+                },);
+              break;
+            case SortingOptions.Shortest:
+              talks.sort(
+                    (a, b) {
+                  return a.duration.compareTo(b.duration);
+                },);
+              break;
+            case SortingOptions.Longest:
+              talks.sort(
+                    (a, b) {
+                  return b.duration.compareTo(a.duration);
+                },);
+              break;
+            case SortingOptions.DateDesc:
+              talks.sort(
+                    (a, b) {
+                  return a.date.compareTo(b.date);
+                },);
+              break;
+            case SortingOptions.DateAsc:
+              talks.sort(
+                    (a, b) {
+                  return b.date.compareTo(a.date);
+                },);
+              break;
+            default:
+              talks.sort(
+                    (a, b) {
+                  return b.ocupation.compareTo(a.ocupation);
+                },);
+              break;
+          }
+        },
+    );
   }
 
   void updateScheduled(String talkId, bool scheduled) {
     if (!scheduled) {
       FirebaseFirestore.instance.collection('Users').doc(currentUser).update({
         'scheduled': FieldValue.arrayUnion([talkId])
+      }).then((value) {
+        FirebaseFirestore.instance.collection('Talks').doc(talkId).update({
+          'ocupation': FieldValue.increment(1)
+        }).then((value1) => setState(() {
+              scheduledIds.add(talkId);
+              talks
+                  .elementAt(
+                      talks.indexWhere((element) => element.id == talkId))
+                  .ocupation++;
+            }));
       });
-      FirebaseFirestore.instance.collection('Talks').doc(talkId).update({
-        'ocupation': FieldValue.increment(1)
-      });
+      FirebaseFirestore.instance.collection('Talks').doc(talkId).update({'ocupation': FieldValue.increment(1)});
     } else {
       FirebaseFirestore.instance.collection('Users').doc(currentUser).update({
         'scheduled': FieldValue.arrayRemove([talkId])
+      }).then((value) {
+        FirebaseFirestore.instance.collection('Talks').doc(talkId).update({
+          'ocupation': FieldValue.increment(-1)
+        }).then((value1) => setState(() {
+              scheduledIds.remove(talkId);
+              talks
+                  .elementAt(
+                      talks.indexWhere((element) => element.id == talkId))
+                  .ocupation--;
+            }));
       });
-      FirebaseFirestore.instance.collection('Talks').doc(talkId).update({
-        'ocupation':FieldValue.increment(-1)
-      });
+      FirebaseFirestore.instance.collection('Talks').doc(talkId).update({'ocupation': FieldValue.increment(-1)});
     }
-    //setState(() {});
+    // setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
-    // if(!loaded)
-    // addTalk("Teste Talk", "wow isto é teste", new DateTime.utc(2020, 9, 11, 18, 30), "aqui", 70);
     addTalks();
+
     return Scaffold(
       appBar: TalksScreenAppBar(context),
       body: Container(
@@ -92,6 +166,41 @@ class TalksScreenState extends State<TalksScreen> {
                   fontSize: 38,
                 ),
               ),
+            ),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(
+                    left: 230.0,
+                  ),),
+
+                DropdownButton(
+                  hint: Text('Sort Options'),
+                  value: sorter,
+                  onChanged: (newValue) {
+                    setState(() {
+                      sorter = newValue;
+                      sortTalks();
+                    });
+                  },
+
+                  iconEnabledColor: Colors.grey[600],
+                  underline: Container(
+                    height:1,
+                    color: Colors.grey[400],
+                  ),
+                  items: SortingOptions.values.map((sortValue) {
+                    return DropdownMenuItem(
+                      child:new Text(sortValue.toString().split('.').last,
+                        textAlign: TextAlign.left,
+                      ),
+                      value: sortValue,
+                    );
+                  }).toList(),
+                ),
+
+              ],
             ),
             Expanded(
               child: Container(
@@ -207,10 +316,7 @@ class ScheduledTalkSource extends CalendarDataSource {
 
   @override
   DateTime getEndTime(int index) {
-    return appointments
-        .elementAt(index)
-        .date
-        .add(appointments.elementAt(index).duration);
+    return appointments.elementAt(index).date.add(appointments.elementAt(index).duration);
   }
 
   @override
@@ -255,34 +361,28 @@ class TalkScheduleState extends State<TalkSchedule> {
     if (!loaded) {
       scheduled = [];
       loaded = true;
-      FirebaseFirestore.instance
-          .collection('Users')
-          .doc(currentUser)
-          .get()
-          .then((value) {
-        user = User.fromData(value.data());
+      FirebaseFirestore.instance.collection('Users').doc(currentUser).get().then((value) {
+        user = User.fromData(value);
 
-        if(user.scheduledTalks.length > 0) {
+        if (user.scheduledTalks.length > 0) {
           for (int i = 0; i < user.scheduledTalks.length; ++i) {
-            FirebaseFirestore.instance
-                .collection("Talks")
-                .doc(user.scheduledTalks[i])
-                .get()
-                .then((value) {
+            FirebaseFirestore.instance.collection("Talks").doc(user.scheduledTalks[i]).get().then((value) {
               scheduled.add(new Talk(
-                  value.id,
-                  value.data()["title"],
-                  value.data()["description"],
-                  value.data()["date"].toDate(),
-                  value.data()["location"],
-                  value.data()["duration"],
-                  value.data()["ocupation"],
-                  user));
-              setState(() {
-              });
+                value.id,
+                value.data()["title"],
+                value.data()["description"],
+                value.data()["date"].toDate(),
+                value.data()["location"],
+                value.data()["duration"],
+                value.data()["ocupation"],
+                user,
+                null,
+              ));
+              setState(() {});
             });
           }
-        } else setState(() {});
+        } else
+          setState(() {});
       });
     }
   }
@@ -301,18 +401,16 @@ class TalkScheduleState extends State<TalkSchedule> {
     }).then((value) {
       loaded = false;
       getScheduled();
-    } );
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: ScheduleAppBar(context),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-              icon: Icon(Icons.calendar_today), label: "Calendar"),
+          BottomNavigationBarItem(icon: Icon(Icons.calendar_today), label: "Calendar"),
           BottomNavigationBarItem(icon: Icon(Icons.list), label: "List"),
         ],
         currentIndex: _selectedIndex,
@@ -338,23 +436,21 @@ class TalkScheduleState extends State<TalkSchedule> {
                 if (_selectedIndex == 0) {
                   return Expanded(
                       child: SfCalendar(
-                    allowedViews: [CalendarView.day, CalendarView.month],
+                    // allowedViews: [CalendarView.day, CalendarView.month],
                     backgroundColor: Color(0xFFECECEC),
                     initialDisplayDate: _jumpToTime,
                     view: _calendarView,
                     dataSource: new ScheduledTalkSource(scheduled),
                     //getDataSource
-                    monthViewSettings: MonthViewSettings(
-                        appointmentDisplayMode:
-                            MonthAppointmentDisplayMode.appointment),
+                    monthViewSettings:
+                        MonthViewSettings(appointmentDisplayMode: MonthAppointmentDisplayMode.appointment),
                     showNavigationArrow: true,
-                    showDatePickerButton: true,
+                    // showDatePickerButton: true,
                   ));
                 } else {
                   return Expanded(
                     child: ListView(
-                      padding:
-                          const EdgeInsets.only(left: 17, right: 17, top: 10),
+                      padding: const EdgeInsets.only(left: 17, right: 17, top: 10),
                       children: scheduled.map<TalkCard>((Talk talk) {
                         for (String t in user.scheduledTalks) {
                           if (t == talk.id) {

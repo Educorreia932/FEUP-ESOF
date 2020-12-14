@@ -153,6 +153,7 @@ MainScreenAppBar(GlobalKey<ScaffoldState> _drawerKey, bool _isLoggedIn, BuildCon
         child: _isLoggedIn
             ? UserIcon()
             : InkWell(
+                key: Key("loginButton"),
                 onTap: () {
                   Navigator.pushNamed(context, '/login');
                 },

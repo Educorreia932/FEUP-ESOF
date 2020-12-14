@@ -45,14 +45,13 @@ class _VotingComponentState extends State<VotingComponent> {
     String questionID = widget.question.id;
     DocumentReference userRef = FirebaseFirestore.instance.collection('Users').doc(currentUser);
 
-    print(elapsedTime);
-
     if (elapsedTime >= 1000) {
       FirebaseFirestore.instance.runTransaction(
         (transaction) {
           return transaction.get(userRef).then(
             (value) {
-              user = User.fromData(value.data());
+              print(value.id);
+              user = User.fromData(value);
               DocumentReference docRef = FirebaseFirestore.instance.collection("Questions").doc(questionID);
 
               // User didn't have a vote in this question

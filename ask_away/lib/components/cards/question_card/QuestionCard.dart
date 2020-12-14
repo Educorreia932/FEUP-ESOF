@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ask_away/screens/main_screen/MainScreen.dart';
 
-import 'components/VotingComponent.dart';
+import 'VotingComponent.dart';
 
 class QuestionCard extends StatefulWidget {
   Question _question;
@@ -15,10 +15,7 @@ class QuestionCard extends StatefulWidget {
   State<StatefulWidget> createState() => QuestionCardState();
 }
 
-
-
 class QuestionCardState extends State<QuestionCard> {
-
   void deleteQuestion(){
     print("Deleting question: ");
     print(this.widget._question.id);

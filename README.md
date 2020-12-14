@@ -139,16 +139,66 @@ Briefly describe each use case mentioning the following:
    
 ### User stories
 - As an atendee I want to have my questions answered however i do without breaking the flow of the lecture so that all atendees can focus and not lose their line of thought.
-- As a participant I want to be able to up/downvote other atendees' questions so the best questions are answered first.  
+```gherkin
+Feature: Submit a Question
+    Scenario: Users can submit questions to be answered later
+        Given I am logged in
+        When I fill "questionField" with "MyQuestion"
+        Then I tap the "submitQuestionButton" button
+        Then I expect "MyQuestion" is present
+```
+- As a participant I want to be able to up/downvote other atendees' questions so the best questions are answered first. 
+```gherkin
+Feature: Vote a question
+    Scenario: Users can vote questions to prioritise to be answered
+        Given I am logged in
+        When I tap the "upvoteQuestionButton" button
+        Then Question will have one more vote
+
+        Given I am logged in and already voted
+        When I tap the "upvoteQuestionButton" button
+        Then Question will have one less vote
+```
 **Question Screen Mock Up**  
 <img src="mockups/Talk%20Questions.png" alt="Question Screen" width="200"/>
 
 - As a moderator i want to be able to filter questions that the atendees have so that the speakers have time to answer the questions most people have.  
 - As a speaker I would like to be able to have an admin filtering unwanted questions for me.  
+```gherkin
+Feature: Filter a question
+    Scenario: Moderators can filter question users have
+        Given I am logged in on a Moderator account
+        When I tap the "acceptQuestionButton" button
+        Then Question will be accepted and shown to everyone
+
+        Given I am logged in on a Moderator account
+        When I tap the "rejectQuestionButton" button
+        Then Question will be deleted
+```
 - As a speaker I want to easily schedule a talk allowing people to book attendance early.  
+```gherkin
+Feature: Schedule a talk
+    Scenario: Speakers can create new talks early
+        Given I am logged in
+        When I tap the "createTalkButton" button
+        Then I fill "talkTitleField" with "test" and "talkDescriptionField" with "test" and "talkLocationField" with "test" and "starDateField" and "endDateField"
+        And I tap "submitTalkButton"
+        And I expect "talkScreen" to be present
+```
+<img src="mockups/Talk%20Create.png" alt="Talk Create Screen" width="200"/> <br/>
+
+
 - As a user I want to know a talk's occupation so I can know if I can still attend it.  
+```gherkin
+Feature: Check occupation
+    Scenario: Users can check talk occupation
+        Given I am logged in
+        When "talkScreen" is present
+        Then I expect "talkAttendance" to be present
+```
 **Talk Screen Mock Up**  
 <img src="mockups/Talks%20Screen.png" alt="Talks Screen" width="200"/>
+
 
 ### Other Mock Ups
 **Login Screen Mock Up**  
