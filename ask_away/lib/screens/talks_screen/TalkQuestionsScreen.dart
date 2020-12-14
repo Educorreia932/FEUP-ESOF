@@ -9,10 +9,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
-
 List<String> censoredWords;
-
-
 
 Future<String> loadAsset() async {
   return await rootBundle.loadString('assets/censoredWords.txt');
@@ -21,7 +18,6 @@ Future<String> loadAsset() async {
 void loadCensoredWords(){
   loadAsset().then((value) {LineSplitter ls = new LineSplitter(); censoredWords = ls.convert(value);});
 }
-
 
 Talk talk;
 final _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -36,10 +32,7 @@ class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
   List<Question> questions = [];
   bool loaded = false;
   String talkTitle = "";
-  SortingOptions sorter=SortingOptions.MostVotes;
-
-
-
+  SortingOptions sorter = SortingOptions.MostVotes;
 
   void voteForQuestion(Question question){
     DocumentReference userRef = FirebaseFirestore.instance.collection('Users').doc(currentUser);
@@ -146,21 +139,31 @@ class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
   }
 
   void addQuestion(String question, String talkId,BuildContext context) {
+    String userRole = talk.getUserRole(currentUser);
 
-    if(!verifyQuestionWords(question)){
+    if (userRole == "" || userRole == "speakers") {
+      Scaffold.of(context).showSnackBar(SnackBar(
+        content: Text(
+            "You're not authorized to submit questions"),
+        backgroundColor: Color(0xFFE11D1D),
+      ));
+
+      return;
+    }
+
+    else if(!verifyQuestionWords(question)){
       Scaffold.of(context).showSnackBar(SnackBar(
         content: Text(
             "Invalid words are present in the question submitted, "
                 "please rewrite your question!"),
         backgroundColor: Color(0xFFE11D1D),
       ));
+
       return;
     }
 
-    if(!verifyEqualQuestions(question,context))
+    else if(!verifyEqualQuestions(question,context))
       return;
-
-
 
     if (question != "") {
       // Call the user's CollectionReference to add a new user
@@ -459,10 +462,10 @@ Widget QuestionsScreenAppBar(BuildContext context) {
             color: Colors.black,
           ),
           onPressed: () {
-            if (currentUser != talk.creator.id)
+            if (currentUser != talk.creator.id && talk.getUserRole(currentUser) != "moderators")
               _scaffoldKey.currentState.showSnackBar(
                 SnackBar(
-                  content: Text("You must be the creator of the talk to assign roles"),
+                  content: Text("You don't have the authorization to assign roles"),
                 ),
               );
 
