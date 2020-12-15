@@ -8,7 +8,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'EntryField.dart';
 import '../main_screen/MainScreen.dart';
-import 'LoginScreen.dart';
 
 String _email;
 String _username;

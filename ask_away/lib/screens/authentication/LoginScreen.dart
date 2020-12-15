@@ -104,7 +104,10 @@ class LoginScreenState extends State<LoginScreen> {
                 ),
                 child: TextButton(
                   key: Key("loginbutton"),
-                  child : Text("Login"),
+                  child : Text(
+                      "Login",
+                      style: TextStyle(fontSize: 25),
+                  ),
                   onPressed: validateAndSubmit,
 
                 ),
