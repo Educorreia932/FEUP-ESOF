@@ -232,6 +232,8 @@ Feature: Assign roles to talks
 
 To better understand the context of the software system, it is very useful to have a simple UML class diagram with all the key concepts (names, attributes) and relationships involved of the problem domain addressed by your module.
 
+![Domain Model Diagram](diagrams/Domain%20Model.png)
+
 ---
 
 ## Architecture and Design
@@ -257,6 +259,7 @@ Thanks to this separation, the screen module works with any amount of data (ques
 
 
 ### Physical architecture
+
 The physical architecture of our project relies on two separate blocks that communicate with each other via HTTPS requests.
 
 * The Client Side that represents the Ask Away App, installed on the user's smartphone created using flutter.
@@ -301,15 +304,19 @@ In order to let the atendees know how many people will attend the talk, when the
 Throughout the project development, we have worked by implementing multiple iterations:
 
 #### Iteration 1
+
 As we started working on the app, we focused our first iteration on learning the basics of the flutter engine, implementing the first pages and starting with the question rate system.
 
 #### Iteration 2
+
 In this iteration we dedicated time into continuing and improving on the work made in the first iteration, working on the app's menus, how to update pages and list data.
 
 #### Iteration 3
+
 The main focus in the third iteration was to get a database up and running to store all of the data. We decided to use a Firebase database and started changing the app's code to accomodate its use, storing and reading the data when needed, including user authentication. We also redesigned the app's appearance and made the ground work for the talks.
 
 #### Iteration 4
+
 With this last iteration our focus turned mostly to the details in the talks, as the different roles a user can have, talk occupation and the talk moderators funcionalities. We also spent time fixing some of the previously implemented funcionalities and developing acceptance tests.
 
 ---
