@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import '../main_screen/MainScreen.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart'as auth;
+import 'package:get/get.dart';
 import 'EntryField.dart';
 
 
@@ -37,6 +38,7 @@ class LoginScreen extends StatefulWidget {
 
 class LoginScreenState extends State<LoginScreen> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
 
 
   Future<void> signInWithGoogle() async {
@@ -69,14 +71,14 @@ class LoginScreenState extends State<LoginScreen> {
      auth.UserCredential authResult = await _auth.signInWithCredential(credential);
 
     print("anonymous assert");
-     auth.FirebaseUser user = authResult.user;
+     auth.User user = authResult.user;
 
     assert(!user.isAnonymous);
     assert(await user.getIdToken() != null);
 
 
     print("final assert");
-    final auth.FirebaseUser currentUser = _auth.currentUser;
+    final auth.User currentUser = _auth.currentUser;
     assert(user.uid == currentUser.uid);
 
     print('signInWithGoogle succeeded: $user');
@@ -106,7 +108,30 @@ class LoginScreenState extends State<LoginScreen> {
     validateAndSave();
 
     final BaseAuth auth = AuthProvider.of(context).auth;
-    final String userId = await auth.signInWithEmailAndPassword(_email, _password);
+    String userId;
+    try {
+      userId = await auth.signInWithEmailAndPassword(_email, _password);
+    }
+    catch(error){
+      print(error);
+      print(context);/*
+      GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+      Scaffold(
+          key: _scaffoldKey,
+
+      );
+      _scaffoldKey.showSnackBar(SnackBar(
+        content: Text("New Notification"),
+      ));
+      Get.showSnackbar(GetBar(
+          message: "Error with login $error",
+          backgroundColor: Color(0xFFE11D1D),
+          duration: Duration(seconds: 4),
+          snackPosition: SnackPosition.BOTTOM,
+      ));*/
+      return;
+    }
 
     print('User logged in: $userId');
 
