@@ -6,19 +6,20 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../main_screen/MainScreen.dart';
 import 'package:ask_away/models/Question.dart';
+import 'package:ask_away/models/Talk.dart';
 import 'package:ask_away/components/cards/question_card/UserQuestionCard.dart';
-
+import 'package:ask_away/components/cards/UserTalkCard.dart';
 
 class UserProfile extends StatefulWidget {
   @override
   UserProfileState createState() => new UserProfileState();
 }
 
-
 class UserProfileState extends State<UserProfile> {
   User user;
   bool loaded = false;
   List<Question> questions = [];
+  List<Talk> talks = [];
   int totalRep = 0;
 
   void getUserQuestions() {
@@ -27,14 +28,36 @@ class UserProfileState extends State<UserProfile> {
         .where("author", isEqualTo: currentUser)
         .get()
         .then((questionsQuery) {
-        questionsQuery.docs.forEach((element) {
+      questionsQuery.docs.forEach((element) {
         totalRep += element["votes"];
-        questions.add(new Question(
-            element["text"], element["votes"], element.id, element["author"],
-            element["accepted"]));
-          });
-        setState(() {});
+        questions.add(new Question(element["text"], element["votes"],
+            element.id, element["author"], element["accepted"]));
+      });
+      setState(() {});
+    });
+  }
 
+  void getUserTalks() {
+    FirebaseFirestore.instance
+        .collection('Talks')
+        .where("creator", isEqualTo: currentUser)
+        .get()
+        .then((questionsQuery) {
+      questionsQuery.docs.forEach((element) {
+        totalRep += element["ocupation"];
+        talks.add(new Talk(
+          element.id,
+          element["title"],
+          element["description"],
+          element["date"].toDate(),
+          element["location"],
+          element["duration"],
+          element["ocupation"],
+          user,
+          null,
+        ));
+      });
+      setState(() {});
     });
   }
 
@@ -46,20 +69,16 @@ class UserProfileState extends State<UserProfile> {
           .doc(currentUser)
           .snapshots()
           .first
-          .then((value) =>
-        {
-          user = new User(
-              value.data()["username"], value.data()["Reputation"],
-              value.data()["votes"]),
-          getUserQuestions(),
-          setState(() {})
-        }
-      );
+          .then((value) => {
+                user = new User(value.data()["username"],
+                    value.data()["Reputation"], value.data()["votes"]),
+                getUserQuestions(),
+                getUserTalks(),
+                setState(() {})
+              });
 
       loaded = true;
-
     }
-
 
     return Scaffold(
       appBar: UserProfileAppBar(context),
@@ -96,41 +115,29 @@ class UserProfileState extends State<UserProfile> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Container(
-                            width: MediaQuery
-                                .of(context)
-                                .size
-                                .width * 0.50,
+                            width: MediaQuery.of(context).size.width * 0.50,
                             child: RichText(
                               overflow: TextOverflow.ellipsis,
                               text: TextSpan(
-
                                 text: user != null ? user.username : "",
-
                                 style: TextStyle(
                                   color: Colors.black,
-                                  fontSize: MediaQuery
-                                      .of(context)
-                                      .size
-                                      .width * 0.06,
+                                  fontSize:
+                                      MediaQuery.of(context).size.width * 0.06,
                                 ),
                               ),
                             ),
                           ),
                           Container(
-                            width: MediaQuery
-                                .of(context)
-                                .size
-                                .width * 0.50,
+                            width: MediaQuery.of(context).size.width * 0.50,
                             child: RichText(
                               overflow: TextOverflow.ellipsis,
                               text: TextSpan(
                                 text: "Asking questions",
                                 style: TextStyle(
                                   color: Color(0xFFC8C8C8),
-                                  fontSize: MediaQuery
-                                      .of(context)
-                                      .size
-                                      .width * 0.045,
+                                  fontSize:
+                                      MediaQuery.of(context).size.width * 0.045,
                                 ),
                               ),
                             ),
@@ -172,20 +179,73 @@ class UserProfileState extends State<UserProfile> {
                 left: 20,
                 right: 20,
               ),
-              child: Column(
-                children: [
-                  SectionHeader("Asked Questions", questions.length),
-                  Expanded(
-                  child: ListView(
-                  scrollDirection: Axis.vertical,
-                    shrinkWrap: true,
-                    children: questions
-                        .map<UserQuestionCard>((Question question) => UserQuestionCard(question, user.username))
-                        .toList(),
+              child: PageView(
+                  controller: PageController(
+                    initialPage: 0,
                   ),
-                  ),
-                ],
-              ),
+                  scrollDirection: Axis.horizontal,
+                  children: [
+                    Column(
+                      children: [
+                        SectionHeader("Asked Questions", questions.length),
+                        Expanded(
+                          child: ListView(
+                            scrollDirection: Axis.vertical,
+                            shrinkWrap: true,
+                            children: questions
+                                .map<UserQuestionCard>((Question question) =>
+                                    UserQuestionCard(question, user.username))
+                                .toList(),
+                          ),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Talks",
+                              style: TextStyle(
+                                color: Color(0xFFE11D1D),
+                                fontSize: 25,
+                              ),
+                            ),
+                            Icon(
+                                Icons.arrow_forward,
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    Column(
+                      children: [
+                        SectionHeader("Planed Talks", talks.length),
+                        Expanded(
+                          child: ListView(
+                            scrollDirection: Axis.vertical,
+                            shrinkWrap: true,
+                            children: talks
+                                .map<UserTalkCard>((Talk talk) =>
+                                UserTalkCard(talk, user.username))
+                                .toList(),
+                          ),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.arrow_back
+                            ),
+                            Text(
+                              "Questions",
+                              style: TextStyle(
+                                color: Color(0xFFE11D1D),
+                                fontSize: 25,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+              ]),
             ),
           ),
         ],
@@ -271,5 +331,3 @@ class SectionHeader extends StatelessWidget {
     );
   }
 }
-
-
