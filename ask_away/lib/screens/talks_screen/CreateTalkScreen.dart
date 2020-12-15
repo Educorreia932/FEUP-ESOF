@@ -132,14 +132,19 @@ class CreateTalkScreenState extends State<CreateTalkScreen> {
   bool addTalk(String title, String description, DateTime date, String location, int duration) {
     if (title != "" && description != "" && date != null && location != "" && duration != null) {
       // Call the user's CollectionReference to add a new user
+      Map<String,List<String>> map = new Map();
+      map["atendees"] = [];
+      map["moderators"] = [];
+      map["speakers"] = [];
       FirebaseFirestore.instance.collection('Talks').add({
         'title': title,
         'description': description,
         'date': date,
+        'ocupation': 0,
         'location': location,
         'duration': duration,
         'creator': currentUser,
-        'participants': null,
+        'participants': map,
       });
     }
 
