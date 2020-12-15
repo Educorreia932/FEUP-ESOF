@@ -141,6 +141,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                       ),
                       recognizer: TapGestureRecognizer()
                         ..onTap = () {
+                          Navigator.pop(context);
                           Navigator.pushNamed(context, '/login');
                         },
                     ),
