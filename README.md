@@ -35,46 +35,47 @@ Thank you!
 ---
 
 ## Product Vision
-Help attendees get the most out of conferences they attend by answering the best questions they have.
+
+Help attendees get the most out of conferences they attend by submitting the questions they have on our platform to be answered by the speakers that are giving the lecture.
 
 ## Elevator Pitch
 
-For speakers who want to improve the speaker-participant interaction, Ask a Way is an app that guarentees that the questions asked are the ones that the atendees want to hear the most, by using a voting and moderating system that rewards the best questions. Atendees can submit new questions during a talk in our app, to be answered by the speaker without disrupting the talk. Behind every great answer is a great question.
+> Behind every great answer is a great question.
+
+For speakers who want to improve the speaker-participant interaction, **Ask Away** is an app that guarentees that the questions asked are the ones that the atendees want to hear the most, by using a voting and moderating system that rewards the best questions.  
+Atendees can submit new questions during a talk in our app, to be answered by the speaker without disrupting the talk. 
 
 ---
 ## Requirements
 
-### Use case diagram 
+### Use Case diagram 
 
-![Use Cases](Use%20Cases.png)
+![Use Cases](diagrams/Use%20Cases.png)
 
-Create a use-case diagram in UML with all high-level use cases possibly addressed by your module.
-
-Give each use case a concise, results-oriented name. Use cases should reflect the tasks the user needs to be able to accomplish using the system. Include an action verb and a noun. 
-
-Briefly describe each use case mentioning the following:
+Briefly description of each use case of the product.
 
 **Ask questions**
 
-* **Actor**. Attendee. 
-* **Description**. Give the attendees the possibility to ask the questions they have in their mind to be cleared. 
-* **Preconditions**. User must be logged in to the app and on the correct talk page. 
-* **Postconditions**. Question is deleavered to a moderator to filter the useful questions.
+* **Actor:** Attendee. 
+* **Description:** Give the attendees the possibility to ask the questions they have in their mind to be clarified. 
+* **Preconditions:** User must be logged in to the app and on the correct talk page. 
+* **Postconditions:** Question is deleavered to a moderator to filter the useful questions.
 
-* **Normal Flow**. 
+* **Normal Flow:**
   1. Attendee enters the correct talk page.
   2. Click on the bar at the bottom of the screen.
   3. A keyboard will pop up.
   4. The user types the question they want to ask.
   5. The user precess the submit button.
   6. The qestion is fast-fowarded to a moderator to apreve of the question.
-* **Alternative Flows and Exceptions**. 
+
+* **Alternative Flows and Exceptions:** 
   1. The user is not logged in.
   2. The question wont be posted.
 
 **Vote questions**
 
-* **Actor**. Attendee. 
+* **Actor:** Attendee. 
 * **Description**. Gives the attendees power to choose and vote on the questions they want to ear. 
 * **Preconditions**. User must be logged in to the app and on the correct talk page. 
 * **Postconditions**. A counter is incremented/decreased which represents the like to dislike ratio a question has.
@@ -234,6 +235,7 @@ To better understand the context of the software system, it is very useful to ha
 ---
 
 ## Architecture and Design
+
 The architecture of a software system encompasses the set of key decisions about its overall organization. 
 
 A well written architecture document is brief but reduces the amount of time it takes new programmers to a project to understand the code to feel able to make modifications and enhancements.
@@ -243,6 +245,7 @@ To document the architecture requires describing the decomposition of the system
 In this section you should start by briefly describing the overall components of the project and their interrelations. You should also describe how you solved typical problems you may have encountered, pointing to well-known architectural and design patterns, if applicable.
 
 ### Logical architecture
+
 In this project, our group decided to mainly use to architectural patters:
 * Client-server pattern
 * MVC (Model, view, controller)
@@ -262,7 +265,10 @@ The physical architecture of our project relies on two separate blocks that comm
 
 The connection between the Firebase and the user's app is done only when needed in order to reduce the time wasted in HTTP requests, making the app run faster and smoother. <br/> When entering a new screen all data that's needed to build the interface is loaded and in case any of update to such data, another request is sent to the Firebase server, also updating the information present there.
 
+![Physical Architecure Diagram](diagrams/Physical%20Architecture.png)
+
 ### Prototype
+
 To help on validating all the architectural, design and technological decisions made, we usually implement a vertical prototype, a thin vertical slice of the system.
 
 In this subsection please describe in more detail which, and how, user(s) story(ies) were implemented.
@@ -327,11 +333,5 @@ For the purpose of ESOF, we will use a very simple approach, just to manage feat
 
 ## Project management
 
-For the project management we used [Github Projects](https://github.com/features/project-management/com), as it is a good yet simple tool to keep track of the project status, including user stories, notes and issues. It also is incorporated into the Github repository, which makes the development easier as there is no need for other tools. 
-
-
----
-
-## Evolution - contributions to open-cx
-
-Describe your contribution to open-cx (iteration 5), linking to the appropriate pull requests, issues, documentation.
+For the project management we used [Github Projects](https://github.com/features/project-management/com), as it is a good yet simple tool to keep track of the project status, including user stories, notes and issues.  
+It also is incorporated into the Github repository, which makes the development easier as there is no need for other tools. 
