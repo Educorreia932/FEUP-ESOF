@@ -1,8 +1,7 @@
-import 'package:ask_away/screens/authentication/LoginScreen.dart';
-import 'package:ask_away/screens/authentication/RegisterScreen.dart';
 import 'package:ask_away/services/Auth.dart';
 import 'package:ask_away/services/AuthProvider.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/material.dart';
 
 class DrawerComponent extends StatelessWidget {
@@ -17,39 +16,24 @@ class DrawerComponent extends StatelessWidget {
       child: ListView(
         children: <Widget>[
           DrawerHeader(
-            child: RichText(
-              text: TextSpan(
-                children: [
-                  TextSpan(
-                    text: "Logged in as\n",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 35,
+            child: Align(
+              alignment: Alignment.center,
+              child: RichText(
+                text: TextSpan(
+                  children: [
+                    TextSpan(
+                      text: "More Options.",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 35,
+                      ),
                     ),
-                  ),
-                  TextSpan(
-                    text: "Educorreia932",
-                    style: TextStyle(
-                      color: Color(0xFFE11D1D),
-                      fontSize: 35,
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
-          ListTile(
-            title: Text(
-              'Settings',
-              style: TextStyle(
-                fontWeight: FontWeight.normal,
-                fontSize: 35,
-              ),
-            ),
-            onTap: () {
-              Navigator.pop(context);
-            },
-          ),
+
           ListTile(
             title: Text(
               'About',
@@ -59,7 +43,7 @@ class DrawerComponent extends StatelessWidget {
               ),
             ),
             onTap: () {
-              Navigator.pop(context);
+              _launchURL();
             },
           ),
           ListTile(
@@ -78,4 +62,15 @@ class DrawerComponent extends StatelessWidget {
       ),
     );
   }
+
+  void _launchURL() async {
+    const url = 'https://github.com/FEUP-ESOF-2020-21/open-cx-t1g2-escama';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
 }
+
+
