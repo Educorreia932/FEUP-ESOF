@@ -255,9 +255,9 @@ class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
         talk = Talk.fromData(value);
         talkTitle = value.data()["title"];
         questionsIds = List.from(value.data()['questions']);
-        List<dynamic> attendees = talk.participants["atendees"];
+        List<dynamic> mods = talk.participants["moderators"];
 
-        isModerator = attendees.contains(currentUser);
+        isModerator = mods.contains(currentUser);
 
         if(questionsIds.isNotEmpty && isModerator){
           questions = [];

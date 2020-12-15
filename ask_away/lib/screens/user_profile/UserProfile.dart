@@ -5,6 +5,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../main_screen/MainScreen.dart';
+import 'package:ask_away/models/Question.dart';
+import 'package:ask_away/components/cards/question_card/UserQuestionCard.dart';
+
 
 class UserProfile extends StatefulWidget {
   @override
@@ -12,28 +15,51 @@ class UserProfile extends StatefulWidget {
 }
 
 
-
 class UserProfileState extends State<UserProfile> {
   User user;
   bool loaded = false;
+  List<Question> questions = [];
+  int totalRep = 0;
+
+  void getUserQuestions() {
+    FirebaseFirestore.instance
+        .collection('Questions')
+        .where("author", isEqualTo: currentUser)
+        .get()
+        .then((questionsQuery) {
+        questionsQuery.docs.forEach((element) {
+        totalRep += element["votes"];
+        questions.add(new Question(
+            element["text"], element["votes"], element.id, element["author"],
+            element["accepted"]));
+          });
+        setState(() {});
+
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-
-    if(!loaded) {
+    if (!loaded) {
       FirebaseFirestore.instance
           .collection('Users')
           .doc(currentUser)
           .snapshots()
           .first
-          .then((value) => {
-        user = new User(value.data()["username"], value.data()["Reputation"], value.data()["votes"]),
-        setState(() {})
-      }
+          .then((value) =>
+        {
+          user = new User(
+              value.data()["username"], value.data()["Reputation"],
+              value.data()["votes"]),
+          getUserQuestions(),
+          setState(() {})
+        }
       );
+
       loaded = true;
+
     }
-    
+
 
     return Scaffold(
       appBar: UserProfileAppBar(context),
@@ -70,7 +96,10 @@ class UserProfileState extends State<UserProfile> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Container(
-                            width : MediaQuery.of(context).size.width*0.50,
+                            width: MediaQuery
+                                .of(context)
+                                .size
+                                .width * 0.50,
                             child: RichText(
                               overflow: TextOverflow.ellipsis,
                               text: TextSpan(
@@ -79,20 +108,29 @@ class UserProfileState extends State<UserProfile> {
 
                                 style: TextStyle(
                                   color: Colors.black,
-                                  fontSize: MediaQuery.of(context).size.width*0.06,
+                                  fontSize: MediaQuery
+                                      .of(context)
+                                      .size
+                                      .width * 0.06,
                                 ),
                               ),
                             ),
                           ),
                           Container(
-                            width : MediaQuery.of(context).size.width*0.50,
+                            width: MediaQuery
+                                .of(context)
+                                .size
+                                .width * 0.50,
                             child: RichText(
                               overflow: TextOverflow.ellipsis,
                               text: TextSpan(
                                 text: "Asking questions",
                                 style: TextStyle(
                                   color: Color(0xFFC8C8C8),
-                                  fontSize: MediaQuery.of(context).size.width*0.045,
+                                  fontSize: MediaQuery
+                                      .of(context)
+                                      .size
+                                      .width * 0.045,
                                 ),
                               ),
                             ),
@@ -114,7 +152,7 @@ class UserProfileState extends State<UserProfile> {
                             ),
                           ),
                           Text(
-                            user != null ? user.reputation.toString() : "",
+                            user != null ? totalRep.toString() : "",
                             style: TextStyle(
                               fontSize: 30,
                             ),
@@ -136,17 +174,16 @@ class UserProfileState extends State<UserProfile> {
               ),
               child: Column(
                 children: [
-                  SectionHeader("Asked Questions", 5),
-                  Column(
-                    children: [
-                      // QuestionCard(),
-                      // SizedBox(
-                      //   height: 10,
-                      // ),
-                      // QuestionCard(),
-                    ],
+                  SectionHeader("Asked Questions", questions.length),
+                  Expanded(
+                  child: ListView(
+                  scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    children: questions
+                        .map<UserQuestionCard>((Question question) => UserQuestionCard(question, user.username))
+                        .toList(),
                   ),
-                  SectionHeader("Answers", 3),
+                  ),
                 ],
               ),
             ),

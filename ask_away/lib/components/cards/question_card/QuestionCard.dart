@@ -16,6 +16,9 @@ class QuestionCard extends StatefulWidget {
 }
 
 class QuestionCardState extends State<QuestionCard> {
+  String questionUser = "";
+  bool loaded = false;
+
   void deleteQuestion(){
     print("Deleting question: ");
     print(this.widget._question.id);
@@ -31,8 +34,26 @@ class QuestionCardState extends State<QuestionCard> {
     });});
   }
 
+  void getQuestionUser()
+  {
+      FirebaseFirestore.instance
+          .collection('Users')
+          .doc(this.widget._question.user)
+          .snapshots()
+          .first
+          .then((value)
+          {
+            questionUser = value["username"];
+            setState(() {loaded=true;});
+          }
+      );
+  }
+
   @override
   Widget build(BuildContext context) {
+    if(!loaded) {
+      getQuestionUser();
+    }
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(18)),
@@ -47,7 +68,7 @@ class QuestionCardState extends State<QuestionCard> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "Educorreia932",
+                  questionUser,
                   style: TextStyle(
                     fontSize: 21,
                   ),
@@ -83,14 +104,6 @@ class QuestionCardState extends State<QuestionCard> {
                     onPressed: () => this.deleteQuestion(),
                   )
                 ,
-                IconButton(
-                    onPressed: null,
-                    icon: Icon(
-                      Icons.bookmark_border,
-                      size: 27,
-                      color: Color(0xFFFF5656),
-                    )
-                ),
               ],
             ),
             RichText(
@@ -108,27 +121,6 @@ class QuestionCardState extends State<QuestionCard> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 VotingComponent(widget._question.votes, widget._callback, widget._question),
-                RichText(
-                  text: TextSpan(
-                    style: TextStyle(
-                      fontSize: 16,
-                    ),
-                    children: [
-                      TextSpan(
-                        text: "33 minutes",
-                        style: TextStyle(
-                          color: Color(0xFFFF5656),
-                        ),
-                      ),
-                      TextSpan(
-                        text: " ago",
-                        style: TextStyle(
-                          color: Color(0xFF979797),
-                        ),
-                      ),
-                    ],
-                  ),
-                )
               ],
             )
           ],
