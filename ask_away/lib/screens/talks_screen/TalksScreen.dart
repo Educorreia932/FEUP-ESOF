@@ -129,7 +129,6 @@ class TalksScreenState extends State<TalksScreen> {
                   .ocupation++;
             }));
       });
-      FirebaseFirestore.instance.collection('Talks').doc(talkId).update({'ocupation': FieldValue.increment(1)});
     } else {
       FirebaseFirestore.instance.collection('Users').doc(currentUser).update({
         'scheduled': FieldValue.arrayRemove([talkId])
@@ -144,7 +143,6 @@ class TalksScreenState extends State<TalksScreen> {
                   .ocupation--;
             }));
       });
-      FirebaseFirestore.instance.collection('Talks').doc(talkId).update({'ocupation': FieldValue.increment(-1)});
     }
     // setState(() {});
   }
