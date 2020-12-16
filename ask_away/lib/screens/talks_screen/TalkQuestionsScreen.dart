@@ -13,15 +13,11 @@ import 'package:flutter/services.dart' show rootBundle;
 List<String> censoredWords = [];
 
 Future<String> loadAsset() async {
-  print("loading");
-  String result = await rootBundle.loadString('assets/censoredWords.txt');
-  print("loaded");
-  return result;
+  return await rootBundle.loadString('assets/censoredWords.txt');
 }
 
 void loadCensoredWords() async {
   await loadAsset().then((value) {LineSplitter ls = new LineSplitter(); censoredWords = ls.convert(value);});
-  print(censoredWords);
 }
 
 Talk talk;

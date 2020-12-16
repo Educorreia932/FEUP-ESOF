@@ -50,17 +50,18 @@ void main() {
   });
 
   testWidgets('Verifies question words', (WidgetTester tester) async {
-    // TestWidgetsFlutterBinding.ensureInitialized();
-    //
-    // await tester.pumpWidget(talkQuestions);
-    //
-    // final TalkQuestionsScreenState myWidgetState = tester.state(find.byType(TalkQuestionsScreen));
-    //
-    // bool result = myWidgetState.verifyQuestionWords("this is a normal question :)");
-    // expect(result, isTrue);
-    //
-    // result = myWidgetState.verifyQuestionWords("goddamn this is a cool question :)");
-    // expect(result, isFalse);
+    TestWidgetsFlutterBinding.ensureInitialized();
+
+    await tester.pumpWidget(talkQuestions);
+
+    final TalkQuestionsScreenState myWidgetState = tester.state(find.byType(TalkQuestionsScreen));
+
+    await loadCensoredWords();
+    bool result = myWidgetState.verifyQuestionWords("this is a normal question :)");
+    expect(result, isTrue);
+
+    result = myWidgetState.verifyQuestionWords("goddamn this is a cool question :)");
+    expect(result, isFalse);
   });
 
 }
