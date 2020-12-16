@@ -10,12 +10,18 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
+List<String> censoredWords = [];
 
 Future<String> loadAsset() async {
   print("loading");
   String result = await rootBundle.loadString('assets/censoredWords.txt');
   print("loaded");
   return result;
+}
+
+void loadCensoredWords() async {
+  await loadAsset().then((value) {LineSplitter ls = new LineSplitter(); censoredWords = ls.convert(value);});
+  print(censoredWords);
 }
 
 Talk talk;
@@ -32,12 +38,6 @@ class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
   bool loaded = false;
   String talkTitle = "";
   SortingOptions sorter = SortingOptions.MostVotes;
-  List<String> censoredWords = [];
-
-  void loadCensoredWords() async {
-    await loadAsset().then((value) {LineSplitter ls = new LineSplitter(); censoredWords = ls.convert(value);});
-    print(censoredWords);
-  }
 
   void voteForQuestion(Question question){
     DocumentReference userRef = FirebaseFirestore.instance.collection('Users').doc(currentUser);
