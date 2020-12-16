@@ -31,6 +31,7 @@ enum SortingOptions{MostVotes, LeastVotes, NameA_Z,NameZ_A, Newest, Oldest}
 class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
   List<Question> questions = [];
   bool loaded = false;
+  bool isModerator = false;
   String talkTitle = "";
   SortingOptions sorter = SortingOptions.MostVotes;
 
@@ -172,7 +173,10 @@ class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
           .add({'text': question, 'votes': 0, 'author': currentUser, 'accepted': false}).then(
         (value) => setState(
           () {
-            questions.add(new Question(question, 0, value.id, currentUser, false));
+            if(isModerator)
+              questions.add(new Question(question, 0, value.id, currentUser, false));
+            else
+              Scaffold.of(context).showSnackBar(SnackBar(duration: Duration(seconds: 6),content: Text('Your question has been submitted for approval')));
             FirebaseFirestore.instance.collection('Talks').doc(talkId).update(
               {
                 "questions": FieldValue.arrayUnion([value.id])
@@ -247,7 +251,7 @@ class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
   @override
   Widget build(BuildContext context) {
     String talkId = ModalRoute.of(context).settings.arguments;
-    bool isModerator = false;
+
 
     if (!loaded) {
       List<String> questionsIds;
