@@ -45,15 +45,24 @@ void main() {
           tester.state(find.byType(TalkQuestionsScreen));
 
       myWidgetState.questions
-          .add(new Question("testQuestion1", 2, "id1", "user1", true));
+          .add(new Question("test Question 1", 2, "id1", "user1", true));
       myWidgetState.questions
-          .add(new Question("testQuestion2", 6, "id2", "user2", true));
+          .add(new Question("test Question 2", 6, "id2", "user2", true));
 
       bool result =
-          myWidgetState.verifyEqualQuestions("testQuestion3", bContext);
+          myWidgetState.verifyEqualQuestions("test Question 3", bContext);
       expect(result, isTrue);
 
-      result = myWidgetState.verifyEqualQuestions("testQuestion2", bContext);
+      result = myWidgetState.verifyEqualQuestions("test Question 2", bContext);
+      expect(result, isFalse);
+
+      result = myWidgetState.verifyEqualQuestions("test Question 1", bContext);
+      expect(result, isFalse);
+
+      result = myWidgetState.verifyEqualQuestions("test    Question \n2", bContext);
+      expect(result, isFalse);
+
+      result = myWidgetState.verifyEqualQuestions("test\nQuestion\n2", bContext);
       expect(result, isFalse);
     });
 
@@ -87,6 +96,12 @@ void main() {
       expect(result, isFalse);
 
       result = myWidgetState.compareQuestions("this is a normal question :)", "this is a normal question :)");
+      expect(result, isTrue);
+
+      result = myWidgetState.compareQuestions("this is a normal    question :)", " this is   a normal question :)");
+      expect(result, isTrue);
+
+      result = myWidgetState.compareQuestions("this   is a normal   \nquestion :)", "this is a normal      question  :)");
       expect(result, isTrue);
     });
   });
