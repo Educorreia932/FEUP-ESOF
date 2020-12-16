@@ -265,32 +265,39 @@ class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
 
         if(questionsIds.isNotEmpty && isModerator){
           questions = [];
-          FirebaseFirestore.instance
-              .collection('Questions')
-              .where(FieldPath.documentId, whereIn: questionsIds)
-              .get()
-              .then((questionsQuery) {
-            questionsQuery.docs.forEach((element) {
-              questions.add(new Question(element["text"], element["votes"], element.id, element["author"], element["accepted"]));
+          for(int i=0; i<questionsIds.length; i++) {
+            FirebaseFirestore.instance
+                .collection('Questions')
+                .where(FieldPath.documentId, isEqualTo: questionsIds[i])
+                .get()
+                .then((questionsQuery) {
+                questionsQuery.docs.forEach((element) {
+                  questions.add(new Question(
+                      element["text"], element["votes"], element.id,
+                      element["author"], element["accepted"]));
+              });
+              this.callback("none");
             });
-
-            this.callback("none");
-          });
+          }
         }
         else if (questionsIds.isNotEmpty) {
           questions = [];
-          FirebaseFirestore.instance
-              .collection('Questions')
-              .where('accepted',isEqualTo: true)
-              .where(FieldPath.documentId, whereIn: questionsIds)
-              .get()
-              .then((questionsQuery) {
-            questionsQuery.docs.forEach((element) {
-              questions.add(new Question(element["text"], element["votes"], element.id, element["author"], element["accepted"]));
-            });
+          for(int i=0; i<questionsIds.length; i++) {
+            FirebaseFirestore.instance
+                .collection('Questions')
+                .where('accepted', isEqualTo: true)
+                .where(FieldPath.documentId, isEqualTo: questionsIds[i])
+                .get()
+                .then((questionsQuery) {
+                questionsQuery.docs.forEach((element) {
+                  questions.add(new Question(
+                      element["text"], element["votes"], element.id,
+                      element["author"], element["accepted"]));
+                });
 
-            this.callback("none");
-          });
+              this.callback("none");
+            });
+          }
         }
 
         this.callback("none");
