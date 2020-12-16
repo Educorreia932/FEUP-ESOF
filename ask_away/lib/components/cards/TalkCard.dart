@@ -4,6 +4,16 @@ import 'package:ask_away/screens/talks_screen/TalkQuestionsScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+
+class TalkQuestionsArguments {
+  String talkId;
+  bool loaded;
+  TalkQuestionsArguments(String talkId, bool loaded) {
+    this.talkId = talkId;
+    this.loaded = loaded;
+  }
+}
+
 class TalkCard extends StatefulWidget {
   Talk talk;
   Function(String, bool) callback;
@@ -19,6 +29,7 @@ class TalkCard extends StatefulWidget {
     scheduled = !scheduled;
   }
 }
+
 
 class TalkCardState extends State<TalkCard> {
   bool displayText = false;
@@ -184,7 +195,7 @@ class TalkCardState extends State<TalkCard> {
                 ),
                 SimpleButton("Enter Talk", () {
                   Navigator.pushNamed(context, '/talk_questions',
-                      arguments: widget.talk.id);
+                      arguments: TalkQuestionsArguments(widget.talk.id, false));
                 }, 20, Colors.blue),
               ],
             ),

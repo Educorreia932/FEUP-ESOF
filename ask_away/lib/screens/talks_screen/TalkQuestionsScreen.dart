@@ -1,5 +1,6 @@
 import 'dart:async' show Future;
 import 'dart:convert';
+import 'package:ask_away/components/cards/TalkCard.dart';
 import 'package:ask_away/components/cards/question_card/QuestionCard.dart';
 import 'package:ask_away/models/AppUser.dart';
 import 'package:ask_away/models/Question.dart';
@@ -9,14 +10,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
-List<String> censoredWords;
 
 Future<String> loadAsset() async {
-  return await rootBundle.loadString('assets/censoredWords.txt');
-}
-
-void loadCensoredWords(){
-  loadAsset().then((value) {LineSplitter ls = new LineSplitter(); censoredWords = ls.convert(value);});
+  print("loading");
+  String result = await rootBundle.loadString('assets/censoredWords.txt');
+  print("loaded");
+  return result;
 }
 
 Talk talk;
@@ -33,6 +32,12 @@ class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
   bool loaded = false;
   String talkTitle = "";
   SortingOptions sorter = SortingOptions.MostVotes;
+  List<String> censoredWords = [];
+
+  void loadCensoredWords() async {
+    await loadAsset().then((value) {LineSplitter ls = new LineSplitter(); censoredWords = ls.convert(value);});
+    print(censoredWords);
+  }
 
   void voteForQuestion(Question question){
     DocumentReference userRef = FirebaseFirestore.instance.collection('Users').doc(currentUser);
@@ -78,6 +83,7 @@ class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
 
   }
   bool verifyQuestionWords(String question){
+    print("verifying words");
     List<String> questionLines = question.split("\n");
     List<String> questionWords = [];
     for(int i =0;i <questionLines.length;i++){
@@ -246,7 +252,9 @@ class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    String talkId = ModalRoute.of(context).settings.arguments;
+    TalkQuestionsArguments args = ModalRoute.of(context).settings.arguments;
+    String talkId = args.talkId;
+    this.loaded = args.loaded;
     bool isModerator = false;
 
     if (!loaded) {
