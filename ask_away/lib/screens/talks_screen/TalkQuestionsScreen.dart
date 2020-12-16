@@ -87,7 +87,7 @@ class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
     }
 
     for (int i=0; i < questionWords.length;i++)
-      if(censoredWords.contains(questionWords[i].toLowerCase()))
+      if(censoredWords != null && censoredWords.contains(questionWords[i].toLowerCase()))
         return false;
 
     return true;
@@ -261,7 +261,8 @@ class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
         questionsIds = List.from(value.data()['questions']);
         List<dynamic> mods = talk.participants["moderators"];
 
-        isModerator = mods.contains(currentUser);
+        if(mods != null)
+          isModerator = mods.contains(currentUser);
 
         if(questionsIds.isNotEmpty && isModerator){
           questions = [];

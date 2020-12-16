@@ -19,7 +19,7 @@ final Future<FirebaseApp> _initialization = Firebase.initializeApp();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+  await loadCensoredWords();
   runApp(MyApp());
 }
 
@@ -31,7 +31,6 @@ class MyApp extends StatelessWidget {
       future: _initialization,
       builder: (context, AsyncSnapshot snapshot) {
         if (snapshot.hasData) {
-          loadCensoredWords();
           return AuthProvider(
             auth: Auth(),
             child: MaterialApp(
