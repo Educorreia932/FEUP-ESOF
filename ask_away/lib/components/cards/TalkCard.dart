@@ -7,10 +7,8 @@ import 'package:intl/intl.dart';
 
 class TalkQuestionsArguments {
   String talkId;
-  bool loaded;
-  TalkQuestionsArguments(String talkId, bool loaded) {
+  TalkQuestionsArguments(String talkId) {
     this.talkId = talkId;
-    this.loaded = loaded;
   }
 }
 
@@ -195,7 +193,7 @@ class TalkCardState extends State<TalkCard> {
                 ),
                 SimpleButton("Enter Talk", () {
                   Navigator.pushNamed(context, '/talk_questions',
-                      arguments: TalkQuestionsArguments(widget.talk.id, false));
+                      arguments: TalkQuestionsArguments(widget.talk.id));
                 }, 20, Colors.blue),
               ],
             ),

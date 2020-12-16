@@ -28,8 +28,11 @@ Talk talk;
 final _scaffoldKey = GlobalKey<ScaffoldState>();
 
 class TalkQuestionsScreen extends StatefulWidget {
+  final bool loaded;
+  TalkQuestionsScreen(this.loaded);
+
   @override
-  State<StatefulWidget> createState() => TalkQuestionsScreenState();
+  State<StatefulWidget> createState() => TalkQuestionsScreenState(loaded);
 }
 enum SortingOptions{MostVotes, LeastVotes, NameA_Z,NameZ_A, Newest, Oldest}
 
@@ -39,6 +42,9 @@ class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
   String talkTitle = "";
   SortingOptions sorter = SortingOptions.MostVotes;
 
+  TalkQuestionsScreenState(bool loaded) {
+    this.loaded = loaded;
+  }
   void voteForQuestion(Question question){
     DocumentReference userRef = FirebaseFirestore.instance.collection('Users').doc(currentUser);
     String questionID = question.id;
@@ -254,7 +260,6 @@ class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
   Widget build(BuildContext context) {
     TalkQuestionsArguments args = ModalRoute.of(context).settings.arguments;
     String talkId = args.talkId;
-    this.loaded = args.loaded;
     bool isModerator = false;
 
     if (!loaded) {

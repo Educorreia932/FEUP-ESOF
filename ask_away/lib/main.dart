@@ -46,7 +46,7 @@ class MyApp extends StatelessWidget {
                 '/login': (context) => LoginScreen(key : Key("login")),
                 '/register': (context) => RegisterScreen(),
                 '/talks': (context) => TalksScreen(),
-                '/talk_questions': (context) => TalkQuestionsScreen(),
+                '/talk_questions': (context) => TalkQuestionsScreen(false),
                 '/talk_creation': (context) => CreateTalkScreen(),
                 '/talk_roles': (context) => TalkRolesScreen(),
               },

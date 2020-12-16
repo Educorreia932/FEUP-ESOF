@@ -24,8 +24,8 @@ void main() {
           body: Navigator(
             onGenerateRoute: (_) {
               return MaterialPageRoute<Widget>(
-                builder: (context) { bContext = context; return TalkQuestionsScreen();},
-                settings: RouteSettings(arguments: TalkQuestionsArguments("testTalkId1", true)),
+                builder: (context) { bContext = context; return TalkQuestionsScreen(true);},
+                settings: RouteSettings(arguments: TalkQuestionsArguments("testTalkId1")),
               );
             },
           ),
