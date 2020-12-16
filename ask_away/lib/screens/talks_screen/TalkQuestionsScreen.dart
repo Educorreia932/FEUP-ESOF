@@ -85,7 +85,6 @@ class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
 
   }
   bool verifyQuestionWords(String question){
-    print("verifying words");
     List<String> questionLines = question.split("\n");
     List<String> questionWords = [];
     for(int i =0;i <questionLines.length;i++){
