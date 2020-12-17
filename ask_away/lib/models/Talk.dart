@@ -22,7 +22,7 @@ class Talk {
     this.isExpanded = false;
   }
 
-  Talk.fromData(DocumentSnapshot value) {
+  Talk.fromData(DocumentSnapshot value, FirebaseFirestore instance) {
     id = value.id;
 
     Map<String, dynamic> data = value.data();
@@ -35,7 +35,7 @@ class Talk {
     this.ocupation = data["ocupation"];
     this.participants = data["participants"];
 
-    FirebaseFirestore.instance
+    instance
         .collection('Users')
         .doc(data["creator"])
         .get()

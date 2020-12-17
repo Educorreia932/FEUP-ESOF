@@ -259,8 +259,9 @@ class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
 
     if (!loaded) {
       List<String> questionsIds;
-      FirebaseFirestore.instance.collection('Talks').doc(talkId).get().then((value) {
-        talk = Talk.fromData(value);
+      FirebaseFirestore instance = FirebaseFirestore.instance;
+      instance.collection('Talks').doc(talkId).get().then((value) {
+        talk = Talk.fromData(value, instance);
         talkTitle = value.data()["title"];
         questionsIds = List.from(value.data()['questions']);
         List<dynamic> mods = talk.participants["moderators"];

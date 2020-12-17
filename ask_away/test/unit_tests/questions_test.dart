@@ -7,17 +7,14 @@ import 'package:cloud_firestore_mocks/cloud_firestore_mocks.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 
-// class MockBuildContext extends Mock implements BuildContext {}
 
 void main() {
-  // MockBuildContext _mockContext;
   Widget talkQuestions;
   BuildContext bContext;
 
   group('Questions tests', () {
 
     setUp(() {
-    // _mockContext = MockBuildContext();
     final key = GlobalKey<NavigatorState>();
 
     talkQuestions = MaterialApp(
