@@ -55,6 +55,7 @@ class QuestionCardState extends State<QuestionCard> {
       getQuestionUser();
     }
     return Container(
+      margin: EdgeInsets.all(5),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(18)),
         color: Colors.white,

@@ -238,14 +238,6 @@ To better understand the context of the software system, it is very useful to ha
 
 ## Architecture and Design
 
-The architecture of a software system encompasses the set of key decisions about its overall organization. 
-
-A well written architecture document is brief but reduces the amount of time it takes new programmers to a project to understand the code to feel able to make modifications and enhancements.
-
-To document the architecture requires describing the decomposition of the system in their parts (high-level components) and the key behaviors and collaborations between them. 
-
-In this section you should start by briefly describing the overall components of the project and their interrelations. You should also describe how you solved typical problems you may have encountered, pointing to well-known architectural and design patterns, if applicable.
-
 ### Logical architecture
 
 In this project, our group decided to mainly use to architectural patters:
@@ -331,9 +323,17 @@ With this last iteration our focus turned mostly to the details in the talks, as
 ---
 ## Test
 
-We have tested the following feature:
-* Getting to the login screen from the home screen.
-* Login with a custom account.
+We have tested the following features:
+
+- Gerkin:
+  - Getting to the login screen from the home screen
+  - Login with a custom account
+
+- Unit tests:
+  - Verify repeated questions
+  - Check questions for innapropriate words and expressions
+  - Compare questions
+  - Write and read question and talk data from the database
 
 Although we only have these features tested, we created templates for acceptance tests for varius features which can be found in the user stories section.
 
