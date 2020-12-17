@@ -406,6 +406,8 @@ class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
             this.callback("none");
           });
         }
+      } else {
+        this.callback("none");
       }
 
       loaded = true;
