@@ -325,7 +325,7 @@ With this last iteration our focus turned mostly to the details in the talks, as
 
 We have tested the following features:
 
-- Gerkin:
+- Gherkin:
   - Getting to the login screen from the home screen
   - Login with a custom account
 
