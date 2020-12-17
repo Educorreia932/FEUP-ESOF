@@ -15,6 +15,8 @@ class User {
   User.fromData(DocumentSnapshot value) {
     id = value.id;
 
+    askedQuestions = [];
+
     Map<String, dynamic> data = value.data();
 
     username = data["username"];
@@ -25,4 +27,18 @@ class User {
     if (scheduledTalks == null)
       scheduledTalks = [];
   }
+
+  @override
+  bool operator ==(Object other) =>
+    identical(this, other) ||
+        other is User &&
+            id == other.id &&
+            username == other.username &&
+            reputation == other.reputation &&
+            votes.toString() == other.votes.toString() &&
+            scheduledTalks.toString() == other.scheduledTalks.toString();
+
+  @override
+  int get hashCode => username.hashCode;
+
 }

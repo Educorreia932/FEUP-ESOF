@@ -1,5 +1,6 @@
 import 'dart:async' show Future;
 import 'dart:convert';
+import 'package:ask_away/components/cards/TalkCard.dart';
 import 'package:ask_away/components/cards/question_card/QuestionCard.dart';
 import 'package:ask_away/models/AppUser.dart';
 import 'package:ask_away/models/Question.dart';
@@ -9,22 +10,25 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
-List<String> censoredWords;
+List<String> censoredWords = [];
 
 Future<String> loadAsset() async {
   return await rootBundle.loadString('assets/censoredWords.txt');
 }
 
-void loadCensoredWords(){
-  loadAsset().then((value) {LineSplitter ls = new LineSplitter(); censoredWords = ls.convert(value);});
+void loadCensoredWords() async {
+  await loadAsset().then((value) {LineSplitter ls = new LineSplitter(); censoredWords = ls.convert(value);});
 }
 
 Talk talk;
 final _scaffoldKey = GlobalKey<ScaffoldState>();
 
 class TalkQuestionsScreen extends StatefulWidget {
+  final bool loaded;
+  TalkQuestionsScreen(this.loaded);
+
   @override
-  State<StatefulWidget> createState() => TalkQuestionsScreenState();
+  State<StatefulWidget> createState() => TalkQuestionsScreenState(loaded);
 }
 enum SortingOptions{MostVotes, LeastVotes, NameA_Z,NameZ_A, Newest, Oldest}
 
@@ -35,6 +39,9 @@ class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
   String talkTitle = "";
   SortingOptions sorter = SortingOptions.MostVotes;
 
+  TalkQuestionsScreenState(bool loaded) {
+    this.loaded = loaded;
+  }
   void voteForQuestion(Question question){
     DocumentReference userRef = FirebaseFirestore.instance.collection('Users').doc(currentUser);
     String questionID = question.id;
@@ -250,9 +257,9 @@ class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    String talkId = ModalRoute.of(context).settings.arguments;
-
-
+    TalkQuestionsArguments args = ModalRoute.of(context).settings.arguments;
+    String talkId = args.talkId;
+    
     if (!loaded) {
       loadQuestions(talkId);
     }
@@ -354,8 +361,9 @@ class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
   void loadQuestions(talkId)
   {
     List<String> questionsIds;
-    FirebaseFirestore.instance.collection('Talks').doc(talkId).get().then((value) {
-      talk = Talk.fromData(value);
+    FirebaseFirestore instance = FirebaseFirestore.instance;
+    instance.collection('Talks').doc(talkId).get().then((value) {
+      talk = Talk.fromData(value, instance);
       talkTitle = value.data()["title"];
       questionsIds = List.from(value.data()['questions']);
       List<dynamic> mods = talk.participants["moderators"];
