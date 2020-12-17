@@ -5,3 +5,5 @@ ask_away/.*
 ask_away/build/
 ios/
 
+
+ask_away/pubspec.lock
