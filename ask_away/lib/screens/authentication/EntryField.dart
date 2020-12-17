@@ -61,6 +61,7 @@ Widget EntryField(EntryFieldType entryFieldType, FormType formType) {
           height: 10,
         ),
         TextFormField(
+          key: _title == "E-Mail" ? Key("emailfield") : _title == "Password" ? Key("passfield") : Key("userfield"),
           obscureText: _obscured,
           validator: _validator,
           onSaved: (String value) {

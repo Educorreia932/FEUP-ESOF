@@ -2,16 +2,12 @@ import 'package:ask_away/models/Question.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ask_away/screens/main_screen/MainScreen.dart';
-import 'package:ask_away/models/AppUser.dart';
 
-import 'components/VotingComponent.dart';
-
-
+import 'VotingComponent.dart';
 
 class QuestionCard extends StatefulWidget {
   Question _question;
   Function _callback;
-
 
   QuestionCard(this._question, this._callback);
 
@@ -19,9 +15,9 @@ class QuestionCard extends StatefulWidget {
   State<StatefulWidget> createState() => QuestionCardState();
 }
 
-
-
 class QuestionCardState extends State<QuestionCard> {
+  String questionUser = "";
+  bool loaded = false;
 
   void deleteQuestion(){
     print("Deleting question: ");
@@ -30,9 +26,36 @@ class QuestionCardState extends State<QuestionCard> {
     FirebaseFirestore.instance.collection('Questions').doc(questionToRemove).delete().then((value) => this.widget._callback(questionToRemove));
   }
 
+  void acceptQuestion(){
+    print("Accept question: ");
+    print(this.widget._question.id);
+    String questionToRemove = this.widget._question.id;
+    FirebaseFirestore.instance.collection('Questions').doc(questionToRemove).update({"accepted": true}).then((value) {this.widget._callback("none"); this.widget._question.accepted = true;setState(() {
+    });});
+  }
+
+  void getQuestionUser()
+  {
+      FirebaseFirestore.instance
+          .collection('Users')
+          .doc(this.widget._question.user)
+          .snapshots()
+          .first
+          .then((value)
+          {
+            questionUser = value["username"];
+            setState(() {loaded=true;});
+          }
+      );
+  }
+
   @override
   Widget build(BuildContext context) {
+    if(!loaded) {
+      getQuestionUser();
+    }
     return Container(
+      margin: EdgeInsets.all(5),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(18)),
         color: Colors.white,
@@ -46,12 +69,33 @@ class QuestionCardState extends State<QuestionCard> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "Educorreia932",
+                  questionUser,
                   style: TextStyle(
                     fontSize: 21,
                   ),
                 ),
-                if(currentUser == this.widget._question.user)
+                if(!this.widget._question.accepted)
+                  Row(
+                      children: [
+                        IconButton(
+                          icon: Icon(
+                            Icons.check_circle,
+                            size: 28,
+                            color: Color(0xFFFF5656),
+                          ),
+                          onPressed: () => this.acceptQuestion(),
+                        ),
+                        IconButton(
+                          icon: Icon(
+                            Icons.cancel_sharp,
+                            size: 28,
+                            color: Color(0xFFFF5656),
+                          ),
+                          onPressed: () => this.deleteQuestion(),
+                        )
+                      ]
+                  )
+                else if(currentUser == this.widget._question.user)
                   IconButton(
                     icon: Icon(
                       Icons.delete_forever,
@@ -61,13 +105,6 @@ class QuestionCardState extends State<QuestionCard> {
                     onPressed: () => this.deleteQuestion(),
                   )
                 ,
-                IconButton(
-                    icon: Icon(
-                      Icons.bookmark_border,
-                      size: 27,
-                      color: Color(0xFFFF5656),
-                    )
-                ),
               ],
             ),
             RichText(
@@ -85,27 +122,6 @@ class QuestionCardState extends State<QuestionCard> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 VotingComponent(widget._question.votes, widget._callback, widget._question),
-                RichText(
-                  text: TextSpan(
-                    style: TextStyle(
-                      fontSize: 16,
-                    ),
-                    children: [
-                      TextSpan(
-                        text: "33 minutes",
-                        style: TextStyle(
-                          color: Color(0xFFFF5656),
-                        ),
-                      ),
-                      TextSpan(
-                        text: " ago",
-                        style: TextStyle(
-                          color: Color(0xFF979797),
-                        ),
-                      ),
-                    ],
-                  ),
-                )
               ],
             )
           ],

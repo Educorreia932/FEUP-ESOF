@@ -22,6 +22,8 @@ void loginSetPassword(String password) {
 }
 
 class LoginScreen extends StatefulWidget {
+  LoginScreen({Key key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() => LoginScreenState();
 }
@@ -49,10 +51,6 @@ class LoginScreenState extends State<LoginScreen> {
     print('User logged in: $userId');
 
     Navigator.pop(context);
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => MainScreenBuilder()),
-    );
   }
 
   @override
@@ -104,11 +102,14 @@ class LoginScreenState extends State<LoginScreen> {
                   right: 40,
                   bottom: 40,
                 ),
-                child: SimpleButton(
-                  "Login",
-                  validateAndSubmit,
-                  37,
-                  Color(0xFFE11D1D),
+                child: TextButton(
+                  key: Key("loginbutton"),
+                  child : Text(
+                      "Login",
+                      style: TextStyle(fontSize: 25),
+                  ),
+                  onPressed: validateAndSubmit,
+
                 ),
               ),
               RichText(
@@ -132,12 +133,7 @@ class LoginScreenState extends State<LoginScreen> {
                       recognizer: TapGestureRecognizer()
                         ..onTap = () {
                           Navigator.pop(context);
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => RegisterScreen(),
-                            ),
-                          );
+                          Navigator.pushNamed(context, '/register');
                         },
                     ),
                   ],

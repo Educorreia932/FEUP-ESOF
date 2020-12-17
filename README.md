@@ -1,8 +1,8 @@
 # openCX-'Ask Away' Development Report
 
-Welcome to the documentation pages of the *your (sub)product name* of **openCX**!
+Welcome to the documentation pages of the **Ask Away** product of **openCX**!
 
-You can find here detailed about the (sub)product, hereby mentioned as module, from a high-level vision to low-level implementation decisions, a kind of Software Development Report (see [template](https://github.com/softeng-feup/open-cx/blob/master/docs/templates/Development-Report.md)), organized by discipline (as of RUP): 
+You can find here detailed about the Ask Away application, hereby mentioned as module, from a high-level vision to low-level implementation decisions, a kind of Software Development Report (see [template](https://github.com/softeng-feup/open-cx/blob/master/docs/templates/Development-Report.md)), organized by discipline (as of RUP): 
 
 * Business modeling 
   * [Product Vision](#Product-Vision)
@@ -35,50 +35,47 @@ Thank you!
 ---
 
 ## Product Vision
-Help attendees get the most out of conferences they attend by answering the best questions they have.
+
+Help attendees get the most out of conferences they attend by submitting the questions they have on our platform to be answered by the speakers that are giving the lecture.
 
 ## Elevator Pitch
 
-For speakers who want to improve the speaker-participant interaction, Ask a Way is an app that guarentees that the questions asked are the ones that the atendees want to hear the most, by using a voting and moderating system that rewards the best questions. Behind every great answer is a great question.
+> Behind every great answer is a great question.
+
+For speakers who want to improve the speaker-participant interaction, **Ask Away** is an app that guarentees that the questions asked are the ones that the atendees want to hear the most, by using a voting and moderating system that rewards the best questions.  
+Atendees can submit new questions during a talk in our app, to be answered by the speaker without disrupting the talk. 
 
 ---
 ## Requirements
 
-In this section, you should describe all kinds of requirements for your module: functional and non-functional requirements.
+### Use Case diagram 
 
-Start by contextualizing your module, describing the main concepts, terms, roles, scope and boundaries of the application domain addressed by the project.
+![Use Cases](diagrams/Use%20Cases.png)
 
-### Use case diagram 
-
-![Use Cases](Use%20Cases.png)
-
-Create a use-case diagram in UML with all high-level use cases possibly addressed by your module.
-
-Give each use case a concise, results-oriented name. Use cases should reflect the tasks the user needs to be able to accomplish using the system. Include an action verb and a noun. 
-
-Briefly describe each use case mentioning the following:
+Briefly description of each use case of the product.
 
 **Ask questions**
 
-* **Actor**. Attendee. 
-* **Description**. Give the attendees the possibility to ask the questions they have in their mind to be cleared. 
-* **Preconditions**. User must be logged in to the app and on the correct talk page. 
-* **Postconditions**. Question is deleavered to a moderator to filter the useful questions.
+* **Actor:** Attendee. 
+* **Description:** Give the attendees the possibility to ask the questions they have in their mind to be clarified. 
+* **Preconditions:** User must be logged in to the app and on the correct talk page. 
+* **Postconditions:** Question is deleavered to a moderator to filter the useful questions.
 
-* **Normal Flow**. 
+* **Normal Flow:**
   1. Attendee enters the correct talk page.
   2. Click on the bar at the bottom of the screen.
   3. A keyboard will pop up.
   4. The user types the question they want to ask.
   5. The user precess the submit button.
   6. The qestion is fast-fowarded to a moderator to apreve of the question.
-* **Alternative Flows and Exceptions**. 
+
+* **Alternative Flows and Exceptions:** 
   1. The user is not logged in.
   2. The question wont be posted.
 
 **Vote questions**
 
-* **Actor**. Attendee. 
+* **Actor:** Attendee. 
 * **Description**. Gives the attendees power to choose and vote on the questions they want to ear. 
 * **Preconditions**. User must be logged in to the app and on the correct talk page. 
 * **Postconditions**. A counter is incremented/decreased which represents the like to dislike ratio a question has.
@@ -133,22 +130,87 @@ Briefly describe each use case mentioning the following:
 * **Normal Flow**. 
   1. Speaker enters the talk.
   2. Speaker selects the top rated question.
-  3. The quesiton is answered.
+  3. The question is answered.
   4. The question is sent to the end of the list so it is not answered again.
   
    
 ### User stories
-- As an atendee I want to have my questions answered however i do without breaking the flow of the lecture so that all atendees can focus and not lose their line of thought.
-- As a participant I want to be able to up/downvote other atendees' questions so the best questions are answered first.  
+- As an atendee I want to have my questions answered. However, I want it without breaking the flow of the lecture, so that all atendees can focus and not lose their line of thought.
+```gherkin
+Feature: Submit a Question
+    Scenario: Users can submit questions to be answered later
+        Given I am logged in
+        When I fill "questionField" with "MyQuestion"
+        Then I tap the "submitQuestionButton" button
+        Then I expect "MyQuestion" is present
+```
+- As a participant I want to be able to up/downvote other atendees' questions so the best questions are answered first. 
+```gherkin
+Feature: Vote a question
+    Scenario: Users can vote questions to prioritise to be answered
+        Given I am logged in
+        When I tap the "upvoteQuestionButton" button
+        Then Question will have one more vote
+
+        Given I am logged in and already voted
+        When I tap the "upvoteQuestionButton" button
+        Then Question will have one less vote
+```
 **Question Screen Mock Up**  
 <img src="mockups/Talk%20Questions.png" alt="Question Screen" width="200"/>
 
 - As a moderator i want to be able to filter questions that the atendees have so that the speakers have time to answer the questions most people have.  
 - As a speaker I would like to be able to have an admin filtering unwanted questions for me.  
+```gherkin
+Feature: Filter a question
+    Scenario: Moderators can filter question users have
+        Given I am logged in on a Moderator account
+        When I tap the "acceptQuestionButton" button
+        Then Question will be accepted and shown to everyone
+
+        Given I am logged in on a Moderator account
+        When I tap the "rejectQuestionButton" button
+        Then Question will be deleted
+```
 - As a speaker I want to easily schedule a talk allowing people to book attendance early.  
+```gherkin
+Feature: Schedule a talk
+    Scenario: Speakers can create new talks early
+        Given I am logged in
+        When I tap the "createTalkButton" button
+        Then I fill "talkTitleField" with "test" and "talkDescriptionField" with "test" and "talkLocationField" with "test" and "starDateField" and "endDateField"
+        And I tap "submitTalkButton"
+        And I expect "talkScreen" to be present
+```
+<img src="mockups/Talk%20Create.png" alt="Talk Create Screen" width="200"/> <br/>
+
+
 - As a user I want to know a talk's occupation so I can know if I can still attend it.  
+```gherkin
+Feature: Check occupation
+    Scenario: Users can check talk occupation
+        Given I am logged in
+        When "talkScreen" is present
+        Then I expect "talkAttendance" to be present
+```
 **Talk Screen Mock Up**  
 <img src="mockups/Talks%20Screen.png" alt="Talks Screen" width="200"/>
+
+
+- As a speaker, I want to assign roles to the users attending the talk I'll be presenting (such as attendee, moderator or other speakers).  
+
+
+```gherkin
+Feature: Assign roles to talks
+    Scenario: Speaker can choose people that will attend the talk to also moderate it.
+        Given I am logged in as the talk speaker
+        When I tap the "addRole" button
+        Then I expect "addRoleScreen" to be present
+```
+
+**Role Assignment Screen Mock Up**  
+
+<img src="mockups/Role%20Screen.png" alt="Role Assignment Screen" width="200"/>
 
 ### Other Mock Ups
 **Login Screen Mock Up**  
@@ -170,53 +232,110 @@ Briefly describe each use case mentioning the following:
 
 To better understand the context of the software system, it is very useful to have a simple UML class diagram with all the key concepts (names, attributes) and relationships involved of the problem domain addressed by your module.
 
+![Domain Model Diagram](diagrams/Domain%20Model.png)
+
 ---
 
 ## Architecture and Design
-The architecture of a software system encompasses the set of key decisions about its overall organization. 
-
-A well written architecture document is brief but reduces the amount of time it takes new programmers to a project to understand the code to feel able to make modifications and enhancements.
-
-To document the architecture requires describing the decomposition of the system in their parts (high-level components) and the key behaviors and collaborations between them. 
-
-In this section you should start by briefly describing the overall components of the project and their interrelations. You should also describe how you solved typical problems you may have encountered, pointing to well-known architectural and design patterns, if applicable.
 
 ### Logical architecture
-The purpose of this subsection is to document the high-level logical structure of the code, using a UML diagram with logical packages, without the worry of allocating to components, processes or machines.
 
-It can be beneficial to present the system both in a horizontal or vertical decomposition:
-* horizontal decomposition may define layers and implementation concepts, such as the user interface, business logic and concepts; 
-* vertical decomposition can define a hierarchy of subsystems that cover all layers of implementation.
+In this project, our group decided to mainly use to architectural patters:
+- Client-server pattern
+- MVC (Model, View, Controller)
+
+The first architectural patterns is easily spotted, because every action we take and data we see or input is most likely stored in our database.
+The second one is obtanded thanks to the separation between the modules screens, models and components.
+The screens module is responsible to display to the user all the information needed using the data stored in the module models. This second module is responsible of storing the data and creating the widgets to give so the screen module can display the data. Every widget has a diferent class from eachother which contains functions needed to parse data and create data. 
+Thanks to this separation, the screen module works with any amount of data (question, talks, etc.) which lead to a smoother expantion of functionalities and better performance.
+
+#### Package Diagram
+
+![Package Diagram](diagrams/Packages.png)
+
+- `components`- Custom widgets which are used by multiple different screens
+- `models` -  Models for each structure of database
+- `screens` - Module responsible for drawing the app and allows the iteration user/program.
+- `services` - Includes database services and provides user authentication.
+- `firestore - External module that establishes the connection between the application and Firebase storage.
 
 ### Physical architecture
-The goal of this subsection is to document the high-level physical structure of the software system (machines, connections, software components installed, and their dependencies) using UML deployment diagrams or component diagrams (separate or integrated), showing the physical structure of the system.
 
-It should describe also the technologies considered and justify the selections made. Examples of technologies relevant for openCX are, for example, frameworks for mobile applications (Flutter vs ReactNative vs ...), languages to program with microbit, and communication with things (beacons, sensors, etc.).
+The physical architecture of our project relies on two separate blocks that communicate with each other via HTTPS requests.
+
+* The Client Side that represents the Ask Away App, installed on the user's smartphone created using flutter.
+
+* The Server Side, where all important data is stored. This data is stored in a FireBase data base and is updated while the user is using the app in order to keep all information up to date.
+
+The connection between the Firebase and the user's app is done only when needed in order to reduce the time wasted in HTTP requests, making the app run faster and smoother. <br/> When entering a new screen all data that's needed to build the interface is loaded and in case any of update to such data, another request is sent to the Firebase server, also updating the information present there.
+
+![Physical Architecure Diagram](diagrams/Physical%20Architecture.png)
 
 ### Prototype
+
 To help on validating all the architectural, design and technological decisions made, we usually implement a vertical prototype, a thin vertical slice of the system.
 
 In this subsection please describe in more detail which, and how, user(s) story(ies) were implemented.
 
+For the following user stories:
+* As an atendee I want to have my questions answered however i do without breaking the flow of the lecture so that all atendees can focus and not lose their line of thought.
+* As a participant I want to be able to up/downvote other atendees' questions so the best questions are answered first.
+
+Since they are fairly similar we implemented both of them at the same time. The app provides a questioning screen for each talk where users can ask their question and have them voted by other in order to determine which are the most important questions the speaker should be answering.
+
+For the following user stories:
+* As a moderator i want to be able to filter questions that the atendees have so that the speakers have time to answer the questions most people have.
+* As a speaker I would like to be able to have an admin filtering unwanted questions for me.
+
+Our group implemented a way that before any question is presented to our users the talk's moderators have a chance to filter them, by accepting or refusing. This way, unwanted questions are not presented to the atendees in order to not disrupt the flow.
+
+For the following user story:
+* As a speaker I want to easily schedule a talk allowing people to book attendance early.
+
+A way to create a talk at any time was implemented on the talks screen. With this functionality a user can create a talk and set at what date and time they will host the talk. It's also possible to create a description and title in this functionality. Since the talks can be scheduled early, other users can save it, booking a place for them.
+
+For the following user story:
+* As a user I want to know a talk's occupation so I can know if I can still attend it.
+
+In order to let the atendees know how many people will attend the talk, when they are on the talk screen an indication about how many people bookmarked that talk will appear.
+
 ---
 
 ## Implementation
-Regular product increments are a good practice of product management. 
+Throughout the project development, we have worked by implementing multiple iterations:
 
-While not necessary, sometimes it might be useful to explain a few aspects of the code that have the greatest potential to confuse software engineers about how it works. Since the code should speak by itself, try to keep this section as short and simple as possible.
+#### Iteration 1
 
-Use cross-links to the code repository and only embed real fragments of code when strictly needed, since they tend to become outdated very soon.
+As we started working on the app, we focused our first iteration on learning the basics of the flutter engine, implementing the first pages and starting with the question rate system.
+
+#### Iteration 2
+
+In this iteration we dedicated time into continuing and improving on the work made in the first iteration, working on the app's menus, how to update pages and list data.
+
+#### Iteration 3
+
+The main focus in the third iteration was to get a database up and running to store all of the data. We decided to use a Firebase database and started changing the app's code to accomodate its use, storing and reading the data when needed, including user authentication. We also redesigned the app's appearance and made the ground work for the talks.
+
+#### Iteration 4
+
+With this last iteration our focus turned mostly to the details in the talks, as the different roles a user can have, talk occupation and the talk moderators funcionalities. We also spent time fixing some of the previously implemented funcionalities and developing acceptance tests.
 
 ---
 ## Test
 
-There are several ways of documenting testing activities, and quality assurance in general, being the most common: a strategy, a plan, test case specifications, and test checklists.
+We have tested the following features:
 
-In this section it is only expected to include the following:
-* test plan describing the list of features to be tested and the testing methods and tools;
-* test case specifications to verify the functionalities, using unit tests and acceptance tests.
- 
-A good practice is to simplify this, avoiding repetitions, and automating the testing actions as much as possible.
+- Gerkin:
+  - Getting to the login screen from the home screen
+  - Login with a custom account
+
+- Unit tests:
+  - Verify repeated questions
+  - Check questions for innapropriate words and expressions
+  - Compare questions
+  - Write and read question and talk data from the database
+
+Although we only have these features tested, we created templates for acceptance tests for varius features which can be found in the user stories section.
 
 ---
 ## Configuration and change management
@@ -230,21 +349,5 @@ For the purpose of ESOF, we will use a very simple approach, just to manage feat
 
 ## Project management
 
-Software project management is an art and science of planning and leading software projects, in which software projects are planned, implemented, monitored and controlled.
-
-In the context of ESOF, we expect that each team adopts a project management tool capable of registering tasks, assign tasks to people, add estimations to tasks, monitor tasks progress, and therefore being able to track their projects.
-
-Example of tools to do this are:
-  * [Trello.com](https://trello.com)
-  * [Github Projects](https://github.com/features/project-management/com)
-  * [Pivotal Tracker](https://www.pivotaltracker.com)
-  * [Jira](https://www.atlassian.com/software/jira)
-
-We recommend to use the simplest tool that can possibly work for the team.
-
-
----
-
-## Evolution - contributions to open-cx
-
-Describe your contribution to open-cx (iteration 5), linking to the appropriate pull requests, issues, documentation.
+For the project management we used [Github Projects](https://github.com/features/project-management/com), as it is a good yet simple tool to keep track of the project status, including user stories, notes and issues.  
+It also is incorporated into the Github repository, which makes the development easier as there is no need for other tools. 

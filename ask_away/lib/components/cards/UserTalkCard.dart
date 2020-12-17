@@ -4,32 +4,17 @@ import 'package:ask_away/screens/talks_screen/TalkQuestionsScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-
-class TalkQuestionsArguments {
-  String talkId;
-  TalkQuestionsArguments(String talkId) {
-    this.talkId = talkId;
-  }
-}
-
-class TalkCard extends StatefulWidget {
+class UserTalkCard extends StatefulWidget {
   Talk talk;
-  Function(String, bool) callback;
-  bool scheduled;
+  String user;
 
-  TalkCard(this.talk, this.callback, this.scheduled);
+  UserTalkCard(this.talk, this.user);
 
   @override
-  State<TalkCard> createState() => TalkCardState();
-
-  void callCallback(String id) {
-    callback(id, scheduled);
-    scheduled = !scheduled;
-  }
+  State<UserTalkCard> createState() => UserTalkCardState();
 }
 
-
-class TalkCardState extends State<TalkCard> {
+class UserTalkCardState extends State<UserTalkCard> {
   bool displayText = false;
   Icon arrow = Icon(Icons.keyboard_arrow_down);
 
@@ -44,21 +29,6 @@ class TalkCardState extends State<TalkCard> {
       } else
         arrow = Icon(Icons.keyboard_arrow_down);
     });
-  }
-
-  Widget savedButton() {
-    if (this.widget.scheduled) {
-      return Icon(
-        Icons.bookmark_rounded,
-        size: 30,
-        color: Color(0xFFFF5656),
-      );
-    } else
-      return Icon(
-        Icons.bookmark_border,
-        size: 30,
-        color: Color(0xFFFF5656),
-      );
   }
 
   @override
@@ -77,7 +47,6 @@ class TalkCardState extends State<TalkCard> {
             child: Column(
               children: [
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     IconButton(icon: arrow, onPressed: updateContainer),
                     Flexible(
@@ -89,11 +58,6 @@ class TalkCardState extends State<TalkCard> {
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
-                    IconButton(
-                        icon: savedButton(),
-                        onPressed: () {
-                          this.widget.callCallback(this.widget.talk.id);
-                        }),
                   ],
                 ),
                 AnimatedContainer(
@@ -174,14 +138,14 @@ class TalkCardState extends State<TalkCard> {
                               text: TextSpan(children: [
                                 TextSpan(
                                   text:
-                                      durationFormat.format(widget.talk.date) +
-                                          ' - ' +
-                                          durationFormat.format(endTime),
+                                  durationFormat.format(widget.talk.date) +
+                                      ' - ' +
+                                      durationFormat.format(endTime),
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontSize:
-                                          MediaQuery.of(context).size.width *
-                                              0.045),
+                                      MediaQuery.of(context).size.width *
+                                          0.045),
                                 ),
                               ]),
                             )
@@ -191,10 +155,6 @@ class TalkCardState extends State<TalkCard> {
                     ],
                   ),
                 ),
-                SimpleButton("Enter Talk", () {
-                  Navigator.pushNamed(context, '/talk_questions',
-                      arguments: TalkQuestionsArguments(widget.talk.id));
-                }, 20, Colors.blue),
               ],
             ),
           ),
