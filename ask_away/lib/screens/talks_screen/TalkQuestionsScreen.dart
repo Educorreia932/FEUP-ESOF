@@ -35,6 +35,7 @@ enum SortingOptions{MostVotes, LeastVotes, NameA_Z,NameZ_A, Newest, Oldest}
 class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
   List<Question> questions = [];
   bool loaded = false;
+  bool isModerator = false;
   String talkTitle = "";
   SortingOptions sorter = SortingOptions.MostVotes;
 
@@ -93,7 +94,7 @@ class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
     }
 
     for (int i=0; i < questionWords.length;i++)
-      if(censoredWords.contains(questionWords[i].toLowerCase()))
+      if(censoredWords != null && censoredWords.contains(questionWords[i].toLowerCase()))
         return false;
 
     return true;
@@ -179,7 +180,10 @@ class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
           .add({'text': question, 'votes': 0, 'author': currentUser, 'accepted': false}).then(
         (value) => setState(
           () {
-            questions.add(new Question(question, 0, value.id, currentUser, false));
+            if(isModerator)
+              questions.add(new Question(question, 0, value.id, currentUser, false));
+            else
+              Scaffold.of(context).showSnackBar(SnackBar(duration: Duration(seconds: 6),content: Text('Your question has been submitted for approval')));
             FirebaseFirestore.instance.collection('Talks').doc(talkId).update(
               {
                 "questions": FieldValue.arrayUnion([value.id])
@@ -255,52 +259,9 @@ class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
   Widget build(BuildContext context) {
     TalkQuestionsArguments args = ModalRoute.of(context).settings.arguments;
     String talkId = args.talkId;
-    bool isModerator = false;
-
+    
     if (!loaded) {
-      List<String> questionsIds;
-      FirebaseFirestore instance = FirebaseFirestore.instance;
-      instance.collection('Talks').doc(talkId).get().then((value) {
-        talk = Talk.fromData(value, instance);
-        talkTitle = value.data()["title"];
-        questionsIds = List.from(value.data()['questions']);
-        List<dynamic> mods = talk.participants["moderators"];
-
-        isModerator = mods.contains(currentUser);
-
-        if(questionsIds.isNotEmpty && isModerator){
-          questions = [];
-          FirebaseFirestore.instance
-              .collection('Questions')
-              .where(FieldPath.documentId, whereIn: questionsIds)
-              .get()
-              .then((questionsQuery) {
-            questionsQuery.docs.forEach((element) {
-              questions.add(new Question(element["text"], element["votes"], element.id, element["author"], element["accepted"]));
-            });
-
-            this.callback("none");
-          });
-        }
-        else if (questionsIds.isNotEmpty) {
-          questions = [];
-          FirebaseFirestore.instance
-              .collection('Questions')
-              .where('accepted',isEqualTo: true)
-              .where(FieldPath.documentId, whereIn: questionsIds)
-              .get()
-              .then((questionsQuery) {
-            questionsQuery.docs.forEach((element) {
-              questions.add(new Question(element["text"], element["votes"], element.id, element["author"], element["accepted"]));
-            });
-
-            this.callback("none");
-          });
-        }
-
-        this.callback("none");
-        loaded = true;
-      });
+      loadQuestions(talkId);
     }
 
     return GestureDetector(
@@ -370,12 +331,15 @@ class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
                   child: Column(
                     children: [
                       Expanded(
-                        child: ListView(
-                          scrollDirection: Axis.vertical,
-                          shrinkWrap: true,
-                          children: questions
-                              .map<QuestionCard>((Question question) => QuestionCard(question, callback))
-                              .toList(),
+                        child: RefreshIndicator(
+                          onRefresh: () async {loadQuestions(talkId);},
+                          child: ListView(
+                            scrollDirection: Axis.vertical,
+                            shrinkWrap: true,
+                            children: questions
+                                .map<QuestionCard>((Question question) => QuestionCard(question, callback))
+                                .toList(),
+                          ),
                         ),
                       ),
                       SizedBox(
@@ -392,6 +356,60 @@ class TalkQuestionsScreenState extends State<TalkQuestionsScreen> {
         ),
       ),
     );
+  }
+
+  void loadQuestions(talkId)
+  {
+    List<String> questionsIds;
+    FirebaseFirestore instance = FirebaseFirestore.instance;
+    instance.collection('Talks').doc(talkId).get().then((value) {
+      talk = Talk.fromData(value, instance);
+      talkTitle = value.data()["title"];
+      questionsIds = List.from(value.data()['questions']);
+      List<dynamic> mods = talk.participants["moderators"];
+
+      if(mods != null)
+        isModerator = mods.contains(currentUser);
+
+      if(questionsIds.isNotEmpty && isModerator){
+        questions = [];
+        for(int i=0; i<questionsIds.length; i++) {
+          FirebaseFirestore.instance
+              .collection('Questions')
+              .where(FieldPath.documentId, isEqualTo: questionsIds[i])
+              .get()
+              .then((questionsQuery) {
+            questionsQuery.docs.forEach((element) {
+              questions.add(new Question(
+                  element["text"], element["votes"], element.id,
+                  element["author"], element["accepted"]));
+            });
+            this.callback("none");
+          });
+        }
+      }
+      else if (questionsIds.isNotEmpty) {
+        questions = [];
+        for(int i=0; i<questionsIds.length; i++) {
+          FirebaseFirestore.instance
+              .collection('Questions')
+              .where('accepted', isEqualTo: true)
+              .where(FieldPath.documentId, isEqualTo: questionsIds[i])
+              .get()
+              .then((questionsQuery) {
+            questionsQuery.docs.forEach((element) {
+              questions.add(new Question(
+                  element["text"], element["votes"], element.id,
+                  element["author"], element["accepted"]));
+            });
+
+            this.callback("none");
+          });
+        }
+      }
+
+      loaded = true;
+    });
   }
 }
 
