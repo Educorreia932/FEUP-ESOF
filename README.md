@@ -42,8 +42,8 @@ Help attendees get the most out of conferences they attend by submitting the que
 
 > Behind every great answer is a great question.
 
-For speakers who want to improve the speaker-participant interaction, **Ask Away** is an app that guarentees that the questions asked are the ones that the atendees want to hear the most, by using a voting and moderating system that rewards the best questions.  
-Atendees can submit new questions during a talk in our app, to be answered by the speaker without disrupting the talk. 
+For speakers who want to improve the speaker-participant interaction, **Ask Away** is an app that makes sure that the questions asked are the ones that the atendees want to hear the most, by using a voting and moderating system that rewards the best questions.  
+Atendees can submit new questions during a talk in our app, to be answered by the speaker without interrupting the talk. 
 
 ---
 ## Requirements
@@ -272,10 +272,6 @@ The connection between the Firebase and the user's app is done only when needed 
 ![Physical Architecure Diagram](diagrams/Physical%20Architecture.png)
 
 ### Prototype
-
-To help on validating all the architectural, design and technological decisions made, we usually implement a vertical prototype, a thin vertical slice of the system.
-
-In this subsection please describe in more detail which, and how, user(s) story(ies) were implemented.
 
 For the following user stories:
 * As an atendee I want to have my questions answered however i do without breaking the flow of the lecture so that all atendees can focus and not lose their line of thought.
