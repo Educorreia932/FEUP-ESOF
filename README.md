@@ -247,7 +247,7 @@ In this project, our group decided to mainly use to architectural patters:
 The first architectural patterns is easily spotted, because every action we take and data we see or input is most likely stored in our database.
 The second one is obtanded thanks to the separation between the modules screens, models and components.
 The screens module is responsible to display to the user all the information needed using the data stored in the module models. This second module is responsible of storing the data and creating the widgets to give so the screen module can display the data. Every widget has a diferent class from eachother which contains functions needed to parse data and create data. 
-Thanks to this separation, the screen module works with any amount of data (question, talks, etc.) which lead to a smoother expantion of functionalities and better performance.
+Thanks to this separation, the screen module works with any amount of data (question, talks, etc.) which lead to a smoother expansion of functionalities and better performance.
 
 #### Package Diagram
 
