@@ -257,7 +257,7 @@ Thanks to this separation, the screen module works with any amount of data (ques
 - `models` -  Models for each structure of database
 - `screens` - Module responsible for drawing the app and allows the iteration user/program.
 - `services` - Includes database services and provides user authentication.
-- `firestore - External module that establishes the connection between the application and Firebase storage.
+- `firestore` - External module that establishes the connection between the application and Firebase storage.
 
 ### Physical architecture
 
